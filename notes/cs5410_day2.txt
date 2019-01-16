@@ -1,0 +1,90 @@
+More on Components & Architecture!
+    - Resource management:
+        - System responsible for manipulating content/assets
+            - i.e sound, animation, models, etc.
+        - Optimizes usage of resources
+        - Asset streaming (prediction of usage)
+            - Game engine is predicitively loading assets and things
+    
+        - Game developers have historically preferred to write their own memory management, rather than using
+            the standard libraries
+            - Object Pools:
+                - Pre-allocated objects/assets in memory
+                - Rather than needing to use the resources to allocate memory for these, 
+                    the memory manager can pull these pre-allocated items in
+    - Rendering:
+        - Interface to low-level API for drawing things
+            - low level APIs like DirectX, OpenGL, etc.
+        - Handles things like screen resolution, apsect ration, colors
+        - Font Rendering
+        - Hierarchy of rending engines (From lowest to highest):
+            - Video Card GPU
+                - OpenGL, Vulkan, DirectX, etc.
+                    - Abstraction Layer on top of those APIs
+                        - Low-level API (for game-engine) -> Renders models
+                            - High-level API -> plays animation
+                                - Game Engine
+                                    - Gameplay Code
+        - Features:
+            - Scene Graph:
+                - things such as buildings, scenerey, etc.
+            - 2D & 3D Rendering
+            - Camera models
+            - Offline Rendering
+    - Audio:
+        - Like the video rendering, has an interface to a low-level API
+    - Input:
+        - Keyboard
+        - Mouse (+Motion Smoothing, as human movement is really jerky)
+    - Networking:
+        - Sharing game data
+        - Multiplayer
+        - Social communities
+        - Challenges:
+            - TCP/IP data transfer
+            - Packet loss
+            - Latency
+            - Bandwidth
+            - Synchronization of game state
+    - Physics engines
+    - Scripting
+        - glue between game and game engine
+    - Artificial Intelligence:
+        - Collection of techniques used to produce the illusion of Intelligent behavior in non-player controlled game characters
+        - Things that can be included to help with this:
+            - actions
+            - information gathering
+            - goals, planning
+            - path finding
+            - finite-state machines
+
+Game Loop: (See Dean's example in the slides)
+    Steps:
+        1 - Initialize game (One time initialization)
+            - Loads graphics
+            - take initial time-stamp (call it previous_time_stamp)
+        MAIN LOOP:
+            2 - Process Input
+            3 - Update Game Logic
+                - Take current time-stamp (compute elapsed time)
+                - update based on elapsed time
+            4 - render game state
+        5 - Move time-stamp to previous time-stamp
+        6 - If done, move to step 7, else back to 2
+        7 - terminate
+    Timing:
+        - Wall clock-time:
+            - real world elapsed time
+        - Simluation time:
+            - how much game-play time has passed (from when the game was initialized)
+            - Not always the same as wall-clock time
+                - Example (Bullet time):
+                    - game frame-rate stays the same
+                    - game Simluation slows down
+                    - player continues to react in real-time 
+    Moving objects:
+        - BAD IDEA: Move some number of units per frame
+            - Results in increasing speed of objects
+        - Best idea:
+            - take elapsed time a 
+                X_2 = X_1 + v delta_t (x_2 is new location, x_1 is old position, v is velocity, delta_t is elapsed (time changed between frames))
