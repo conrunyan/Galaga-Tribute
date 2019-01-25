@@ -88,3 +88,55 @@ Game Loop: (See Dean's example in the slides)
         - Best idea:
             - take elapsed time a 
                 X_2 = X_1 + v delta_t (x_2 is new location, x_1 is old position, v is velocity, delta_t is elapsed (time changed between frames))
+
+
+
+More on the game loop:
+    Frame rate matters not only for visual processing, but also because of how fast input is processed.objects
+
+
+Game Loop Assignment:
+    - Loop is running at one tick per millisecond
+    - Render only shows the things that have been reported to be rendered
+        - Removes things from the queue
+    - Update loop is the one doing all the logic determining what should be rendered
+    - Add event is asynchronous (just use the JS onpressed button, put stuff in the array of inputs)
+        - Because of the way JS works, if input is given in the middle of the loop, it wont be processed until after the 
+            request animation frame function is called.
+    - Timestamp returned from requestAnimationFrame is NOT the elapsed time.
+    - Remove expired events from the array/queue
+
+Rendering:
+    - Canvas Rendering
+        - Example of canvas element:
+            <canvas width="500" height="500"></canvas>
+                - Defines the size of the coordinate system of the canvas
+                - Visually, this can be changed using CSS. 
+                - Coordinate system:
+                    - Upper Left (0,0)
+        - JS -> HTML connection:
+            let canvas = document.getElementById('canvas-id')
+            let context = canvas.getContext('2d')
+        - Clearing canvas:
+            - context.clearRect(start_x, start_y, width, height)
+            *** This is done at the beginning of every rendering of every frame
+
+    - Drawing a rectangle:
+        1 - Set rendering styles
+            - See Canvas documentation for possible styles
+            - IMPORTANT!!! When using complex styles (i.e. shadows), save the context state then restore after it's been used
+                - This is basically like post script.
+        2 - Fill (optional)
+        3 - Draw (optional)
+            - When drawing straight lines, be aware that odd pixel widths need to be offset by 0.5.
+    - Drawing polygons:
+        - Similar to how it's done in Postscript:
+            - i.e. with moveTo and lineTo functions
+
+    - Rotating Shapes:
+        Very similar to translation in Postscript:
+            - the bottom left of the canvas is translated to the center of the shape
+            - Rotate the canvas
+            - translate back
+            - Draw the box
+            - Unrotate the canvas (revert contaxt back with context.restore())
