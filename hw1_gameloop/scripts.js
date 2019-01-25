@@ -1,18 +1,32 @@
 let events = [];
+let startTime = performance.now();
+gameLoop();
 
-function gameLoop() {
-    let gameTime = performance.now();
-    // TODO: Get elapsed time
+function gameLoop(browserTime) {
+    // DONE: Get elapsed time
+    let elapsedTime = browserTime - startTime;
     // TODO: Add update funciton
+    update(elapsedTime);
     // TODO: Add redner function
-    let node = document.getElementById('box_1');
-    node.innerHTML += "Current Time: " + gameTime + "\n";
+    // let node = document.getElementById('box_1');
+    // node.innerHTML += "Current Time: " + gameTime + "\n";
+    //console.log(myTime);
     //let y = node.scrollTop;
     requestAnimationFrame(gameLoop);
 }
 
-function update(elapsed_time) {
+function update(elapsedTime) {
     // TODO: Add logic to calculate if an object should be rendered. Based on interval
+    for (let i = 0; i < events.length; i++) {
+        if (Math.floor(elapsedTime) % events[i].interval == 0) {
+            console.log('event #: ' + i + events[i]);    
+        }
+        else
+        {
+            console.log('event #: ' + i + ' waiting...' + typeof(Math.floor(elapsedTime)));
+        }
+        //console.log('event #: ' + i + events[i]);
+    }
     // TODO: Add step to delete object if # of times is 0
     // TODO: If object is to be rendered, subtract the number of times left by 1.
     // Keep objects ordered by time added.
