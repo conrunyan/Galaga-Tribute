@@ -24,29 +24,23 @@ function gameLoop(browserTime) {
 function update(elapsedTime) {
     // DONE: Add logic to calculate if an object should be rendered. Based on interval
     for (let i = 0; i < events.length; i++) {
-        console.log('TOP OF LOOP: ' + Math.floor(elapsedTime) + ' => ' + parseInt(events[i].interval))
         // if an event has 0 times left to display, mark for deletion
         if (parseInt(events[i].times) === 0) {
             events[i].delete = true;
         }
         // if the elapsed time is a multiple (within a margin of error) of the interval, flag event to render
         else if (events[i].timeSinceLastRender >= events[i].interval) {
-            console.log('BEFORE: event #: ' + i + events[i].timeSinceLastRender);
             events[i].render = true;
             events[i].times--;   
             // carry over extra elapsed time
             events[i].timeSinceLastRender = (events[i].timeSinceLastRender - events[i].interval);
-            console.log('event times: ' + events[i].times); 
-            console.log('AFTER : event #: ' + i + events[i].timeSinceLastRender);
         }
         else
         {
             // capture elapsed time so far and make sure event isn't rendered
             events[i].timeSinceLastRender += Math.floor(elapsedTime);
-            console.log('NO RENDER: event #: ' + events[i].timeSinceLastRender);
             events[i].render = false; 
         }
-        //console.log('event #: ' + i + events[i]);
     }
     // DONE: Add step to delete object if # of times is 0
     // filter out any events flagged to be deleted
@@ -55,12 +49,12 @@ function update(elapsedTime) {
 }
 
 function render() {
-    // TODO: For each event that needs to be rendered, do so.
+    // DONE: For each event that needs to be rendered, do so.
     let node = document.getElementById('box_1')
     // For each event flagged to be rendered, print it to box_1
     events.forEach(function(tmpEvent) {
         if (tmpEvent.render === true) {
-            node.innerHTML += '<p>Event: ' + tmpEvent.name + '(' + tmpEvent.times + ' remaining)' + '</p>'
+            node.innerHTML = '<p>Event: ' + tmpEvent.name + ' (' + tmpEvent.times + ' remaining)' + '</p>' + node.innerHTML
         }
     });
     
