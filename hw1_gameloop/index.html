@@ -11,17 +11,20 @@
             </div>
             <div class="display_box">
                 <div id="box_1">
-                    <p>THIS IS A BUNCH OF TEXT</p>
+                    <p id="id-initinfo" class="console_text">Please enter an event.</p>
                 </div>
                 <div id="box_2">
                     Name: <input type="text" id="id-name" class="input_text" name="name"/>
-                    Interval: <input type="text" id="id-interval" class="input_text" name="name"/>
+                    Interval(ms): <input type="text" id="id-interval" class="input_text" name="name"/>
                     # Times: <input type="text" id="id-times" class="input_text" name="name"/>
-                    <button id='id-button' type="submit" onclick="addNewEvent()" class="input_text">Add Event</button>
+                    <button id='id-button' type="submit" onclick="addNewEvent()" class="newEvent_button">Add Event</button>
+                    <button id='id-clear_button' type="submit" onclick="clearDisplay()" class="clearEvents_button">Clear Events</button>
                 </div>
             </div>
         </div>
-        <footer>
+        <footer id="footer">
+            <p>CS 5410 - HW1: Game Loop</p>
+            <p>Connor Runyan - A01705201</p>
         </footer>
     </body>
     <script src="scripts.js"></script>

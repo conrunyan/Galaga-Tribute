@@ -1,10 +1,15 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 .header_text
 {
     margin-left: auto;
     margin-right: auto;
-    width: 700px;
+    width: 50%;
     text-align: center;
-    background-color : rgba(16, 93, 138, 0.404);
+    border-style: solid;
+    background-color : rgba(15, 207, 191, 0.808);
 }
 
 .display_box
@@ -13,32 +18,59 @@
     flex-flow: wrap;
     margin-left: auto;
     margin-right: auto;
-    width: 700px;
+    width: 50%;
+    border-style: solid;
+    border-top-style: none;
     height: 400px;
-}
-
-.display_table
-{
-    margin-left: auto;
-    margin-right: auto;
-    width: 700px;
-    height: 400px;
-    /* overflow-y: scroll; */
 }
 
 #box_1
 {
     flex: 2;
     width: 65%;  
-    background-color: rgba(163, 212, 47, 0.603); 
+    background-color: rgba(125, 229, 236, 0.603); 
+    padding-left: 10px;
     overflow: auto;
+}
+
+#id-initinfo
+{
+    display: inline;
+}
+
+.console_text
+{
+    margin: 1px;
 }
 
 #box_2
 {
-    background-color: green;
+    background-color: rgba(15, 207, 191, 0.808);
     flex: 1;
-    /*width: 80%;
-	margin-left:10%;
-	margin-right: auto*/
+    padding: 10px;
+    align-content: center;
+    border-left-style: solid;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+.input_text
+{
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-content: center;
+    border-radius: 4px;
+}
+
+#id-button
+{
+    align-content: flex-start;
+    margin-top: 10px;
+}
+
+#footer {
+    margin-top: 20%;
 }

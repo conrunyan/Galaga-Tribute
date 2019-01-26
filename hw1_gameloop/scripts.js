@@ -1,34 +1,31 @@
 let events = [];
 let startTime = performance.now();
 let ERROR_MARGIN = 20; 
-let topOfLoop = true;
+let firstLoop = true;
 let prevBrowserTime = 0;
 gameLoop();
 
 function gameLoop(browserTime) {
-    // DONE: Get elapsed time
+    // Get elapsed time
     let elapsedTime = 0
-    if (!topOfLoop) {
+    if (!firstLoop) {
         elapsedTime = browserTime - prevBrowserTime;
         prevBrowserTime = browserTime;
     }
-    // DONE: Add update funciton
     update(elapsedTime);
-    // DONE: Add render function
     render()
-    //let y = node.scrollTop;
-    topOfLoop = false;
+    firstLoop = false;
     requestAnimationFrame(gameLoop);
 }
 
 function update(elapsedTime) {
-    // DONE: Add logic to calculate if an object should be rendered. Based on interval
+    // Logic to calculate if an object should be rendered. Based on interval
     for (let i = 0; i < events.length; i++) {
         // if an event has 0 times left to display, mark for deletion
         if (parseInt(events[i].times) === 0) {
             events[i].delete = true;
         }
-        // if the elapsed time is a multiple (within a margin of error) of the interval, flag event to render
+        // logic to flag event to render
         else if (events[i].timeSinceLastRender >= events[i].interval) {
             events[i].render = true;
             events[i].times--;   
@@ -42,19 +39,23 @@ function update(elapsedTime) {
             events[i].render = false; 
         }
     }
-    // DONE: Add step to delete object if # of times is 0
     // filter out any events flagged to be deleted
     events = events.filter(tmpEvent => tmpEvent.delete === false);
-    // TODO: Keep objects ordered by time added.
 }
 
 function render() {
-    // DONE: For each event that needs to be rendered, do so.
+    // For each event that needs to be rendered, do so.
     let node = document.getElementById('box_1')
     // For each event flagged to be rendered, print it to box_1
     events.forEach(function(tmpEvent) {
         if (tmpEvent.render === true) {
-            node.innerHTML = '<p>Event: ' + tmpEvent.name + ' (' + tmpEvent.times + ' remaining)' + '</p>' + node.innerHTML
+            // remove prompt to enter event
+            let prompt = document.getElementById('id-initinfo');
+            prompt.style.display = 'none';
+            node.innerHTML += '<p class="console_text">Event: ' + tmpEvent.name + ' (' + tmpEvent.times + ' remaining)' + '</p>';
+            // make sure the display always shows the newest element. (Unless user manually scrolls up, of course)
+            node.scrollTop += 50;
+            node.scrollHeight = 50;
         }
     });
     
@@ -75,5 +76,11 @@ function addNewEvent() {
         events.push(newEvent);
         console.log(events);
     } 
+}
+
+function clearDisplay() {
+    let displayBox = document.getElementById('box_1');
+    displayBox.innerHTML = '<p id="id-initinfo" class="console_text">Please enter an event.</p>';
+    events = [];
 }
 
