@@ -1,5 +1,6 @@
 let events = [];
 let startTime = performance.now();
+let ERROR_MARGIN = 10; 
 gameLoop();
 
 function gameLoop(browserTime) {
@@ -7,7 +8,7 @@ function gameLoop(browserTime) {
     let elapsedTime = browserTime - startTime;
     // TODO: Add update funciton
     update(elapsedTime);
-    // TODO: Add redner function
+    // TODO: Add render function
     // let node = document.getElementById('box_1');
     // node.innerHTML += "Current Time: " + gameTime + "\n";
     //console.log(myTime);
@@ -16,24 +17,35 @@ function gameLoop(browserTime) {
 }
 
 function update(elapsedTime) {
-    // TODO: Add logic to calculate if an object should be rendered. Based on interval
+    // DONE: Add logic to calculate if an object should be rendered. Based on interval
     for (let i = 0; i < events.length; i++) {
-        if (Math.floor(elapsedTime) % events[i].interval == 0) {
-            console.log('event #: ' + i + events[i]);    
+        //console.log('MATH FLOOR: ' + Math.floor(elapsedTime) + ' => ' + parseInt(events[i].interval))
+        // if an event has 0 times left to display, mark for deletion
+        if (parseInt(events[i].times) === 0) {
+            events[i].delete = true;
+        }
+        // if the elapsed time is a multiple (within a margin of error) of the interval, flag event to render
+        else if (Math.floor(elapsedTime) % parseInt(events[i].interval) <= ERROR_MARGIN) {
+            console.log('event #: ' + i + events[i]);
+            events[i].render = true;
+            events[i].times--;   
+            console.log('event times: ' + events[i].times) 
         }
         else
         {
-            console.log('event #: ' + i + ' waiting...' + typeof(Math.floor(elapsedTime)));
+            events[i].render = false; 
         }
         //console.log('event #: ' + i + events[i]);
     }
     // TODO: Add step to delete object if # of times is 0
-    // TODO: If object is to be rendered, subtract the number of times left by 1.
+    // filter out any events flagged to be deleted
+    events = events.filter(tmp_event => tmp_event.delete === false)
     // Keep objects ordered by time added.
 }
 
 function render() {
     // TODO: For each event that needs to be rendered, do so.
+    let node = document.getElementById('box_1')
 }
 
 function addNewEvent() {
@@ -47,7 +59,7 @@ function addNewEvent() {
     times = times.value;
     // make sure all fields are populated, otherwise ignore the command
     if (name !== '' && interval !== '' && times !== '') {
-        let newEvent = {name:name , interval:interval, times:times, render:true};
+        let newEvent = {name:name , interval:interval, times:times, render:true, delete:false};
         events.push(newEvent);
         console.log(events);
     } 
