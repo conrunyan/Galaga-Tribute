@@ -3,6 +3,8 @@ let firstLoop = true;
 let prevBrowserTime = 0;
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
+let canvas = document.getElementById('id-canvas');
+let context = canvas.getContext('2d');
 
 // Game Constants
 let BOARD_WIDTH = 500;
@@ -32,7 +34,7 @@ function gameLoop(browserTime) {
     requestAnimationFrame(gameLoop);
 }
 
-// TODO: Make function to generate a grid (nxn) of rectangles. Should evenly break up the board size into chunks.
+// DONE: Make function to generate a grid (nxn) of rectangles. Should evenly break up the board size into chunks.
 //          This initial grid will have all rectangles marked as background
 function makeGameBoard() {
     // generate board
@@ -46,24 +48,24 @@ function makeGameBoard() {
         for (let j = 0; j < BOARD_CELL_COUNT; j++) {
             let tmpX = (j * BOARD_CELL_SIZE)
             let tmpType = ((j === 0 || i === 0) ? 'wall' : 'background');  
+            //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX + ' Current Type: ' + tmpType);
             let tmpSpec = {
                 xCoord: tmpX,
                 yCoord: tmpY,
                 type: tmpType
             };
             let tmpGamePiece = GamePiece(tmpSpec);
-            tmpGamePiece.info();
-            //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX);
+            boardPieces.push(tmpGamePiece);
+            //tmpGamePiece.info();
         }
     }
 }
-// TODO: Make function to generate a rectangle, with a specified type (snake-piece, food, wall, background)
+// TODO: Make function to generate a board piece, with a specified type (snake-piece, food, wall, background)
 function GamePiece(specs) {
     // determine color of piece
     let color = BOARD_BACKGROUND_COLOR;
-    let xCoord = specs.xCoord;
-    let yCoord = specs.yCoord;
-    let type = specs.type;
+    let width = BOARD_CELL_SIZE;
+    let height = width;
     if (specs.type === 'wall') {
         color = BOARD_WALL_COLOR;
     }
@@ -74,12 +76,37 @@ function GamePiece(specs) {
         color = BOARD_FOOD_COLOR;
     }
 
+    function changeType(newType) {
+        specs.type = newType;
+    }
+
+    function drawGamePiece() {
+        context.save();
+
+        context.fillStyle = color;
+        context.lineWidth = 3;
+        context.fillRect(
+            specs.xCoord,
+            specs.yCoord,
+            width,
+            height);
+
+        context.restore();
+    }
+
     function info() {
-        console.log(`x: ${this.xCoord} y: ${this.yCoord} type: ${this.type} color: ${this.color}`);
+        console.log(`x: ${specs.xCoord} y: ${specs.yCoord} type: ${specs.type} color: ${color}`);
     }
 
     return {
-        info: info,
+        // Functions
+        info: info, 
+        changeType: changeType,
+        drawGamePiece: drawGamePiece;
+        // Properties
+        color: color,
+        width: width,
+        height: height,
     };
 }
 // TODO: How to get UI to work? Maybe have it be a segment of HTMl that is dynamically imported and cleared?
