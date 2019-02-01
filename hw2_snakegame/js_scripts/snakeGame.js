@@ -3,6 +3,7 @@ let firstLoop = true;
 let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
+let snakePieces = [];
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
 
@@ -53,6 +54,9 @@ function render() {
 function makeGameBoard() {
     // generate board
     let obstacles = randomWalls(15); // generate n number of obstacle coordinates
+    let snake = SnakePiece({
+        
+    });
     // y-coord loop
     for (let i = 0; i < BOARD_CELL_COUNT; i++) {
         let tmpY = (i * BOARD_CELL_SIZE)
@@ -103,7 +107,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-// TODO: Make function to generate a board piece, with a specified type (snake-piece, food, wall, background)
+// DONE: Make function to generate a board piece, with a specified type (snake-piece, food, wall, background)
 function GamePiece(specs) {
     // determine color of piece
     let color = BOARD_BACKGROUND_COLOR;
@@ -139,7 +143,7 @@ function GamePiece(specs) {
             specs.yCoord,
             width,
             height);
-        context.lineWidth = 2;
+        context.lineWidth = 5;
         context.strokeStyle = border;
         context.stroke();
 
@@ -161,6 +165,64 @@ function GamePiece(specs) {
         height: height,
     };
 }
+
+
+// Function generates a snake piece
+function SnakePiece(specs) {
+        // determine color of piece
+        let color = BOARD_SNAKE_COLOR;
+        let width = BOARD_CELL_SIZE;
+        let border = BOARD_BLOCK_BORDER;
+        let height = width;
+    
+        function drawGamePiece() {
+            context.save();
+            context.fillStyle = color;
+            context.lineWidth = 3;
+            context.fillRect(
+                specs.xCoord,
+                specs.yCoord,
+                width,
+                height);
+            context.lineWidth = 2;
+            context.strokeStyle = border;
+            context.stroke();
+
+            context.restore();
+        }
+
+        function moveSnakeFoward() {
+            // make sure we can't move back into ourself
+            if (specs.newDirection === 'up' && specs.direction !== 'down') {
+                specs.yCoord -= specs.speed * specs.elapsedTime;
+            }
+            else if (specs.newDirection === 'down' && specs.direction !== 'up') {
+                specs.yCoord += specs.speed * specs.elapsedTime;
+            }
+            else if (specs.newDirection === 'left' && specs.direction !== 'right') {
+                specs.xCoord -= specs.speed * specs.elapsedTime;
+            }
+            else if (specs.newDirection === 'right' && specs.direction !== 'left') {
+                specs.xCoord += specs.speed * specs.elapsedTime;
+            }
+        }
+    
+        function info() {
+            console.log(`SNAKE -> x: ${specs.xCoord} y: ${specs.yCoord} type: ${specs.type} color: ${color}`);
+        };
+    
+        return {
+            // Functions
+            info: info, 
+            drawGamePiece: drawGamePiece,
+            moveSnakeFoward: moveSnakeFoward,
+            // Properties
+            color: color,
+            width: width,
+            height: height,
+        };
+}
+
 // TODO: How to get UI to work? Maybe have it be a segment of HTMl that is dynamically imported and cleared?
 
 // TODO: Make function to add a new score. If a new score is added that is greater than one of the top 5, 
