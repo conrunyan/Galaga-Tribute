@@ -14,7 +14,9 @@ let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
 let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
 let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
 let BOARD_SNAKE_COLOR = 'rgba(0, 255, 0, .5)';
-let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)'
+let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)';
+let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
+let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 
 makeGameBoard();
@@ -50,16 +52,22 @@ function render() {
 //          This initial grid will have all rectangles marked as background
 function makeGameBoard() {
     // generate board
-    let cur_y = 0;
+    let obstacles = randomWalls(15); // generate n number of obstacle coordinates
     // y-coord loop
     for (let i = 0; i < BOARD_CELL_COUNT; i++) {
-        let tmpPieces = [];
-        let cur_x = 0;
         let tmpY = (i * BOARD_CELL_SIZE)
         // x-coord loop
         for (let j = 0; j < BOARD_CELL_COUNT; j++) {
             let tmpX = (j * BOARD_CELL_SIZE)
+            // condition for initial walls
             let tmpType = ((j === 0 || i === 0 || j === BOARD_CELL_COUNT-1 || i === BOARD_CELL_COUNT-1) ? 'wall' : 'background');  
+            // condition for obstacle (technically just a wall)
+            obstacles.forEach(function(ob){
+                if (ob.x === j && ob.y === i) {
+                    console.log('Wall Obstacle: ', ob);
+                    tmpType = 'obstacle'
+                }
+            });
             //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX + ' Current Type: ' + tmpType);
             let tmpSpec = {
                 xCoord: tmpX,
@@ -68,24 +76,53 @@ function makeGameBoard() {
             };
             let tmpGamePiece = GamePiece(tmpSpec);
             boardPieces.push(tmpGamePiece);
-            tmpGamePiece.info();
+            //tmpGamePiece.info();
         }
     }
 }
+
+// Function generates a list of coordinates to turn into obstacles throughout the board
+function randomWalls(numBlocks) {
+    let counter = 0;
+    let blockOffsets = [];
+    while (counter < numBlocks) {
+        let tmpX = getRandomInt(BOARD_CELL_COUNT);
+        let tmpY = getRandomInt(BOARD_CELL_COUNT);
+        let tmpXY = {x: tmpX, y: tmpY}
+        // only add a block if it hasn't been encountered before
+        if (!blockOffsets.includes(tmpXY) && (tmpX != 0 && tmpX != BOARD_CELL_COUNT-1) && (tmpY != 0 && tmpY != BOARD_CELL_COUNT-1)) {
+            blockOffsets.push(tmpXY);
+            counter++;
+        }
+    }
+    return blockOffsets;
+}
+
+// Function found on Mozilla's documentation site: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 // TODO: Make function to generate a board piece, with a specified type (snake-piece, food, wall, background)
 function GamePiece(specs) {
     // determine color of piece
     let color = BOARD_BACKGROUND_COLOR;
     let width = BOARD_CELL_SIZE;
+    let border = '';
     let height = width;
     if (specs.type === 'wall') {
         color = BOARD_WALL_COLOR;
+        border = BOARD_BLOCK_BORDER;
     }
     else if (specs.type === 'snake') {
         color = BOARD_SNAKE_COLOR;
+        border = BOARD_BLOCK_BORDER;
     }
     else if (specs.type === 'food') {
         color = BOARD_FOOD_COLOR;
+    }
+    else if (specs.type === 'obstacle') {
+        color = BOARD_OBSTACLE_COLOR;
     }
 
     function changeType(newType) {
@@ -102,6 +139,9 @@ function GamePiece(specs) {
             specs.yCoord,
             width,
             height);
+        context.lineWidth = 2;
+        context.strokeStyle = border;
+        context.stroke();
 
         context.restore();
     }
