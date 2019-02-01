@@ -1,6 +1,6 @@
 // Code for the snake game engine
 let firstLoop = true;
-let prevBrowserTime = 0;
+let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
 let canvas = document.getElementById('id-canvas');
@@ -18,6 +18,7 @@ let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)'
 
 
 makeGameBoard();
+gameLoop();
 
 
 
@@ -34,6 +35,17 @@ function gameLoop(browserTime) {
     requestAnimationFrame(gameLoop);
 }
 
+function update(elapsedTime) {
+    // TODO: Add stuff to update function.
+}
+
+function render() {
+    // render game board
+    for (let i = 0; i < boardPieces.length; i++) {
+        boardPieces[i].drawGamePiece();
+    }
+}
+
 // DONE: Make function to generate a grid (nxn) of rectangles. Should evenly break up the board size into chunks.
 //          This initial grid will have all rectangles marked as background
 function makeGameBoard() {
@@ -47,7 +59,7 @@ function makeGameBoard() {
         // x-coord loop
         for (let j = 0; j < BOARD_CELL_COUNT; j++) {
             let tmpX = (j * BOARD_CELL_SIZE)
-            let tmpType = ((j === 0 || i === 0) ? 'wall' : 'background');  
+            let tmpType = ((j === 0 || i === 0 || j === BOARD_CELL_COUNT-1 || i === BOARD_CELL_COUNT-1) ? 'wall' : 'background');  
             //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX + ' Current Type: ' + tmpType);
             let tmpSpec = {
                 xCoord: tmpX,
@@ -56,7 +68,7 @@ function makeGameBoard() {
             };
             let tmpGamePiece = GamePiece(tmpSpec);
             boardPieces.push(tmpGamePiece);
-            //tmpGamePiece.info();
+            tmpGamePiece.info();
         }
     }
 }
@@ -96,13 +108,13 @@ function GamePiece(specs) {
 
     function info() {
         console.log(`x: ${specs.xCoord} y: ${specs.yCoord} type: ${specs.type} color: ${color}`);
-    }
+    };
 
     return {
         // Functions
         info: info, 
         changeType: changeType,
-        drawGamePiece: drawGamePiece;
+        drawGamePiece: drawGamePiece,
         // Properties
         color: color,
         width: width,
