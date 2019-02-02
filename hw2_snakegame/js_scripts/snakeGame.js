@@ -5,6 +5,7 @@ let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
 let snakePieces = [];
+let nextDirection = '';
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
 let KeyEventCodes = {
@@ -29,7 +30,11 @@ let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 makeGameBoard();
 window.addEventListener('keydown', onKeyDown);
-gameLoop();
+render();
+newDirection = 'down'
+update();
+render();
+//gameLoop();
 
 
 
@@ -47,6 +52,17 @@ function gameLoop(browserTime) {
 }
 
 function update(elapsedTime) {
+    if (true) {
+        // update head
+        console.log('BEFORE');
+        snakePieces[0].info()
+        let tmpHead = snakePieces[0];
+        tmpHead.newDirection = nextDirection;
+        tmpHead.moveSnakeFoward();
+        console.log('AFTER');
+        tmpHead.info();
+        snakePieces[0] = tmpHead;
+    }
     // TODO: Add step to move the snake
     // TODO: Add step to add tail to snake
     // TODO: Add step to move food, if needed
@@ -59,16 +75,30 @@ function render() {
             boardPieces[i][j].drawGamePiece();
         }
     }
+    for (let i = 0; i < snakePieces.length; i++) {
+        snakePieces[i].drawGamePiece();
+        //snakePieces[i].info()
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////
 function onKeyDown(e) {
     snakeCanMove = true;
     
     if (e.keyCode === KeyEventCodes.DOM_VK_A) {
-        
+        console.log('Pressing: A');
+        nextDirection = 'left';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_D) {
         console.log('Pressing: D');
+        nextDirection = 'right';
+    }
+    else if (e.keyCode === KeyEventCodes.DOM_VK_S) {
+        console.log('Pressing: S');
+        nextDirection = 'down';
+    }
+    else if (e.keyCode === KeyEventCodes.DOM_VK_W) {
+        console.log('Pressing: W');
+        nextDirection = 'up';
     }
 } 
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,20 +138,18 @@ function makeGameBoard() {
         boardPieces.push(tmpGamePieces);
     }
 
-    console.log(boardPieces);
-
     // place the snake
     let snakeXY = snakeStartPos();
     let snake = SnakePiece({
         xCoord: snakeXY.x,
         yCoord: snakeXY.y,
-        direction: 'up',
-        newDirection: 'down',
+        direction: '',
+        newDirection: '',
         speed: 100,
         type:'snake-head',
     });
     snake.info()
-    boardPieces[snakeXY.y/BOARD_CELL_SIZE][snakeXY.x/BOARD_CELL_SIZE] = snake;
+    snakePieces.push(snake);
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -252,23 +280,28 @@ function SnakePiece(specs) {
         }
 
         function moveSnakeFoward() {
+            console.log('In moveSnake function')
             // make sure we can't move back into ourself
             if (specs.newDirection === 'up' && specs.direction !== 'down') {
                 specs.yCoord -= specs.speed * specs.elapsedTime;
+                specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'down' && specs.direction !== 'up') {
                 specs.yCoord += specs.speed * specs.elapsedTime;
+                specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'left' && specs.direction !== 'right') {
                 specs.xCoord -= specs.speed * specs.elapsedTime;
+                specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'right' && specs.direction !== 'left') {
                 specs.xCoord += specs.speed * specs.elapsedTime;
+                specs.direction = specs.newDirection;
             }
         }
     
         function info() {
-            console.log(`SNAKE -> x: ${specs.xCoord} y: ${specs.yCoord} type: ${specs.type} color: ${color}`);
+            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}`);
         };
     
         return {
