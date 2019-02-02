@@ -55,10 +55,12 @@ function update(elapsedTime) {
 function render() {
     // render game board
     for (let i = 0; i < boardPieces.length; i++) {
-        boardPieces[i].drawGamePiece();
+        for (let j = 0; j < boardPieces[i].length; j++) {
+            boardPieces[i][j].drawGamePiece();
+        }
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////
 function onKeyDown(e) {
     snakeCanMove = true;
     
@@ -69,12 +71,45 @@ function onKeyDown(e) {
         console.log('Pressing: D');
     }
 } 
-
+////////////////////////////////////////////////////////////////////////////////
 // DONE: Make function to generate a grid (nxn) of rectangles. Should evenly break up the board size into chunks.
 //          This initial grid will have all rectangles marked as background
 function makeGameBoard() {
     // generate board
     let obstacles = randomWalls(15); // generate n number of obstacle coordinates
+    // y-coord loop
+    for (let i = 0; i < BOARD_CELL_COUNT; i++) {
+        let tmpY = (i * BOARD_CELL_SIZE)
+        let tmpGamePieces = [];
+        // x-coord loop
+        for (let j = 0; j < BOARD_CELL_COUNT; j++) {
+            let tmpX = (j * BOARD_CELL_SIZE)
+            // condition for initial walls
+            let tmpType = 'background';
+            if ((j === 0 || i === 0 || j === BOARD_CELL_COUNT-1 || i === BOARD_CELL_COUNT-1)) {
+                tmpType = 'wall';
+            }
+            // generate obstacles
+            obstacles.forEach(function(ob){
+                if (ob.x === (j * BOARD_CELL_SIZE) && ob.y === (i * BOARD_CELL_SIZE)) {
+                    //console.log('Wall Obstacle: ', ob);
+                    tmpType = 'obstacle';
+                }
+            });
+            let tmpSpec = {
+                xCoord: tmpX,
+                yCoord: tmpY,
+                type: tmpType
+            };
+            let tmpGamePiece = GamePiece(tmpSpec);
+            tmpGamePieces.push(tmpGamePiece);
+        }
+        // save a row
+        boardPieces.push(tmpGamePieces);
+    }
+    console.log(boardPieces);
+
+    // place the snake
     let snakeXY = snakeStartPos();
     let snake = SnakePiece({
         xCoord: snakeXY.x,
@@ -84,35 +119,8 @@ function makeGameBoard() {
         speed: 100,
         type:'snake-head',
     });
-    // y-coord loop
-    for (let i = 0; i < BOARD_CELL_COUNT; i++) {
-        let tmpY = (i * BOARD_CELL_SIZE)
-        // x-coord loop
-        for (let j = 0; j < BOARD_CELL_COUNT; j++) {
-            let tmpX = (j * BOARD_CELL_SIZE)
-            // condition for initial walls
-            let tmpType = ((j === 0 || i === 0 || j === BOARD_CELL_COUNT-1 || i === BOARD_CELL_COUNT-1) ? 'wall' : 'background');  
-            // condition for obstacle (technically just a wall)
-            obstacles.forEach(function(ob){
-                if (ob.x === (j * 10) && ob.y === (i * 10)) {
-                    //console.log('Wall Obstacle: ', ob);
-                    tmpType = 'obstacle'
-                }
-            });
-            // TODO: Add step to populate board with food (1 at a time)
-            //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX + ' Current Type: ' + tmpType);
-            let tmpSpec = {
-                xCoord: tmpX,
-                yCoord: tmpY,
-                type: tmpType
-            };
-            let tmpGamePiece = GamePiece(tmpSpec);
-            boardPieces.push(tmpGamePiece);
-            //tmpGamePiece.info();
-        }
-    }
     snake.info()
-    boardPieces.push(snake);
+    boardPieces[snakeXY.x/BOARD_CELL_SIZE][snakeXY.y/BOARD_CELL_SIZE] = snake;
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -124,15 +132,15 @@ function randomWalls(numBlocks) {
         let tmpY = getRandomInt(BOARD_HEIGHT);
         let tmpXY = {x: tmpX, y: tmpY}
         // only add a block if it hasn't been encountered before
-        if (!blockOffsets.includes(tmpXY) && (tmpX != 0 && tmpX != BOARD_CELL_COUNT-1) && (tmpY != 0 && tmpY != BOARD_CELL_COUNT-1)) {
-            console.log(`Pushing new block {x:${tmpXY.x}, y:${tmpXY.y}}`);
+        if (!blockOffsets.includes(tmpXY) && (tmpX != 0 && tmpX != (BOARD_HEIGHT - BOARD_CELL_SIZE)) && (tmpY != 0 && tmpY != (BOARD_HEIGHT - BOARD_CELL_SIZE))) {
+            //console.log(`Pushing new block {x:${tmpXY.x}, y:${tmpXY.y}}`);
             blockOffsets.push(tmpXY);
             counter++;
         }
     }
     return blockOffsets;
 }
-
+////////////////////////////////////////////////////////////////////////////////
 // Function determines where the snake will start
 function snakeStartPos() {
     while (true) {
@@ -142,7 +150,6 @@ function snakeStartPos() {
         foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
         // if piece is not a wall or food, place the snake there;
         if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle') {
-            console.log('Found a home!')
             return {x: tmpX, y:tmpY};
         }
     }
