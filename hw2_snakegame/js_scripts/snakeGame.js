@@ -1,6 +1,7 @@
 // Code for the snake game engine
 let firstLoop = true;
 let snakeCanMove = false; // only move the after the first direction key has been pressed
+let gameOver = false;
 let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
@@ -16,14 +17,14 @@ let KeyEventCodes = {
 };
 
 // Game Constants
-let BOARD_SNAKE_SPEED = 100;  // ms per square
+let BOARD_SNAKE_SPEED = 300;  // ms per square
 let BOARD_WIDTH = 500;
 let BOARD_HEIGHT = 500;
 let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
 let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
 let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
 let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
-let BOARD_SNAKE_COLOR = 'rgba(0, 255, 0, .5)';
+let BOARD_SNAKE_COLOR = 'rgba(0, 255, 0, 1)';
 let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)';
 let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
 let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
@@ -50,23 +51,32 @@ function gameLoop(browserTime) {
     update(elapsedTime);
     render();
     firstLoop = false;
+    if (gameOver) {
+        // window.alert('GAME OVER')
+        return;
+    }
     requestAnimationFrame(gameLoop);
 }
 
 function update(elapsedTime) {
     if (snakeCanMove) {
         // update head
-        console.log('BEFORE');
-        snakePieces[0].info()
         let tmpHead = snakePieces[0];
-        tmpHead.changeDirection(nextDirection);
-        tmpHead.updateElapsedTime(elapsedTime);
-        tmpHead.moveSnakeFoward();
-        tmpHead.drawGamePiece();
-        tmpHead.shouldSnakeRender();
-        console.log('AFTER');
-        tmpHead.info();
-        snakePieces[0] = tmpHead;
+        snakePieces[0].changeDirection(nextDirection);
+        snakePieces[0].updateElapsedTime(elapsedTime);
+        snakePieces[0].moveSnakeFoward();
+        snakePieces[0].drawGamePiece();
+        snakePieces[0].shouldSnakeRender();
+        //snakePieces[0] = tmpHead;
+        // check if snake has hit a wall
+        let snakeHeadX_idx = snakePieces[0].getXYCoords().x / BOARD_CELL_SIZE;
+        let snakeHeadY_idx = snakePieces[0].getXYCoords().y / BOARD_CELL_SIZE;
+        console.log(snakeHeadX_idx, snakeHeadY_idx);
+        let pieceHeadIsOn = boardPieces[snakeHeadX_idx][snakeHeadY_idx];
+        pieceHeadIsOn.info()
+        if (pieceHeadIsOn.type === 'wall' || pieceHeadIsOn.type === 'obstacle') {
+            gameOver = true;
+        }
     }
     // TODO: Add step to move the snake
     // TODO: Add step to add tail to snake
@@ -84,7 +94,7 @@ function render() {
         if (snakePieces[i].render) {
             snakePieces[i].drawGamePiece();
         }
-        //snakePieces[i].info()
+        // snakePieces[i].info()
     }
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -319,6 +329,10 @@ function SnakePiece(specs) {
             }
         }
 
+        function getXYCoords() {
+            return {x: specs.xCoord, y: specs.yCoord};
+        }
+
         function snakeShouldMove() {
             if (specs.eTime >= specs.speed) {
                 return true;
@@ -356,6 +370,7 @@ function SnakePiece(specs) {
             updateElapsedTime: updateElapsedTime,
             shouldSnakeRender: shouldSnakeRender,
             snakeShouldMove: snakeShouldMove,
+            getXYCoords: getXYCoords,
             // Properties
             color: specs.color,
             width: specs.width,
