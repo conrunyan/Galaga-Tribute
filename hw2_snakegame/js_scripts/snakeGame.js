@@ -107,6 +107,7 @@ function makeGameBoard() {
         // save a row
         boardPieces.push(tmpGamePieces);
     }
+
     console.log(boardPieces);
 
     // place the snake
@@ -120,7 +121,7 @@ function makeGameBoard() {
         type:'snake-head',
     });
     snake.info()
-    boardPieces[snakeXY.x/BOARD_CELL_SIZE][snakeXY.y/BOARD_CELL_SIZE] = snake;
+    boardPieces[snakeXY.y/BOARD_CELL_SIZE][snakeXY.x/BOARD_CELL_SIZE] = snake;
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -144,8 +145,12 @@ function randomWalls(numBlocks) {
 // Function determines where the snake will start
 function snakeStartPos() {
     while (true) {
-        let tmpX = getRandomInt(BOARD_WIDTH);
-        let tmpY = getRandomInt(BOARD_HEIGHT);
+        let tmpX = getRandomInt(BOARD_WIDTH) - BOARD_CELL_SIZE;
+        let tmpY = getRandomInt(BOARD_HEIGHT) - BOARD_CELL_SIZE;
+        if (tmpX === 0 || tmpY === 0 || tmpX === (BOARD_WIDTH - BOARD_CELL_SIZE) || tmpY === (BOARD_WIDTH - BOARD_CELL_SIZE)) {
+            continue;
+        }
+        // make sure x,y coord are valid for the snake
         filteredPieces = boardPieces.filter(piece => piece.xCoord === tmpX);
         foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
         // if piece is not a wall or food, place the snake there;
