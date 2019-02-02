@@ -30,19 +30,19 @@ let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 makeGameBoard();
 window.addEventListener('keydown', onKeyDown);
-render();
-newDirection = 'down'
-update();
-render();
-//gameLoop();
+// render();
+// nextDirection = 'down'
+// update();
+// render();
+gameLoop();
 
 
 
 function gameLoop(browserTime) {
     // Get elapsed time
-    let elapsedTime = 0
+    let elapsedTime = performance.now();
     if (!firstLoop) {
-        elapsedTime = browserTime - prevBrowserTime;
+        elapsedTime = Math.floor(browserTime - prevBrowserTime);
         prevBrowserTime = browserTime;
     }
     update(elapsedTime);
@@ -57,7 +57,8 @@ function update(elapsedTime) {
         console.log('BEFORE');
         snakePieces[0].info()
         let tmpHead = snakePieces[0];
-        tmpHead.newDirection = nextDirection;
+        tmpHead.changeDirection(nextDirection);
+        tmpHead.updateElapsedTime(elapsedTime);
         tmpHead.moveSnakeFoward();
         console.log('AFTER');
         tmpHead.info();
@@ -145,8 +146,13 @@ function makeGameBoard() {
         yCoord: snakeXY.y,
         direction: '',
         newDirection: '',
-        speed: 100,
+        speed: .1,
         type:'snake-head',
+        color: BOARD_SNAKE_COLOR,
+        width: BOARD_CELL_SIZE,
+        border: BOARD_BLOCK_BORDER,
+        height: BOARD_CELL_SIZE,
+        eTime: 0,
     });
     snake.info()
     snakePieces.push(snake);
@@ -257,23 +263,18 @@ function GamePiece(specs) {
 
 // Function generates a snake piece
 function SnakePiece(specs) {
-        // determine color of piece
-        let color = BOARD_SNAKE_COLOR;
-        let width = BOARD_CELL_SIZE;
-        let border = BOARD_BLOCK_BORDER;
-        let height = width;
-    
+        // determine color of piece    
         function drawGamePiece() {
             context.save();
-            context.fillStyle = color;
+            context.fillStyle = specs.color;
             context.lineWidth = 3;
             context.fillRect(
                 specs.xCoord,
                 specs.yCoord,
-                width,
-                height);
+                specs.width,
+                specs.height);
             context.lineWidth = 2;
-            context.strokeStyle = border;
+            context.strokeStyle = specs.border;
             context.stroke();
 
             context.restore();
@@ -283,25 +284,34 @@ function SnakePiece(specs) {
             console.log('In moveSnake function')
             // make sure we can't move back into ourself
             if (specs.newDirection === 'up' && specs.direction !== 'down') {
-                specs.yCoord -= specs.speed * specs.elapsedTime;
+                specs.yCoord -= specs.speed * specs.eTime;
                 specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'down' && specs.direction !== 'up') {
-                specs.yCoord += specs.speed * specs.elapsedTime;
+                specs.yCoord += specs.speed * specs.eTime;
+                console.log ('SPEED: ' + specs.speed + ' ET: ' + specs.eTime);
                 specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'left' && specs.direction !== 'right') {
-                specs.xCoord -= specs.speed * specs.elapsedTime;
+                specs.xCoord -= specs.speed * specs.eTime;
                 specs.direction = specs.newDirection;
             }
             else if (specs.newDirection === 'right' && specs.direction !== 'left') {
-                specs.xCoord += specs.speed * specs.elapsedTime;
+                specs.xCoord += specs.speed * specs.eTime;
                 specs.direction = specs.newDirection;
             }
         }
+
+        function changeDirection(newDirection) {
+            specs.newDirection = newDirection;
+        }
+
+        function updateElapsedTime(updateTime) {
+            specs.eTime = updateTime;
+        }
     
         function info() {
-            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}`);
+            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${specs.color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}\nelapsedTime: ${specs.eTime}`);
         };
     
         return {
@@ -309,10 +319,12 @@ function SnakePiece(specs) {
             info: info, 
             drawGamePiece: drawGamePiece,
             moveSnakeFoward: moveSnakeFoward,
+            changeDirection: changeDirection,
+            updateElapsedTime: updateElapsedTime,
             // Properties
-            color: color,
-            width: width,
-            height: height,
+            color: specs.color,
+            width: specs.width,
+            height: specs.height,
         };
 }
 
