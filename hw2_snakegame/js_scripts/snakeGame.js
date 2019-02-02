@@ -16,6 +16,7 @@ let KeyEventCodes = {
 };
 
 // Game Constants
+let BOARD_SNAKE_SPEED = 100;  // ms per square
 let BOARD_WIDTH = 500;
 let BOARD_HEIGHT = 500;
 let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
@@ -32,6 +33,7 @@ makeGameBoard();
 window.addEventListener('keydown', onKeyDown);
 // render();
 // nextDirection = 'down'
+// snakeCanMove = true;
 // update();
 // render();
 gameLoop();
@@ -52,7 +54,7 @@ function gameLoop(browserTime) {
 }
 
 function update(elapsedTime) {
-    if (true) {
+    if (snakeCanMove) {
         // update head
         console.log('BEFORE');
         snakePieces[0].info()
@@ -60,6 +62,8 @@ function update(elapsedTime) {
         tmpHead.changeDirection(nextDirection);
         tmpHead.updateElapsedTime(elapsedTime);
         tmpHead.moveSnakeFoward();
+        tmpHead.drawGamePiece();
+        tmpHead.shouldSnakeRender();
         console.log('AFTER');
         tmpHead.info();
         snakePieces[0] = tmpHead;
@@ -77,7 +81,9 @@ function render() {
         }
     }
     for (let i = 0; i < snakePieces.length; i++) {
-        snakePieces[i].drawGamePiece();
+        if (snakePieces[i].render) {
+            snakePieces[i].drawGamePiece();
+        }
         //snakePieces[i].info()
     }
 }
@@ -146,13 +152,14 @@ function makeGameBoard() {
         yCoord: snakeXY.y,
         direction: '',
         newDirection: '',
-        speed: .1,
+        speed: BOARD_SNAKE_SPEED,
         type:'snake-head',
         color: BOARD_SNAKE_COLOR,
         width: BOARD_CELL_SIZE,
         border: BOARD_BLOCK_BORDER,
         height: BOARD_CELL_SIZE,
         eTime: 0,
+        render: true,
     });
     snake.info()
     snakePieces.push(snake);
@@ -281,25 +288,42 @@ function SnakePiece(specs) {
         }
 
         function moveSnakeFoward() {
-            console.log('In moveSnake function')
             // make sure we can't move back into ourself
             if (specs.newDirection === 'up' && specs.direction !== 'down') {
-                specs.yCoord -= specs.speed * specs.eTime;
-                specs.direction = specs.newDirection;
+                if (snakeShouldMove()) {
+                    specs.yCoord -= BOARD_CELL_SIZE;
+                    specs.direction = specs.newDirection;
+                    specs.eTime = 0;
+                }
             }
             else if (specs.newDirection === 'down' && specs.direction !== 'up') {
-                specs.yCoord += specs.speed * specs.eTime;
-                console.log ('SPEED: ' + specs.speed + ' ET: ' + specs.eTime);
-                specs.direction = specs.newDirection;
+                if (snakeShouldMove()) {
+                    specs.yCoord += BOARD_CELL_SIZE;
+                    specs.direction = specs.newDirection;
+                    specs.eTime = 0;
+                }
             }
             else if (specs.newDirection === 'left' && specs.direction !== 'right') {
-                specs.xCoord -= specs.speed * specs.eTime;
-                specs.direction = specs.newDirection;
+                if (snakeShouldMove()) {
+                    specs.xCoord -= BOARD_CELL_SIZE;
+                    specs.direction = specs.newDirection;
+                    specs.eTime = 0;
+                }
             }
             else if (specs.newDirection === 'right' && specs.direction !== 'left') {
-                specs.xCoord += specs.speed * specs.eTime;
-                specs.direction = specs.newDirection;
+                if (snakeShouldMove()) {
+                    specs.xCoord += BOARD_CELL_SIZE;
+                    specs.direction = specs.newDirection;
+                    specs.eTime = 0;
+                }
             }
+        }
+
+        function snakeShouldMove() {
+            if (specs.eTime >= specs.speed) {
+                return true;
+            }
+            return false;
         }
 
         function changeDirection(newDirection) {
@@ -307,11 +331,20 @@ function SnakePiece(specs) {
         }
 
         function updateElapsedTime(updateTime) {
-            specs.eTime = updateTime;
+            specs.eTime += updateTime;
+        }
+
+        function shouldSnakeRender() {
+            if (specs.xCoord % BOARD_CELL_SIZE == 0 && specs.yCoord % BOARD_CELL_SIZE == 0) {
+                specs.render = true;
+            }
+            else {
+                specs.render = false;
+            }
         }
     
         function info() {
-            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${specs.color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}\nelapsedTime: ${specs.eTime}`);
+            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${specs.color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}\nelapsedTime: ${specs.eTime}\nrender: ${specs.render}`);
         };
     
         return {
@@ -321,6 +354,8 @@ function SnakePiece(specs) {
             moveSnakeFoward: moveSnakeFoward,
             changeDirection: changeDirection,
             updateElapsedTime: updateElapsedTime,
+            shouldSnakeRender: shouldSnakeRender,
+            snakeShouldMove: snakeShouldMove,
             // Properties
             color: specs.color,
             width: specs.width,
