@@ -1,11 +1,18 @@
 // Code for the snake game engine
 let firstLoop = true;
+let snakeCanMove = false; // only move the after the first direction key has been pressed
 let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
 let snakePieces = [];
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
+let KeyEventCodes = {
+    DOM_VK_A: 65,
+    DOM_VK_D: 68,
+    DOM_VK_S: 83,
+    DOM_VK_W: 87,
+};
 
 // Game Constants
 let BOARD_WIDTH = 500;
@@ -21,6 +28,7 @@ let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 
 makeGameBoard();
+window.addEventListener('keydown', onKeyDown);
 gameLoop();
 
 
@@ -39,7 +47,9 @@ function gameLoop(browserTime) {
 }
 
 function update(elapsedTime) {
-    // TODO: Add stuff to update function.
+    // TODO: Add step to move the snake
+    // TODO: Add step to add tail to snake
+    // TODO: Add step to move food, if needed
 }
 
 function render() {
@@ -49,13 +59,30 @@ function render() {
     }
 }
 
+function onKeyDown(e) {
+    snakeCanMove = true;
+    
+    if (e.keyCode === KeyEventCodes.DOM_VK_A) {
+        
+    }
+    else if (e.keyCode === KeyEventCodes.DOM_VK_D) {
+        console.log('Pressing: D');
+    }
+} 
+
 // DONE: Make function to generate a grid (nxn) of rectangles. Should evenly break up the board size into chunks.
 //          This initial grid will have all rectangles marked as background
 function makeGameBoard() {
     // generate board
     let obstacles = randomWalls(15); // generate n number of obstacle coordinates
+    let snakeXY = snakeStartPos();
     let snake = SnakePiece({
-        
+        xCoord: snakeXY.x,
+        yCoord: snakeXY.y,
+        direction: 'up',
+        newDirection: 'down',
+        speed: 100,
+        type:'snake-head',
     });
     // y-coord loop
     for (let i = 0; i < BOARD_CELL_COUNT; i++) {
@@ -67,11 +94,12 @@ function makeGameBoard() {
             let tmpType = ((j === 0 || i === 0 || j === BOARD_CELL_COUNT-1 || i === BOARD_CELL_COUNT-1) ? 'wall' : 'background');  
             // condition for obstacle (technically just a wall)
             obstacles.forEach(function(ob){
-                if (ob.x === j && ob.y === i) {
-                    console.log('Wall Obstacle: ', ob);
+                if (ob.x === (j * 10) && ob.y === (i * 10)) {
+                    //console.log('Wall Obstacle: ', ob);
                     tmpType = 'obstacle'
                 }
             });
+            // TODO: Add step to populate board with food (1 at a time)
             //console.log('Current Y: ' + tmpY + ' Current X: ' + tmpX + ' Current Type: ' + tmpType);
             let tmpSpec = {
                 xCoord: tmpX,
@@ -83,6 +111,8 @@ function makeGameBoard() {
             //tmpGamePiece.info();
         }
     }
+    snake.info()
+    boardPieces.push(snake);
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -90,11 +120,12 @@ function randomWalls(numBlocks) {
     let counter = 0;
     let blockOffsets = [];
     while (counter < numBlocks) {
-        let tmpX = getRandomInt(BOARD_CELL_COUNT);
-        let tmpY = getRandomInt(BOARD_CELL_COUNT);
+        let tmpX = getRandomInt(BOARD_WIDTH);
+        let tmpY = getRandomInt(BOARD_HEIGHT);
         let tmpXY = {x: tmpX, y: tmpY}
         // only add a block if it hasn't been encountered before
         if (!blockOffsets.includes(tmpXY) && (tmpX != 0 && tmpX != BOARD_CELL_COUNT-1) && (tmpY != 0 && tmpY != BOARD_CELL_COUNT-1)) {
+            console.log(`Pushing new block {x:${tmpXY.x}, y:${tmpXY.y}}`);
             blockOffsets.push(tmpXY);
             counter++;
         }
@@ -102,9 +133,26 @@ function randomWalls(numBlocks) {
     return blockOffsets;
 }
 
+// Function determines where the snake will start
+function snakeStartPos() {
+    while (true) {
+        let tmpX = getRandomInt(BOARD_WIDTH);
+        let tmpY = getRandomInt(BOARD_HEIGHT);
+        filteredPieces = boardPieces.filter(piece => piece.xCoord === tmpX);
+        foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
+        // if piece is not a wall or food, place the snake there;
+        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle') {
+            console.log('Found a home!')
+            return {x: tmpX, y:tmpY};
+        }
+    }
+}
+
 // Function found on Mozilla's documentation site: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
+    let val = Math.floor(Math.random() * Math.floor(max));
+    return (Math.ceil((val + 1)/10) * 10); 
+
 }
 
 // DONE: Make function to generate a board piece, with a specified type (snake-piece, food, wall, background)
