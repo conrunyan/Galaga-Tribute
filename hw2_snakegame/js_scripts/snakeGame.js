@@ -4,6 +4,7 @@ let snakeCanMove = false; // only move the after the first direction key has bee
 let gameOver = false;
 let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
+let currentScore = 0;
 let boardPieces = [];
 let snakePieces = [];
 let foodPiece = {x: NaN, y: NaN};
@@ -18,10 +19,11 @@ let KeyEventCodes = {
 };
 
 // Game Constants
-let BOARD_SNAKE_SPEED = 300;  // ms per square
+let BOARD_SNAKE_SPEED = 100;  // ms per square
 let BOARD_WIDTH = 500;
 let BOARD_HEIGHT = 500;
 let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
+let SNAKE_PIECES_TO_ADD = 3;
 let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
 let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
 let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
@@ -60,6 +62,7 @@ function gameLoop(browserTime) {
     firstLoop = false;
     if (gameOver) {
         // window.alert('GAME OVER')
+        // TODO: Add stuff to be cleared/saved at the end of a game
         return;
     }
     requestAnimationFrame(gameLoop);
@@ -67,26 +70,59 @@ function gameLoop(browserTime) {
 
 function update(elapsedTime) {
     if (snakeCanMove) {
-        // update head
+        // update head and snake pieces
         let tmpHead = snakePieces[0];
         snakePieces[0].changeDirection(nextDirection);
         snakePieces[0].updateElapsedTime(elapsedTime);
         snakePieces[0].moveSnakeFoward();
-        snakePieces[0].drawGamePiece();
         snakePieces[0].shouldSnakeRender();
-        //snakePieces[0] = tmpHead;
-        // check if snake has hit a wall
+
         let snakeHeadX_idx = snakePieces[0].getXYCoords().x / BOARD_CELL_SIZE;
         let snakeHeadY_idx = snakePieces[0].getXYCoords().y / BOARD_CELL_SIZE;
-        console.log(snakeHeadX_idx, snakeHeadY_idx);
+        let curSnakeHeadX = snakePieces[0].getXYCoords().x;
+        let curSnakeHeadY = snakePieces[0].getXYCoords().y;
         let pieceHeadIsOn = boardPieces[snakeHeadY_idx][snakeHeadX_idx];
+        // Lose condition.
         if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
             console.log('GAME OVER');
             gameOver = true;
         }
+        // check if current block is a food piece
+        if (pieceHeadIsOn.type === 'food') {
+            // increment score
+            currentScore += SNAKE_PIECES_TO_ADD;
+            // add new pieces to the snake
+            for (let i = 0; i < SNAKE_PIECES_TO_ADD; i++) {
+                let newSnakePiece = SnakePiece({
+                    xCoord: curSnakeHeadX,
+                    yCoord: curSnakeHeadY,
+                    direction: '',
+                    newDirection: '',
+                    speed: BOARD_SNAKE_SPEED,
+                    type:'snake-body',
+                    color: BOARD_SNAKE_COLOR,
+                    width: BOARD_CELL_SIZE,
+                    border: BOARD_BLOCK_BORDER,
+                    height: BOARD_CELL_SIZE,
+                    eTime: 0,
+                    render: true,
+                });
+                snakePieces.push(newSnakePiece);
+            }
+        }
+        // loop over snake pieces and move then if needed
+        let nextBodyX = curSnakeHeadX;
+        let nextBodyY = curSnakeHeadY;
+        for (let i = 1; i < snakePieces.length; i++) {
+            let curBodyX = snakePieces[i].getXYCoords().x;
+            let curBodyY = snakePieces[i].getXYCoords().y;
+            // move current body position, then set nextBody positions to current
+            snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
+            nextBodyX = curBodyX;
+            nextBodyY = curBodyY;
+        }
     }
     // TODO: Add step to move the snake
-    // TODO: Add step to add tail to snake
     // TODO: Add step to move food, if needed
 }
 
@@ -222,7 +258,7 @@ function findOpenPos() {
         filteredPieces = boardPieces.filter(piece => piece.xCoord === tmpX);
         foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
         // if piece is not a wall or food, place the snake there;
-        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle' && foundPiece.type !== 'snake-head' && foundPiece.type !== 'snake') {
+        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle' && foundPiece.type !== 'snake-head' && foundPiece.type !== 'snake-body') {
             return {x: tmpX, y:tmpY, xIdx: tmpX / BOARD_CELL_SIZE, yIdx: tmpY / BOARD_CELL_SIZE};
         }
     }
@@ -248,7 +284,7 @@ function GamePiece(specs) {
         color = BOARD_WALL_COLOR;
         border = BOARD_BLOCK_BORDER;
     }
-    else if (specs.type === 'snake') {
+    else if (specs.type === 'snake-body') {
         color = BOARD_SNAKE_COLOR;
         border = BOARD_BLOCK_BORDER;
     }
@@ -349,6 +385,15 @@ function SnakePiece(specs) {
             }
         }
 
+        // set body piece to the x/y coord passed (should be coords or piece right before it)
+        function moveSnakeBodyPiece(lastXY) {
+            if (specs.type === 'snake-body') {
+                specs.xCoord = lastXY.x;
+                specs.yCoord = lastXY.y;
+                console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
+            }
+        }
+
         function getXYCoords() {
             return {x: specs.xCoord, y: specs.yCoord};
         }
@@ -396,10 +441,12 @@ function SnakePiece(specs) {
             snakeShouldMove: snakeShouldMove,
             getXYCoords: getXYCoords,
             getType: getType,
+            moveSnakeBodyPiece: moveSnakeBodyPiece,
             // Properties
             color: specs.color,
             width: specs.width,
             height: specs.height,
+            render: specs.render,
         };
 }
 
