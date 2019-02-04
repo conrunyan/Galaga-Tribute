@@ -7,7 +7,7 @@ let scores = []; // list of scores to be kept track of
 let currentScore = 0;
 let boardPieces = [];
 let snakePieces = [];
-let foodPiece = {x: NaN, y: NaN};
+let foodPiece = {x: 0, y: 0};
 let nextDirection = '';
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
@@ -89,26 +89,16 @@ function update(elapsedTime) {
         }
         // check if current block is a food piece
         if (pieceHeadIsOn.type === 'food') {
+
             // increment score
             currentScore += SNAKE_PIECES_TO_ADD;
             // add new pieces to the snake
             for (let i = 0; i < SNAKE_PIECES_TO_ADD; i++) {
-                let newSnakePiece = SnakePiece({
-                    xCoord: curSnakeHeadX,
-                    yCoord: curSnakeHeadY,
-                    direction: '',
-                    newDirection: '',
-                    speed: BOARD_SNAKE_SPEED,
-                    type:'snake-body',
-                    color: BOARD_SNAKE_COLOR,
-                    width: BOARD_CELL_SIZE,
-                    border: BOARD_BLOCK_BORDER,
-                    height: BOARD_CELL_SIZE,
-                    eTime: 0,
-                    render: true,
-                });
-                snakePieces.push(newSnakePiece);
+                makeSnakeBody();
             }
+            // move food
+
+            placeFood();
         }
         // loop over snake pieces and move then if needed
         let nextBodyX = curSnakeHeadX;
@@ -197,7 +187,29 @@ function makeGameBoard() {
         // save a row
         boardPieces.push(tmpGamePieces);
     }
+    placeSnakeHead();
+    placeFood();
+}
 
+function makeSnakeBody(curSnakeHeadX, curSnakeHeadY) {
+    let newSnakePiece = SnakePiece({
+        xCoord: curSnakeHeadX,
+        yCoord: curSnakeHeadY,
+        direction: '',
+        newDirection: '',
+        speed: BOARD_SNAKE_SPEED,
+        type:'snake-body',
+        color: BOARD_SNAKE_COLOR,
+        width: BOARD_CELL_SIZE,
+        border: BOARD_BLOCK_BORDER,
+        height: BOARD_CELL_SIZE,
+        eTime: 0,
+        render: true,
+    });
+    snakePieces.push(newSnakePiece);
+}
+
+function placeSnakeHead() {
     // place the snake
     let snakeXY = findOpenPos();
     let snake = SnakePiece({
@@ -216,7 +228,20 @@ function makeGameBoard() {
     });
     snake.info()
     snakePieces.push(snake);
+}
 
+function placeFood() {
+    // remove any existing food
+    if (foodPiece.x !== 0 && foodPiece.y !== 0) {
+        console.log('REMOVING FOOD PIECE AT: ', foodPiece);
+        let tmpSpec = {
+            xCoord: foodPiece.x * BOARD_CELL_SIZE,
+            yCoord: foodPiece.y * BOARD_CELL_SIZE,
+            type: 'background',
+        };
+        let tmpGamePiece = GamePiece(tmpSpec);
+        boardPieces[foodPiece.y][foodPiece.x] = tmpGamePiece;
+    }
     // place the food
     let foodXY = findOpenPos();
     let food = GamePiece({
@@ -224,8 +249,8 @@ function makeGameBoard() {
         yCoord: foodXY.y,
         type: 'food',
     });
+    foodPiece = {x: foodXY.x / BOARD_CELL_SIZE, y: foodXY.y / BOARD_CELL_SIZE};
     boardPieces[foodXY.yIdx][foodXY.xIdx] = food;
-
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -299,6 +324,10 @@ function GamePiece(specs) {
         specs.type = newType;
     }
 
+    function changeColor(newColor) {
+        color = newColor;
+    }
+
     function drawGamePiece() {
         context.save();
 
@@ -325,6 +354,7 @@ function GamePiece(specs) {
         info: info, 
         changeType: changeType,
         drawGamePiece: drawGamePiece,
+        changeColor: changeColor,
         // Properties
         color: color,
         width: width,
@@ -390,7 +420,7 @@ function SnakePiece(specs) {
             if (specs.type === 'snake-body') {
                 specs.xCoord = lastXY.x;
                 specs.yCoord = lastXY.y;
-                console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
+                // console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
             }
         }
 
