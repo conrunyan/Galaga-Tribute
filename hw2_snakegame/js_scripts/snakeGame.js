@@ -6,6 +6,7 @@ let prevBrowserTime = performance.now();
 let scores = []; // list of scores to be kept track of
 let boardPieces = [];
 let snakePieces = [];
+let foodPiece = {x: NaN, y: NaN};
 let nextDirection = '';
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
@@ -79,7 +80,7 @@ function update(elapsedTime) {
         let snakeHeadY_idx = snakePieces[0].getXYCoords().y / BOARD_CELL_SIZE;
         console.log(snakeHeadX_idx, snakeHeadY_idx);
         let pieceHeadIsOn = boardPieces[snakeHeadY_idx][snakeHeadX_idx];
-        if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head')) {
+        if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
             console.log('GAME OVER');
             gameOver = true;
         }
@@ -162,7 +163,7 @@ function makeGameBoard() {
     }
 
     // place the snake
-    let snakeXY = snakeStartPos();
+    let snakeXY = findOpenPos();
     let snake = SnakePiece({
         xCoord: snakeXY.x,
         yCoord: snakeXY.y,
@@ -179,6 +180,16 @@ function makeGameBoard() {
     });
     snake.info()
     snakePieces.push(snake);
+
+    // place the food
+    let foodXY = findOpenPos();
+    let food = GamePiece({
+        xCoord: foodXY.x,
+        yCoord: foodXY.y,
+        type: 'food',
+    });
+    boardPieces[foodXY.yIdx][foodXY.xIdx] = food;
+
 }
 
 // Function generates a list of coordinates to turn into obstacles throughout the board
@@ -200,7 +211,7 @@ function randomWalls(numBlocks) {
 }
 ////////////////////////////////////////////////////////////////////////////////
 // Function determines where the snake will start
-function snakeStartPos() {
+function findOpenPos() {
     while (true) {
         let tmpX = getRandomInt(BOARD_WIDTH) - BOARD_CELL_SIZE;
         let tmpY = getRandomInt(BOARD_HEIGHT) - BOARD_CELL_SIZE;
@@ -211,11 +222,13 @@ function snakeStartPos() {
         filteredPieces = boardPieces.filter(piece => piece.xCoord === tmpX);
         foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
         // if piece is not a wall or food, place the snake there;
-        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle') {
-            return {x: tmpX, y:tmpY};
+        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle' && foundPiece.type !== 'snake-head' && foundPiece.type !== 'snake') {
+            return {x: tmpX, y:tmpY, xIdx: tmpX / BOARD_CELL_SIZE, yIdx: tmpY / BOARD_CELL_SIZE};
         }
     }
 }
+
+
 
 // Function found on Mozilla's documentation site: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomInt(max) {
