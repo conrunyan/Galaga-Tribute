@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+}
+
+#id-canvascontainer {
+    flex: 1;
+    background-color: lightblue;
+}
+
+#id-canvas {
+    width: 500px;
+    height: 500px;
+    border-style: solid;
+    border-width: 1px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#id-menu {
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+#id-highscore {
+    flex:1;
+    justify-content: center;
+    background-color: lightcoral;
+}
+
+#id-startbutton {
+    flex:1;
+}

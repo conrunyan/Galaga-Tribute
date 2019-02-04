@@ -63,6 +63,7 @@ function gameLoop(browserTime) {
     if (gameOver) {
         // window.alert('GAME OVER')
         // TODO: Add stuff to be cleared/saved at the end of a game
+        console.log('GAME OVER!');
         return;
     }
     requestAnimationFrame(gameLoop);
@@ -74,7 +75,7 @@ function update(elapsedTime) {
         let tmpHead = snakePieces[0];
         snakePieces[0].changeDirection(nextDirection);
         snakePieces[0].updateElapsedTime(elapsedTime);
-        snakePieces[0].moveSnakeFoward();
+        let snakeDidMove = snakePieces[0].moveSnakeFoward();
         snakePieces[0].shouldSnakeRender();
 
         let snakeHeadX_idx = snakePieces[0].getXYCoords().x / BOARD_CELL_SIZE;
@@ -82,11 +83,6 @@ function update(elapsedTime) {
         let curSnakeHeadX = snakePieces[0].getXYCoords().x;
         let curSnakeHeadY = snakePieces[0].getXYCoords().y;
         let pieceHeadIsOn = boardPieces[snakeHeadY_idx][snakeHeadX_idx];
-        // Lose condition.
-        if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
-            console.log('GAME OVER');
-            gameOver = true;
-        }
         // check if current block is a food piece
         if (pieceHeadIsOn.type === 'food') {
 
@@ -103,13 +99,28 @@ function update(elapsedTime) {
         // loop over snake pieces and move then if needed
         let nextBodyX = curSnakeHeadX;
         let nextBodyY = curSnakeHeadY;
-        for (let i = 1; i < snakePieces.length; i++) {
-            let curBodyX = snakePieces[i].getXYCoords().x;
-            let curBodyY = snakePieces[i].getXYCoords().y;
-            // move current body position, then set nextBody positions to current
-            snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
-            nextBodyX = curBodyX;
-            nextBodyY = curBodyY;
+        if (snakeDidMove) {
+            for (let i = 1; i < snakePieces.length; i++) {
+                let curBodyX = snakePieces[i].getXYCoords().x;
+                let curBodyY = snakePieces[i].getXYCoords().y;
+                // move current body position, then set nextBody positions to current
+                
+                    snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
+                    nextBodyX = curBodyX;
+                    nextBodyY = curBodyY;
+                }
+            // Lose conditions.
+            if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
+                gameOver = true;
+            }
+            // check if head has hit any part of its tail
+            for (let i = 3; i < snakePieces.length; i++) {
+                snakePieces[i].info()
+                console.log('CX: ' + curSnakeHeadX + ' CY: ' + curSnakeHeadY);
+                if (curSnakeHeadX === snakePieces[i].getXYCoords().x && curSnakeHeadY === snakePieces[i].getXYCoords().x) {
+                    gameOver = true;
+                } 
+            }
         }
     }
     // TODO: Add step to move the snake
@@ -117,6 +128,8 @@ function update(elapsedTime) {
 }
 
 function render() {
+    // clear board
+    context.clearRect(0, 0, canvas.width, canvas.height);
     // render game board
     for (let i = 0; i < boardPieces.length; i++) {
         for (let j = 0; j < boardPieces[i].length; j++) {
@@ -129,6 +142,10 @@ function render() {
         }
         // snakePieces[i].info()
     }
+
+    let domScore = document.getElementById('id-highscore')
+
+    domScore.innerHTML 
 }
 ////////////////////////////////////////////////////////////////////////////////
 function onKeyDown(e) {
@@ -225,15 +242,15 @@ function placeSnakeHead() {
         height: BOARD_CELL_SIZE,
         eTime: 0,
         render: true,
+        snakeWillMove: false,
     });
-    snake.info()
+    // snake.info()
     snakePieces.push(snake);
 }
 
 function placeFood() {
     // remove any existing food
     if (foodPiece.x !== 0 && foodPiece.y !== 0) {
-        console.log('REMOVING FOOD PIECE AT: ', foodPiece);
         let tmpSpec = {
             xCoord: foodPiece.x * BOARD_CELL_SIZE,
             yCoord: foodPiece.y * BOARD_CELL_SIZE,
@@ -390,6 +407,7 @@ function SnakePiece(specs) {
                     specs.yCoord -= BOARD_CELL_SIZE;
                     specs.direction = specs.newDirection;
                     specs.eTime = 0;
+                    return true;
                 }
             }
             else if (specs.newDirection === 'down' && specs.direction !== 'up') {
@@ -397,6 +415,7 @@ function SnakePiece(specs) {
                     specs.yCoord += BOARD_CELL_SIZE;
                     specs.direction = specs.newDirection;
                     specs.eTime = 0;
+                    return true;
                 }
             }
             else if (specs.newDirection === 'left' && specs.direction !== 'right') {
@@ -404,6 +423,7 @@ function SnakePiece(specs) {
                     specs.xCoord -= BOARD_CELL_SIZE;
                     specs.direction = specs.newDirection;
                     specs.eTime = 0;
+                    return true;
                 }
             }
             else if (specs.newDirection === 'right' && specs.direction !== 'left') {
@@ -411,8 +431,10 @@ function SnakePiece(specs) {
                     specs.xCoord += BOARD_CELL_SIZE;
                     specs.direction = specs.newDirection;
                     specs.eTime = 0;
+                    return true;
                 }
             }
+            return false;
         }
 
         // set body piece to the x/y coord passed (should be coords or piece right before it)
@@ -434,8 +456,10 @@ function SnakePiece(specs) {
 
         function snakeShouldMove() {
             if (specs.eTime >= specs.speed) {
+                specs.snakeWillMove = true;
                 return true;
             }
+            specs.snakeWillMove = false;
             return false;
         }
 
@@ -477,6 +501,7 @@ function SnakePiece(specs) {
             width: specs.width,
             height: specs.height,
             render: specs.render,
+            snakeWillMove: specs.snakeWillMove,
         };
 }
 
