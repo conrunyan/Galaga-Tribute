@@ -32,6 +32,12 @@ let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 makeGameBoard();
 window.addEventListener('keydown', onKeyDown);
+// for (let i = 0; i < boardPieces.length; i++) {
+//     for (let j = 0; j < boardPieces[i].length; j++) {
+//         console.log(i + ' : ' + j);
+//         boardPieces[i][j].info();
+//     }
+// }
 // render();
 // nextDirection = 'down'
 // snakeCanMove = true;
@@ -72,9 +78,9 @@ function update(elapsedTime) {
         let snakeHeadX_idx = snakePieces[0].getXYCoords().x / BOARD_CELL_SIZE;
         let snakeHeadY_idx = snakePieces[0].getXYCoords().y / BOARD_CELL_SIZE;
         console.log(snakeHeadX_idx, snakeHeadY_idx);
-        let pieceHeadIsOn = boardPieces[snakeHeadX_idx][snakeHeadY_idx];
-        pieceHeadIsOn.info()
-        if (pieceHeadIsOn.type === 'wall' || pieceHeadIsOn.type === 'obstacle') {
+        let pieceHeadIsOn = boardPieces[snakeHeadY_idx][snakeHeadX_idx];
+        if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head')) {
+            console.log('GAME OVER');
             gameOver = true;
         }
     }
@@ -274,6 +280,7 @@ function GamePiece(specs) {
         color: color,
         width: width,
         height: height,
+        type: specs.type,
     };
 }
 
@@ -333,6 +340,10 @@ function SnakePiece(specs) {
             return {x: specs.xCoord, y: specs.yCoord};
         }
 
+        function getType() {
+            return specs.type;
+        }
+
         function snakeShouldMove() {
             if (specs.eTime >= specs.speed) {
                 return true;
@@ -371,6 +382,7 @@ function SnakePiece(specs) {
             shouldSnakeRender: shouldSnakeRender,
             snakeShouldMove: snakeShouldMove,
             getXYCoords: getXYCoords,
+            getType: getType,
             // Properties
             color: specs.color,
             width: specs.width,
