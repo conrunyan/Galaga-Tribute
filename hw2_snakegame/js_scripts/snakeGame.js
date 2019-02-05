@@ -33,51 +33,65 @@ let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)';
 let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
 let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
+// let list1 = [];
+// let testScore1 = 9999;
+// let testScore2 = 0;
+// let testScore3 = 3;
 
-//makeGameBoard();
-//window.addEventListener('keydown', onKeyDown);
-//gameLoop();
+// let list2 = [1];
+// let list3 = [9999];
+// let list4 = [3,2,1];
+// let list5 = [5,4,3,2,1];
 
-let list1 = [];
-let testScore1 = 9999;
-let testScore2 = 0;
-let testScore3 = 3;
-
-let list2 = [1];
-let list3 = [9999];
-let list4 = [3,2,1];
-let list5 = [5,4,3,2,1];
-
-//1
-testScore(list1, testScore1);
-//2
-testScore(list2, testScore1);
-testScore(list2, testScore2);
-//3
-testScore(list3, testScore1);
-testScore(list3, testScore2);
-//4
-testScore(list4, testScore1);
-testScore(list4, testScore2);
-testScore(list4, testScore3);
-//5
-testScore(list5, testScore1);
-testScore(list5, testScore2);
-testScore(list5, testScore3);
+// //1
+// testScore(list1, testScore1);
+// //2
+// testScore(list2, testScore1);
+// testScore(list2, testScore2);
+// //3
+// testScore(list3, testScore1);
+// testScore(list3, testScore2);
+// //4
+// testScore(list4, testScore1);
+// testScore(list4, testScore2);
+// testScore(list4, testScore3);
+// //5
+// testScore(list5, testScore1);
+// testScore(list5, testScore2);
+// testScore(list5, testScore3);
 
 
 
 
-function testScore(inputList, score) {
-    console.log(`INPUT: ${inputList} SCORE: ${score}`);
-    scores = inputList;
-    insertScore(score);
-    console.log(`\tOUTPUT: ${scores}`);
-    scores = null;
-    list2 = [1];
-    list3 = [9999];
-    list4 = [3,2,1];
-    list5 = [5,4,3,2,1];
+
+// function testScore(inputList, score) {
+//     console.log(`INPUT: ${inputList} SCORE: ${score}`);
+//     scores = inputList;
+//     insertScore(score);
+//     console.log(`\tOUTPUT: ${scores}`);
+//     list2 = [1];
+//     list3 = [9999];
+//     list4 = [3,2,1];
+//     list5 = [5,4,3,2,1];
+// }
+
+function runGame() {
+    clearBoard();
+    makeGameBoard();
+    window.addEventListener('keydown', onKeyDown);
+    gameLoop();
+}
+
+function clearBoard() {
+    firstLoop = true;
+    snakeCanMove = false; // only move the after the first direction key has been pressed
+    gameOver = false;
+    prevBrowserTime = performance.now();
+    currentScore = 0;
+    boardPieces = [];
+    snakePieces = [];
+    foodPiece = {x: 0, y: 0};
+    nextDirection = '';
 }
 
 
@@ -95,32 +109,33 @@ function gameLoop(browserTime) {
         // window.alert('GAME OVER')
         // TODO: Add stuff to be cleared/saved at the end of a game
         console.log('GAME OVER!');
-        let domScore = document.getElementById('id-highscore')
+        insertScore(currentScore);
+        currentScore = 0;
+        displayScore();
         return;
     }
     requestAnimationFrame(gameLoop);
 }
 
 function displayScore(latestScore) {
-    
+    let myHighscoreDiv = document.getElementById('id-hscontainer');
+    myHighscoreDiv.innerHTML = '';
+    for (let i = 0; i < scores.length; i++) {
+        let hsHTML = `<p id="id-hsEntry">Score - ${i+1} - ${scores[i]}</p>`;
+        myHighscoreDiv.innerHTML += hsHTML;
+    }
 }
 
 function insertScore(latestScore) {
     let idxToPlace = scores.length;
-    // base case
-    // if (scores.length < 5) {
-    //     scores.push(latestScore);
-    //     return;
-    // }
-    // check where score goes in the score list. If it's too small, don't add it
+    // check where score goes in the score list
     for (let i = 0; i < scores.length; i++) {
         if (latestScore >= scores[i]) {
             idxToPlace = i;
             break;
         }
     }
-    // grab chunk of scores to place after latestScore
-
+    // insert new score where it belongs, with a max of MAX_SCORES_KEPT
     scores.splice(idxToPlace, 0, latestScore);
     scores = scores.slice(0,MAX_SCORES_KEPT);
 }
@@ -144,7 +159,6 @@ function update(elapsedTime) {
 
             // increment score
             currentScore += SNAKE_PIECES_TO_ADD;
-            console.log('ATE FOOD! Score is: ' + currentScore);
             // add new pieces to the snake
             for (let i = 0; i < SNAKE_PIECES_TO_ADD; i++) {
                 makeSnakeBody();
@@ -193,19 +207,15 @@ function onKeyDown(e) {
     snakeCanMove = true;
     
     if (e.keyCode === KeyEventCodes.DOM_VK_LEFT) {
-        console.log('Pressing: LEFT');
         nextDirection = 'left';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_RIGHT) {
-        console.log('Pressing: RIGHT');
         nextDirection = 'right';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_DOWN) {
-        console.log('Pressing: DOWN');
         nextDirection = 'down';
     }
-    else if (e.keyCode === KeyEventCodes.DOM_VK_UP) {
-        console.log('Pressing: UP');
+    else if (e.keyCode === KeyEventCodes.DOM_VK_UP) { 
         nextDirection = 'up';
     }
 } 
