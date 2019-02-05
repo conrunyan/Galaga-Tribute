@@ -12,10 +12,10 @@ let nextDirection = '';
 let canvas = document.getElementById('id-canvas');
 let context = canvas.getContext('2d');
 let KeyEventCodes = {
-    DOM_VK_A: 65,
-    DOM_VK_D: 68,
-    DOM_VK_S: 83,
-    DOM_VK_W: 87,
+    DOM_VK_LEFT: 37,
+    DOM_VK_RIGHT: 39,
+    DOM_VK_DOWN: 40,
+    DOM_VK_UP: 38,
 };
 
 // Game Constants
@@ -151,19 +151,19 @@ function render() {
 function onKeyDown(e) {
     snakeCanMove = true;
     
-    if (e.keyCode === KeyEventCodes.DOM_VK_A) {
+    if (e.keyCode === KeyEventCodes.DOM_VK_LEFT) {
         console.log('Pressing: A');
         nextDirection = 'left';
     }
-    else if (e.keyCode === KeyEventCodes.DOM_VK_D) {
+    else if (e.keyCode === KeyEventCodes.DOM_VK_RIGHT) {
         console.log('Pressing: D');
         nextDirection = 'right';
     }
-    else if (e.keyCode === KeyEventCodes.DOM_VK_S) {
+    else if (e.keyCode === KeyEventCodes.DOM_VK_DOWN) {
         console.log('Pressing: S');
         nextDirection = 'down';
     }
-    else if (e.keyCode === KeyEventCodes.DOM_VK_W) {
+    else if (e.keyCode === KeyEventCodes.DOM_VK_UP) {
         console.log('Pressing: W');
         nextDirection = 'up';
     }
