@@ -64,6 +64,10 @@ function gameLoop(browserTime) {
         // window.alert('GAME OVER')
         // TODO: Add stuff to be cleared/saved at the end of a game
         console.log('GAME OVER!');
+        console.log('printing snake sate...')
+        snakePieces.forEach((piece) => {
+            piece.info();
+        })
         return;
     }
     requestAnimationFrame(gameLoop);
@@ -100,26 +104,26 @@ function update(elapsedTime) {
         let nextBodyX = curSnakeHeadX;
         let nextBodyY = curSnakeHeadY;
         if (snakeDidMove) {
-            for (let i = 1; i < snakePieces.length; i++) {
-                let curBodyX = snakePieces[i].getXYCoords().x;
-                let curBodyY = snakePieces[i].getXYCoords().y;
-                // move current body position, then set nextBody positions to current
+            // for (let i = 1; i < snakePieces.length; i++) {
+            //     let curBodyX = snakePieces[i].getXYCoords().x;
+            //     let curBodyY = snakePieces[i].getXYCoords().y;
+            //     // move current body position, then set nextBody positions to current
                 
-                    snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
-                    nextBodyX = curBodyX;
-                    nextBodyY = curBodyY;
-                }
+            //         snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
+            //         nextBodyX = curBodyX;
+            //         nextBodyY = curBodyY;
+            // }
             // Lose conditions.
             if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
                 gameOver = true;
             }
             // check if head has hit any part of its tail
-            for (let i = 3; i < snakePieces.length; i++) {
-                snakePieces[i].info()
-                console.log('CX: ' + curSnakeHeadX + ' CY: ' + curSnakeHeadY);
-                if (curSnakeHeadX === snakePieces[i].getXYCoords().x && curSnakeHeadY === snakePieces[i].getXYCoords().x) {
+            for (let i = 1; i < snakePieces.length; i++) {
+                // snakePieces[i].info()
+                // console.log('CX: ' + curSnakeHeadX + ' CY: ' + curSnakeHeadY);
+                if (curSnakeHeadX === snakePieces[i].getXYCoords().x && curSnakeHeadY === snakePieces[i].getXYCoords().y) {
                     gameOver = true;
-                } 
+                }
             }
         }
     }
@@ -383,126 +387,132 @@ function GamePiece(specs) {
 
 // Function generates a snake piece
 function SnakePiece(specs) {
-        // determine color of piece    
-        function drawGamePiece() {
-            context.save();
-            context.fillStyle = specs.color;
-            context.lineWidth = 3;
-            context.fillRect(
-                specs.xCoord,
-                specs.yCoord,
-                specs.width,
-                specs.height);
-            context.lineWidth = 2;
-            context.strokeStyle = specs.border;
-            context.stroke();
+    // determine color of piece    
+    function drawGamePiece() {
+        context.save();
+        context.fillStyle = specs.color;
+        context.lineWidth = 3;
+        context.fillRect(
+            specs.xCoord,
+            specs.yCoord,
+            specs.width,
+            specs.height);
+        context.lineWidth = 2;
+        context.strokeStyle = specs.border;
+        context.stroke();
+        context.restore();
+    }
 
-            context.restore();
-        }
-
-        function moveSnakeFoward() {
-            // make sure we can't move back into ourself
+    function moveSnakeFoward() {
+        // make sure we can't move back into ourself
+        if (snakeShouldMove()) {
+            let nextBodyX = specs.xCoord;
+            let nextBodyY = specs.yCoord;
             if (specs.newDirection === 'up' && specs.direction !== 'down') {
-                if (snakeShouldMove()) {
-                    specs.yCoord -= BOARD_CELL_SIZE;
-                    specs.direction = specs.newDirection;
-                    specs.eTime = 0;
-                    return true;
-                }
+                specs.yCoord -= BOARD_CELL_SIZE;
+                specs.direction = specs.newDirection;
+                specs.eTime = 0;
             }
             else if (specs.newDirection === 'down' && specs.direction !== 'up') {
-                if (snakeShouldMove()) {
-                    specs.yCoord += BOARD_CELL_SIZE;
-                    specs.direction = specs.newDirection;
-                    specs.eTime = 0;
-                    return true;
-                }
+
+                specs.yCoord += BOARD_CELL_SIZE;
+                specs.direction = specs.newDirection;
+                specs.eTime = 0;
             }
             else if (specs.newDirection === 'left' && specs.direction !== 'right') {
-                if (snakeShouldMove()) {
-                    specs.xCoord -= BOARD_CELL_SIZE;
-                    specs.direction = specs.newDirection;
-                    specs.eTime = 0;
-                    return true;
-                }
+                specs.xCoord -= BOARD_CELL_SIZE;
+                specs.direction = specs.newDirection;
+                specs.eTime = 0;
             }
             else if (specs.newDirection === 'right' && specs.direction !== 'left') {
-                if (snakeShouldMove()) {
-                    specs.xCoord += BOARD_CELL_SIZE;
-                    specs.direction = specs.newDirection;
-                    specs.eTime = 0;
-                    return true;
-                }
+                specs.xCoord += BOARD_CELL_SIZE;
+                specs.direction = specs.newDirection;
+                specs.eTime = 0;
             }
+            console.log(`MOVED SNAKE HEAD from x: ${nextBodyX} y: ${nextBodyY} -> X: ${specs.xCoord} y: ${specs.yCoord}`);
+            // move snake body as well
+            for (let i = 1; i < snakePieces.length; i++) {
+                let curBodyX = snakePieces[i].getXYCoords().x;
+                let curBodyY = snakePieces[i].getXYCoords().y;
+                // move current body position, then set nextBody positions to current
+                snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
+                nextBodyX = curBodyX;
+                nextBodyY = curBodyY;
+            }
+            return true;
+        }
+
+        else {
             return false;
         }
+    }
 
-        // set body piece to the x/y coord passed (should be coords or piece right before it)
-        function moveSnakeBodyPiece(lastXY) {
-            if (specs.type === 'snake-body') {
-                specs.xCoord = lastXY.x;
-                specs.yCoord = lastXY.y;
-                // console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
-            }
+    // set body piece to the x/y coord passed (should be coords or piece right before it)
+    function moveSnakeBodyPiece(lastXY) {
+        if (specs.type === 'snake-body') {
+            specs.xCoord = lastXY.x;
+            specs.yCoord = lastXY.y;
+            console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
         }
+    }
 
-        function getXYCoords() {
-            return {x: specs.xCoord, y: specs.yCoord};
-        }
+    function getXYCoords() {
+        return {x: specs.xCoord, y: specs.yCoord};
+    }
 
-        function getType() {
-            return specs.type;
-        }
+    function getType() {
+        return specs.type;
+    }
 
-        function snakeShouldMove() {
-            if (specs.eTime >= specs.speed) {
-                specs.snakeWillMove = true;
-                return true;
-            }
-            specs.snakeWillMove = false;
-            return false;
+    function snakeShouldMove() {
+        if (specs.eTime >= specs.speed) {
+            specs.snakeWillMove = true;
+            return true;
         }
+        specs.snakeWillMove = false;
+        return false;
+    }
 
-        function changeDirection(newDirection) {
-            specs.newDirection = newDirection;
-        }
+    function changeDirection(newDirection) {
+        specs.newDirection = newDirection;
+    }
 
-        function updateElapsedTime(updateTime) {
-            specs.eTime += updateTime;
-        }
+    function updateElapsedTime(updateTime) {
+        specs.eTime += updateTime;
+    }
 
-        function shouldSnakeRender() {
-            if (specs.xCoord % BOARD_CELL_SIZE == 0 && specs.yCoord % BOARD_CELL_SIZE == 0) {
-                specs.render = true;
-            }
-            else {
-                specs.render = false;
-            }
+    function shouldSnakeRender() {
+        if (specs.xCoord % BOARD_CELL_SIZE == 0 && specs.yCoord % BOARD_CELL_SIZE == 0) {
+            specs.render = true;
         }
-    
-        function info() {
-            console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${specs.color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}\nelapsedTime: ${specs.eTime}\nrender: ${specs.render}`);
-        };
-    
-        return {
-            // Functions
-            info: info, 
-            drawGamePiece: drawGamePiece,
-            moveSnakeFoward: moveSnakeFoward,
-            changeDirection: changeDirection,
-            updateElapsedTime: updateElapsedTime,
-            shouldSnakeRender: shouldSnakeRender,
-            snakeShouldMove: snakeShouldMove,
-            getXYCoords: getXYCoords,
-            getType: getType,
-            moveSnakeBodyPiece: moveSnakeBodyPiece,
-            // Properties
-            color: specs.color,
-            width: specs.width,
-            height: specs.height,
-            render: specs.render,
-            snakeWillMove: specs.snakeWillMove,
-        };
+        else {
+            specs.render = false;
+        }
+    }
+
+    function info() {
+        console.log(`SNAKE -> x: ${specs.xCoord}\ny: ${specs.yCoord}\ntype: ${specs.type}\ncolor: ${specs.color}\ndirection: ${specs.direction}\nnewDirection: ${specs.newDirection}\nelapsedTime: ${specs.eTime}\nrender: ${specs.render}`);
+    };
+
+    return {
+        // Functions
+        info: info, 
+        drawGamePiece: drawGamePiece,
+        moveSnakeFoward: moveSnakeFoward,
+        changeDirection: changeDirection,
+        updateElapsedTime: updateElapsedTime,
+        shouldSnakeRender: shouldSnakeRender,
+        snakeShouldMove: snakeShouldMove,
+        getXYCoords: getXYCoords,
+        getType: getType,
+        moveSnakeBodyPiece: moveSnakeBodyPiece,
+        // Properties
+        color: specs.color,
+        width: specs.width,
+        height: specs.height,
+        render: specs.render,
+        snakeWillMove: specs.snakeWillMove,
+    };
 }
 
 // TODO: How to get UI to work? Maybe have it be a segment of HTMl that is dynamically imported and cleared?
