@@ -1,5 +1,6 @@
 .container {
     display: flex;
+    align-content: center;
 }
 
 #id-canvascontainer {
@@ -7,23 +8,48 @@
     /* background-color: lightblue; */
 }
 
+#id-gameovermessage {
+    font-family: 'Courier New', Courier, monospace;
+    /* z-index: auto; */
+}
+
 #id-canvas {
     width: 500px;
     height: 500px;
     border-style: solid;
     border-width: 3px;
-    margin-left: 25%;
+    margin-left: 35%;
 }
 
 #id-menu {
     flex-wrap: wrap;
-    flex: 1;
+    flex: .5;
+    text-align: center;
+    margin-right: 25%
+
 }
 
 #id-highscore {
     flex:1;
     justify-content: center;
-    background-color: lightcoral;
+    background-color: rgba(36, 194, 186, 0.514);
+}
+
+#id-hsEntry {
+    padding: 12pt;
+    vertical-align: top;
+}
+
+#id-hsEntryAnimated {
+    padding: 12pt;
+    vertical-align: top;
+    animation-name: glow;
+    animation-duration: 2s;
+}
+
+@keyframes glow {
+    from {background-color: rgba(36, 194, 186, 0.514);}
+    to {background-color: rgba(7, 73, 94, 0.514);}
 }
 
 #id-startbutton {

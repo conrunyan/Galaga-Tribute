@@ -26,8 +26,8 @@ let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
 let SNAKE_PIECES_TO_ADD = 3;
 let MAX_SCORES_KEPT = 5;
 let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
-let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
-let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
+let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, 1)';
+let BOARD_WALL_COLOR = 'rgba(50, 30, 255, 1)';
 let BOARD_SNAKE_COLOR = 'rgba(0, 255, 0, 1)';
 let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, 1)';
 let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
@@ -73,6 +73,7 @@ function gameLoop(browserTime) {
         // window.alert('GAME OVER')
         // TODO: Add stuff to be cleared/saved at the end of a game
         console.log('GAME OVER!');
+        gameOverMessage();
         insertScore(currentScore);
         currentScore = 0;
         displayScore();
@@ -85,23 +86,40 @@ function displayScore(latestScore) {
     let myHighscoreDiv = document.getElementById('id-hscontainer');
     myHighscoreDiv.innerHTML = '';
     for (let i = 0; i < scores.length; i++) {
-        let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i]}</p>`;
+        let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i].score}</p>`;
+        if (scores[i].animate) {
+            hsHTML = `<p id="id-hsEntryAnimated">Score #${i+1} - ${scores[i].score}</p>`;
+        }
         myHighscoreDiv.innerHTML += hsHTML;
     }
+}
+
+function gameOverMessage() {
+    context.save();
+    context.font = '32pt Courier New MS';
+    context.fillStyle = 'white';
+    context.textAlign = 'center';
+    context.fillText('GAME OVER!', BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
+    context.restore();
 }
 
 function insertScore(latestScore) {
     let idxToPlace = scores.length;
     // check where score goes in the score list
     for (let i = 0; i < scores.length; i++) {
-        if (latestScore >= scores[i]) {
+        if (latestScore >= scores[i].score) {
             idxToPlace = i;
             break;
         }
     }
+    // turn off animation for each of the scores
+    scores.forEach((item) => {
+        item.animate = false;
+    });
     // insert new score where it belongs, with a max of MAX_SCORES_KEPT
-    scores.splice(idxToPlace, 0, latestScore);
+    scores.splice(idxToPlace, 0, {score: latestScore, animate: true});
     scores = scores.slice(0,MAX_SCORES_KEPT);
+    console.log(scores);
 }
 
 function update(elapsedTime) {
