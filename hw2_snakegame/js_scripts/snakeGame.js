@@ -19,7 +19,7 @@ let KeyEventCodes = {
 };
 
 // Game Constants
-let BOARD_SNAKE_SPEED = 100;  // ms per square
+let BOARD_SNAKE_SPEED = 75;  // ms per square
 let BOARD_WIDTH = 500;
 let BOARD_HEIGHT = 500;
 let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
@@ -29,7 +29,7 @@ let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
 let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
 let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
 let BOARD_SNAKE_COLOR = 'rgba(0, 255, 0, 1)';
-let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)';
+let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, 1)';
 let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
 let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
@@ -147,8 +147,6 @@ function update(elapsedTime) {
             }
         }
     }
-    // TODO: Add step to move the snake
-    // TODO: Add step to move food, if needed
 }
 
 function render() {
@@ -165,6 +163,10 @@ function render() {
             snakePieces[i].drawGamePiece();
         }
     }
+
+    // show current score
+    let myCurrentScoreDiv = document.getElementById('id-currentscore');
+    myCurrentScoreDiv.innerHTML = `<p>Current Score: ${currentScore}</p>`;
 }
 ////////////////////////////////////////////////////////////////////////////////
 function onKeyDown(e) {
