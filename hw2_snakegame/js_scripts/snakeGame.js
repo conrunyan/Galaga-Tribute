@@ -427,31 +427,46 @@ function SnakePiece(specs) {
         context.restore();
     }
 
+    function _snakeMoveUp() {
+        specs.yCoord -= BOARD_CELL_SIZE;
+        specs.direction = 'up';
+        specs.eTime = 0;
+    }
+
+    function _snakeMoveDown() {
+        specs.yCoord += BOARD_CELL_SIZE;
+        specs.direction = 'down';
+        specs.eTime = 0;
+    }
+    function _snakeMoveLeft() {
+        specs.xCoord -= BOARD_CELL_SIZE;
+        specs.direction = 'left';
+        specs.eTime = 0;
+    }
+
+    function _snakeMoveRight() {
+        specs.xCoord += BOARD_CELL_SIZE;
+        specs.direction = 'right';
+        specs.eTime = 0;
+    }
+    
+
     function moveSnakeFoward() {
         // make sure we can't move back into ourself
         if (snakeShouldMove()) {
             let nextBodyX = specs.xCoord;
             let nextBodyY = specs.yCoord;
-            if (specs.newDirection === 'up' && specs.direction !== 'down') {
-                specs.yCoord -= BOARD_CELL_SIZE;
-                specs.direction = specs.newDirection;
-                specs.eTime = 0;
+            if ((specs.newDirection === 'up' && specs.direction !== 'down') || (specs.newDirection === 'down' && specs.direction === 'up')) {
+                _snakeMoveUp();
             }
-            else if (specs.newDirection === 'down' && specs.direction !== 'up') {
-
-                specs.yCoord += BOARD_CELL_SIZE;
-                specs.direction = specs.newDirection;
-                specs.eTime = 0;
+            else if ((specs.newDirection === 'down' && specs.direction !== 'up') || (specs.newDirection === 'up' && specs.direction === 'down')) {
+                _snakeMoveDown();
             }
-            else if (specs.newDirection === 'left' && specs.direction !== 'right') {
-                specs.xCoord -= BOARD_CELL_SIZE;
-                specs.direction = specs.newDirection;
-                specs.eTime = 0;
+            else if ((specs.newDirection === 'left' && specs.direction !== 'right') || (specs.newDirection === 'right' && specs.direction === 'left')) {
+                _snakeMoveLeft();
             }
-            else if (specs.newDirection === 'right' && specs.direction !== 'left') {
-                specs.xCoord += BOARD_CELL_SIZE;
-                specs.direction = specs.newDirection;
-                specs.eTime = 0;
+            else if ((specs.newDirection === 'right' && specs.direction !== 'left') || (specs.newDirection === 'left' && specs.direction === 'right')) {
+                _snakeMoveRight();
             }
             // move snake body as well
             for (let i = 1; i < snakePieces.length; i++) {
@@ -536,8 +551,3 @@ function SnakePiece(specs) {
         snakeWillMove: specs.snakeWillMove,
     };
 }
-
-// TODO: How to get UI to work? Maybe have it be a segment of HTMl that is dynamically imported and cleared?
-
-// TODO: Make function to add a new score. If a new score is added that is greater than one of the top 5, 
-//          pop off the lowest and add the new score where it belongs.
