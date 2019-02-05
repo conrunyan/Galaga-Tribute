@@ -331,11 +331,14 @@ function findOpenPos() {
         if (tmpX === 0 || tmpY === 0 || tmpX === (BOARD_WIDTH - BOARD_CELL_SIZE) || tmpY === (BOARD_WIDTH - BOARD_CELL_SIZE)) {
             continue;
         }
-        // make sure x,y coord are valid for the snake
+        // make sure x,y coord are valid for the item
         filteredPieces = boardPieces.filter(piece => piece.xCoord === tmpX);
         foundPiece = filteredPieces.filter(piece => piece.yCoord === tmpY);
-        // if piece is not a wall or food, place the snake there;
-        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle' && foundPiece.type !== 'snake-head' && foundPiece.type !== 'snake-body') {
+        let curX = foundPiece.xCoord;
+        let curY = foundPiece.yCoord;
+        let pieceInSnake = false;
+        // if piece is not a wall or food, place the item there;
+        if (foundPiece.type !== 'wall' && foundPiece.type !== 'food' && foundPiece.type !== 'obstacle' && !(pieceInSnake)) {
             return {x: tmpX, y:tmpY, xIdx: tmpX / BOARD_CELL_SIZE, yIdx: tmpY / BOARD_CELL_SIZE};
         }
     }
