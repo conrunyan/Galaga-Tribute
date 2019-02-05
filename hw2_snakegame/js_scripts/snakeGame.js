@@ -33,47 +33,11 @@ let BOARD_FOOD_COLOR = 'rgba(255, 0, 0, .5)';
 let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
 let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
-// let list1 = [];
-// let testScore1 = 9999;
-// let testScore2 = 0;
-// let testScore3 = 3;
-
-// let list2 = [1];
-// let list3 = [9999];
-// let list4 = [3,2,1];
-// let list5 = [5,4,3,2,1];
-
-// //1
-// testScore(list1, testScore1);
-// //2
-// testScore(list2, testScore1);
-// testScore(list2, testScore2);
-// //3
-// testScore(list3, testScore1);
-// testScore(list3, testScore2);
-// //4
-// testScore(list4, testScore1);
-// testScore(list4, testScore2);
-// testScore(list4, testScore3);
-// //5
-// testScore(list5, testScore1);
-// testScore(list5, testScore2);
-// testScore(list5, testScore3);
-
-
-
-
-
-// function testScore(inputList, score) {
-//     console.log(`INPUT: ${inputList} SCORE: ${score}`);
-//     scores = inputList;
-//     insertScore(score);
-//     console.log(`\tOUTPUT: ${scores}`);
-//     list2 = [1];
-//     list3 = [9999];
-//     list4 = [3,2,1];
-//     list5 = [5,4,3,2,1];
-// }
+// initial board load
+clearBoard();
+makeGameBoard();
+window.addEventListener('keydown', onKeyDown);
+gameLoop();
 
 function runGame() {
     clearBoard();
@@ -121,7 +85,7 @@ function displayScore(latestScore) {
     let myHighscoreDiv = document.getElementById('id-hscontainer');
     myHighscoreDiv.innerHTML = '';
     for (let i = 0; i < scores.length; i++) {
-        let hsHTML = `<p id="id-hsEntry">Score - ${i+1} - ${scores[i]}</p>`;
+        let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i]}</p>`;
         myHighscoreDiv.innerHTML += hsHTML;
     }
 }
@@ -400,12 +364,20 @@ function GamePiece(specs) {
         context.save();
 
         context.fillStyle = color;
-        context.lineWidth = 3;
+        context.lineWidth = 1;
         context.fillRect(
             specs.xCoord,
             specs.yCoord,
             width,
             height);
+        if (specs.type !== 'background') {
+            context.strokeRect(
+                specs.xCoord,
+                specs.yCoord,
+                width,
+                height
+            );
+        }
         context.lineWidth = 5;
         context.strokeStyle = border;
         context.stroke();
@@ -438,8 +410,13 @@ function SnakePiece(specs) {
     function drawGamePiece() {
         context.save();
         context.fillStyle = specs.color;
-        context.lineWidth = 3;
+        context.lineWidth = 2;
         context.fillRect(
+            specs.xCoord,
+            specs.yCoord,
+            specs.width,
+            specs.height);
+        context.strokeRect(
             specs.xCoord,
             specs.yCoord,
             specs.width,
