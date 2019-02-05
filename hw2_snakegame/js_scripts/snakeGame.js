@@ -24,6 +24,7 @@ let BOARD_WIDTH = 500;
 let BOARD_HEIGHT = 500;
 let BOARD_CELL_COUNT = 50; // really the number is BOARD_CELLS^2
 let SNAKE_PIECES_TO_ADD = 3;
+let MAX_SCORES_KEPT = 5;
 let BOARD_CELL_SIZE = BOARD_WIDTH / BOARD_CELL_COUNT;
 let BOARD_BACKGROUND_COLOR = 'rgba(125, 125, 125, .5)';
 let BOARD_WALL_COLOR = 'rgba(50, 30, 255, .5)';
@@ -33,21 +34,51 @@ let BOARD_BLOCK_BORDER = 'rgba(0, 0, 0, 1)';
 let BOARD_OBSTACLE_COLOR = 'rgba(0, 255, 255, 1)';
 
 
-makeGameBoard();
-window.addEventListener('keydown', onKeyDown);
-// for (let i = 0; i < boardPieces.length; i++) {
-//     for (let j = 0; j < boardPieces[i].length; j++) {
-//         console.log(i + ' : ' + j);
-//         boardPieces[i][j].info();
-//     }
-// }
-// render();
-// nextDirection = 'down'
-// snakeCanMove = true;
-// update();
-// render();
-gameLoop();
+//makeGameBoard();
+//window.addEventListener('keydown', onKeyDown);
+//gameLoop();
 
+let list1 = [];
+let testScore1 = 9999;
+let testScore2 = 0;
+let testScore3 = 3;
+
+let list2 = [1];
+let list3 = [9999];
+let list4 = [3,2,1];
+let list5 = [5,4,3,2,1];
+
+//1
+testScore(list1, testScore1);
+//2
+testScore(list2, testScore1);
+testScore(list2, testScore2);
+//3
+testScore(list3, testScore1);
+testScore(list3, testScore2);
+//4
+testScore(list4, testScore1);
+testScore(list4, testScore2);
+testScore(list4, testScore3);
+//5
+testScore(list5, testScore1);
+testScore(list5, testScore2);
+testScore(list5, testScore3);
+
+
+
+
+function testScore(inputList, score) {
+    console.log(`INPUT: ${inputList} SCORE: ${score}`);
+    scores = inputList;
+    insertScore(score);
+    console.log(`\tOUTPUT: ${scores}`);
+    scores = null;
+    list2 = [1];
+    list3 = [9999];
+    list4 = [3,2,1];
+    list5 = [5,4,3,2,1];
+}
 
 
 function gameLoop(browserTime) {
@@ -64,13 +95,34 @@ function gameLoop(browserTime) {
         // window.alert('GAME OVER')
         // TODO: Add stuff to be cleared/saved at the end of a game
         console.log('GAME OVER!');
-        console.log('printing snake sate...')
-        snakePieces.forEach((piece) => {
-            piece.info();
-        })
+        let domScore = document.getElementById('id-highscore')
         return;
     }
     requestAnimationFrame(gameLoop);
+}
+
+function displayScore(latestScore) {
+    
+}
+
+function insertScore(latestScore) {
+    let idxToPlace = scores.length;
+    // base case
+    // if (scores.length < 5) {
+    //     scores.push(latestScore);
+    //     return;
+    // }
+    // check where score goes in the score list. If it's too small, don't add it
+    for (let i = 0; i < scores.length; i++) {
+        if (latestScore >= scores[i]) {
+            idxToPlace = i;
+            break;
+        }
+    }
+    // grab chunk of scores to place after latestScore
+
+    scores.splice(idxToPlace, 0, latestScore);
+    scores = scores.slice(0,MAX_SCORES_KEPT);
 }
 
 function update(elapsedTime) {
@@ -92,6 +144,7 @@ function update(elapsedTime) {
 
             // increment score
             currentScore += SNAKE_PIECES_TO_ADD;
+            console.log('ATE FOOD! Score is: ' + currentScore);
             // add new pieces to the snake
             for (let i = 0; i < SNAKE_PIECES_TO_ADD; i++) {
                 makeSnakeBody();
@@ -104,23 +157,12 @@ function update(elapsedTime) {
         let nextBodyX = curSnakeHeadX;
         let nextBodyY = curSnakeHeadY;
         if (snakeDidMove) {
-            // for (let i = 1; i < snakePieces.length; i++) {
-            //     let curBodyX = snakePieces[i].getXYCoords().x;
-            //     let curBodyY = snakePieces[i].getXYCoords().y;
-            //     // move current body position, then set nextBody positions to current
-                
-            //         snakePieces[i].moveSnakeBodyPiece({x: nextBodyX, y: nextBodyY});
-            //         nextBodyX = curBodyX;
-            //         nextBodyY = curBodyY;
-            // }
             // Lose conditions.
             if (!(pieceHeadIsOn.type === 'background') && !(pieceHeadIsOn.type === 'snake-head') && !(pieceHeadIsOn.type === 'food')) {
                 gameOver = true;
             }
             // check if head has hit any part of its tail
             for (let i = 1; i < snakePieces.length; i++) {
-                // snakePieces[i].info()
-                // console.log('CX: ' + curSnakeHeadX + ' CY: ' + curSnakeHeadY);
                 if (curSnakeHeadX === snakePieces[i].getXYCoords().x && curSnakeHeadY === snakePieces[i].getXYCoords().y) {
                     gameOver = true;
                 }
@@ -144,31 +186,26 @@ function render() {
         if (snakePieces[i].render) {
             snakePieces[i].drawGamePiece();
         }
-        // snakePieces[i].info()
     }
-
-    let domScore = document.getElementById('id-highscore')
-
-    domScore.innerHTML 
 }
 ////////////////////////////////////////////////////////////////////////////////
 function onKeyDown(e) {
     snakeCanMove = true;
     
     if (e.keyCode === KeyEventCodes.DOM_VK_LEFT) {
-        console.log('Pressing: A');
+        console.log('Pressing: LEFT');
         nextDirection = 'left';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_RIGHT) {
-        console.log('Pressing: D');
+        console.log('Pressing: RIGHT');
         nextDirection = 'right';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_DOWN) {
-        console.log('Pressing: S');
+        console.log('Pressing: DOWN');
         nextDirection = 'down';
     }
     else if (e.keyCode === KeyEventCodes.DOM_VK_UP) {
-        console.log('Pressing: W');
+        console.log('Pressing: UP');
         nextDirection = 'up';
     }
 } 
@@ -429,7 +466,6 @@ function SnakePiece(specs) {
                 specs.direction = specs.newDirection;
                 specs.eTime = 0;
             }
-            console.log(`MOVED SNAKE HEAD from x: ${nextBodyX} y: ${nextBodyY} -> X: ${specs.xCoord} y: ${specs.yCoord}`);
             // move snake body as well
             for (let i = 1; i < snakePieces.length; i++) {
                 let curBodyX = snakePieces[i].getXYCoords().x;
@@ -452,7 +488,6 @@ function SnakePiece(specs) {
         if (specs.type === 'snake-body') {
             specs.xCoord = lastXY.x;
             specs.yCoord = lastXY.y;
-            console.log(`MOVING SNAKE BODY from x: ${specs.xCoord} y: ${specs.yCoord} -> X: ${lastXY.x} y: ${lastXY.y}`);
         }
     }
 
