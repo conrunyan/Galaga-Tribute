@@ -3,6 +3,10 @@
     align-content: center;
 }
 
+#footer {
+    margin-top: 20%;
+}
+
 #id-canvascontainer {
     flex: 1;
     /* background-color: lightblue; */
