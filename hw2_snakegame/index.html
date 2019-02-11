@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <header>
-        <link rel="stylesheet" href="./css_styles/gameStyle.css" type="text/css"/>
-        <title>HW2 - Snake Game</title>
-    </header>
-    <body>
-        <div class='container'>
-            <div id='id-canvascontainer'>
-                <canvas id = "id-canvas"
-                    width = "500" height = "500"
-                    style = "">
-                </canvas>
+<header>
+    <link rel="stylesheet" href="./css_styles/gameStyle.css" type="text/css" />
+    <title>HW2 - Snake Game</title>
+</header>
+
+<body>
+    <div class='container'>
+        <div id='id-canvascontainer'>
+            <canvas id="id-canvas" width="500" height="500" style="">
+            </canvas>
+        </div>
+        <div id='id-menu'>
+            <div id='id-highscore'>
+                <h1> - HIGH SCORES - </h1>
+                <div id="id-hscontainer"></div>
             </div>
-            <div id='id-menu'>
-                <div id='id-highscore'>
-                    <h1> - HIGH SCORES - </h1>
-                    <div id="id-hscontainer"></div>
-                </div>
-                <div id='id-startbutton'>
-                    <button type="submit" onclick="runGame()">START!</button>
-                </div>
-                <div id='id-currentscore'>
-                    
-                </div>
+            <div id='id-startbutton'>
+                <button type="submit" onclick="runGame()">START!</button>
+            </div>
+            <div id='id-currentscore'>
+
             </div>
         </div>
-        <script>let SnakeGame = {};</script>
-        <script src="js_scripts/snakeGame.js"></script>
-        <footer id="footer">
-            <p>CS 5410 - HW2: Snake Game</p>
-            <p>Connor Runyan - A01705201</p>
-        </footer>
-    </body>
+    </div>
+    <script>let SnakeGame = {};</script>
+    <script src="js_scripts/snakeGame.js"></script>
+    <footer id="footer">
+        <p>CS 5410 - HW2: Snake Game</p>
+        <p>Connor Runyan - A01705201</p>
+    </footer>
+</body>
+
 </html>
