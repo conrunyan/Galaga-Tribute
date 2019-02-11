@@ -22,6 +22,18 @@ MazeGame.objects.maze.Cell = function (spec) {
     function setVisited (visited) {
         spec.visited = visited;
     }
+    function setTopWall(wall) {
+        spec.topWall = wall;
+    }
+    function setBottomWall(wall) {
+        spec.bottomWall = wall;
+    }
+    function setLeftWall(wall) {
+        spec.leftWall = wall;
+    }
+    function setRightWall(wall) {
+        spec.rightWall = wall;
+    }
 
     let api = {
         get xCoord() { return spec.xCoord },

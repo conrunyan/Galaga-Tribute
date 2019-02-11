@@ -4,18 +4,24 @@
 // One Maze object will exist at a time. This can be thougth of as
 // the game board.
 // spec = {
-//  size: {xSize , ySize: },
+//  size: {xCellCount , yCellCount: }, # defaults to 5x5
+//  boardHeight: ,
+//  boardWidth: ,
 // }
 //
 // --------------------------------------------------------------
-MazeGame.objects.maze.Maze = (function (spec) {
+MazeGame.objects.maze.Maze = (function (spec, mazeCell, mazeWall) {
     'use strict';
 
     let mazeBoard = [];
     let startXY = { x: 0, y: 0 }; // default locations
-    let endXY = { x: spec.xSize - 1, y: spec.ySize - 1 }; // default locations
+    let endXY = { x: spec.xCellCount - 1, y: spec.yCellCount - 1 }; // default locations
     let shortestPath = [];
     let breadCrumbs = [];
+
+    function setSize(mazeSize) {
+        spec.size = mazeSize;
+    }
 
     // Function uses Randomized Prim's algorithm to generate a maze
     function generateMaze() {
@@ -28,27 +34,35 @@ MazeGame.objects.maze.Maze = (function (spec) {
         //     b - Remove the wall from the list.
     }
 
-    // Generates an xSize X ySize board of cells, with each cell connected to other adjacent cells
+    // Generates an xCellCount X yCellCount board of cells, with each cell connected to other adjacent cells
     function _generateBaseBoard() {
-        for (let i = 0; i < spec.xSize; i++) {
+        for (let i = 0; i < spec.xCellCount; i++) {
             let mazeRow = [];
-            for (let j = 0; j < spec.ySize; j++) {
+            for (let j = 0; j < spec.yCellCount; j++) {
                 // 
-            }
+                let curCell = mazeCell.Cell({
+                    xCoord: ,
+                    yCoord: ,
+                    cellType: type of cell(start, end, normal),
+                    visited: ,
+                }
+                });
         }
     }
+}
 
     // Function 
     function _linkCells(cellA, CellB) {
 
-    }
+}
 
-    let api = {
-        get mazeBoard() { return mazeBoard },
-        get shortestPath() { return shortestPath },
-        get breadCrumbs() { return breadCrumbs },
-        generateMaze: generateMaze,
-    };
+let api = {
+    get mazeBoard() { return mazeBoard },
+    get shortestPath() { return shortestPath },
+    get breadCrumbs() { return breadCrumbs },
+    generateMaze: generateMaze,
+    setSize: setSize,
+};
 
-    return api;
-}());
+return api;
+}({ xCellCount: 5, yCellCount: 5 }, MazeGame.objects.maze.Cell, MazeGame.objects.maze.Wall));
