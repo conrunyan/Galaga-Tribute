@@ -9,7 +9,7 @@
 // }
 //
 // --------------------------------------------------------------
-MazeGame.objects.maze.Maze = function (spec, mazeCell, mazeWall) {
+MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     'use strict';
 
     spec.mazeBoard = [];
@@ -24,6 +24,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeCell, mazeWall) {
 
     // Function uses Randomized Prim's algorithm to generate a maze
     function generateMaze() {
+        console.log('Generating maze...');
         _generateBaseBoard();
         // 1 - Generate a grid of walls
         // 2 - Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
@@ -34,20 +35,25 @@ MazeGame.objects.maze.Maze = function (spec, mazeCell, mazeWall) {
         //     b - Remove the wall from the list.
     }
 
+    function info() {
+        console.log(`Size: ${spec.size.xCellCount}X${spec.size.yCellCount}`)
+    }
+
     // Generates an xCellCount X yCellCount board of cells, with each cell connected to other adjacent cells
     function _generateBaseBoard() {
-        for (let i = 0; i < spec.xCellCount; i++) {
+        for (let i = 0; i < spec.size.xCellCount; i++) {
+            console.log('Now on row:', i);
             let mazeRow = [];
-            for (let j = 0; j < spec.yCellCount; j++) {
+            for (let j = 0; j < spec.size.yCellCount; j++) {
                 // 
-                let curCell = mazeCell.Cell({
+                let curCell = mazeSpace.Cell({
                     xCoord: i * spec.boardWidth,
                     yCoord: j * spec.boardHeight,
                     cellType: 'normal'
                 });
                 mazeRow.push(curCell);
             }
-            mazeBoard.push(mazeRow);
+            spec.mazeBoard.push(mazeRow);
         }
     }
 

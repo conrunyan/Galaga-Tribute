@@ -10,8 +10,7 @@ MazeGame.main = (function (maze, renderer, graphics, input) {
         size: { xCellCount: cellCount, yCellCount: cellCount },
             CELL_SIZE,
         }, 
-        maze.Cell,
-        maze.Wall
+        maze
     );
 
     gameMaze.generateMaze();
