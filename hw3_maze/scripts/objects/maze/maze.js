@@ -49,7 +49,9 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 let curCell = mazeSpace.Cell({
                     xCoord: i * spec.boardWidth,
                     yCoord: j * spec.boardHeight,
-                    cellType: 'normal'
+                    xIdx: i,
+                    yIdx: j,
+                    cellType: 'normal',
                 });
                 mazeRow.push(curCell);
             }
@@ -59,7 +61,12 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     // Function 
     function _linkCells(cellA, CellB) {
+        // check if either cell is on the edge
+        let cellANeighbors = cellA.getNeighborCellCoords();
+        let cellBNeighbors = cellB.getNeighborCellCoords();
 
+        // TODO: Finish function to link cells together with a wall. Wall needs to be put in the
+        // list of walls.
     }
 
     let api = {
