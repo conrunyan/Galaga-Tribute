@@ -19,8 +19,14 @@
 MazeGame.objects.maze.Cell = function (spec) {
     'use strict';
 
-    function setVisited (visited) {
-        spec.visited = visited;
+    spec.visited = false;
+    spec.topWall = null;
+    spec.bottomWall = null;
+    spec.leftWall = null;
+    spec.rightWall = null;
+
+    function setVisited (newVisted) {
+        spec.visited = newVisted;
     }
     function setTopWall(wall) {
         spec.topWall = wall;
@@ -38,13 +44,17 @@ MazeGame.objects.maze.Cell = function (spec) {
     let api = {
         get xCoord() { return spec.xCoord },
         get yCoord() { return spec.yCoord },
-        get topWall() { return spec.walls.topWall },
-        get bottomWall() { return spec.walls.bottomWall },
-        get leftWall() { return spec.walls.leftWall },
-        get rightWall() { return spec.walls.rightWall },
+        get topWall() { return spec.topWall },
+        get bottomWall() { return spec.bottomWall },
+        get leftWall() { return spec.leftWall },
+        get rightWall() { return spec.rightWall },
         get cellType() { return spec.cellType },
-        get visited() { return visited },
+        get visited() { return spec.visited },
         setVisited: setVisited,
+        setTopWall: setTopWall,
+        setBottomWall: setBottomWall,
+        setLeftWall: setLeftWall,
+        setRightWall: setRightWall,
     };
 
     return api;

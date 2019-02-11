@@ -12,13 +12,19 @@
 
     <script>
         let MazeGame = {
-            objects: {},
+            objects: {
+                maze: {},
+                player: {}
+            },
             render: {},
             input: {}
         };
     </script>
     <script src = "scripts/render/core.js"></script>
     <script src = "scripts/input.js"></script>
+    <script src="scripts/objects/maze/maze.js"></script>
+    <script src="scripts/objects/maze/cell.js"></script>
+    <script src="scripts/objects/maze/wall.js"></script>
     <script src = "scripts/game.js"></script>
 </body>
 </html>

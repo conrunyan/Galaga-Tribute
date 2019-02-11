@@ -1,13 +1,24 @@
-MazeGame.main = (function (objects, renderer, graphics, input) {
+MazeGame.main = (function (maze, renderer, graphics, input) {
     'use strict';
 
     let lastTimeStamp = performance.now();
-
     let myKeyboard = input.Keyboard();
-    let myOtherKeyboard = input.Keyboard();
+    let CELL_SIZE = 50; // TODO: Make this evenly divided by cell count and board width
+    let cellCount = 5;
+
+    let gameMaze = maze.Maze({
+        size: { xCellCount: cellCount, yCellCount: cellCount },
+            CELL_SIZE,
+        }, 
+        maze.Cell,
+        maze.Wall
+    );
+
+    gameMaze.generateMaze();
+    console.log(gameMaze.mazeBoard);
 
     function processInput(elapsedTime) {
-        myOtherKeyboard.update(elapsedTime);
+        myKeyboard.update(elapsedTime)
     }
 
     function update() {
@@ -32,17 +43,13 @@ MazeGame.main = (function (objects, renderer, graphics, input) {
 
         requestAnimationFrame(gameLoop);
     }
+    // Example of keyboard registering
+    // myKeyboard.register('s', myLogo.moveDown);
+    // myKeyboard.register('w', myLogo.moveUp);
+    // myKeyboard.register('a', myLogo.moveLeft);
+    // myKeyboard.register('d', myLogo.moveRight);
 
-    myKeyboard.register('s', myLogo.moveDown);
-    myKeyboard.register('w', myLogo.moveUp);
-    myKeyboard.register('a', myLogo.moveLeft);
-    myKeyboard.register('d', myLogo.moveRight);
+    // Start of game
+    //requestAnimationFrame(gameLoop);
 
-    myOtherKeyboard.register('k', myLogo.moveDown);
-    myOtherKeyboard.register('i', myLogo.moveUp);
-    myOtherKeyboard.register('j', myLogo.moveLeft);
-    myOtherKeyboard.register('l', myLogo.moveRight);
-
-    requestAnimationFrame(gameLoop);
-
-}(MazeGame.objects, MazeGame.render, MazeGame.graphics, MazeGame.input));
+}(MazeGame.objects.maze, MazeGame.render, MazeGame.graphics, MazeGame.input));

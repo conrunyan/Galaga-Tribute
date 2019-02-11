@@ -12,7 +12,7 @@
 MazeGame.objects.maze.Wall = function (spec) {
     'use strict';
 
-    let display = true;
+    spec.display = true;
 
     function setDisplay (displayVal) {
         display = displayVal;
