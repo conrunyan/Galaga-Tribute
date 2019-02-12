@@ -47,17 +47,18 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 else if (spec.mazeBoard[i][j].type === 'cell') {
                     row += ' X ';
                 }
-                else if (spec.mazeBoard[i][j].type === 'wall-verticle' || spec.mazeBoard[i][j].type === 'wall-horizontal') {
+                else if (spec.mazeBoard[i][j].type === 'wall-veritcal') {//|| spec.mazeBoard[i][j].type === 'wall-horizontal') {
                     if (spec.mazeBoard[i][j].isPassage) {
                         row += ' P '
                     }
                     else {
                         row += ' - '
                     }
+                    // row += ' | ';
                 }
-                // else {
-                    // row += ' - ';
-                // }
+                else {
+                    row += ' - ';
+                }
             }
             console.log(row)
         }
@@ -71,25 +72,30 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         wallList = spec.mazeBoard[startCoords.x][startCoords.y].getWalls();
         // 3 - While there are walls in the list:
         while (wallList.length > 0) {
-            //     a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
+            // a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
             let randIdx = _getRandomInt(0, wallList.length - 1);
-            // NodeA hasn't been visited
-            if (!wallList[randIdx].nodeA.visited && !wallList[randIdx].nodeB.visited) {
-                wallList[randIdx].setIsPassage(true);
-                wallList.concat(wallList[randIdx].nodeA.getWalls());
+            console.log(wallList);
+            console.log('LENGTH: ', wallList.length);
+            console.log('IDX: ', randIdx);
+            // Make sure the wall isn't a passage and it's nodes are defined
+            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeA.visited !== undefined) {
+                // i - Make the wall a passage and mark the unvisited cell as part of the maze.
+                // ii - Add the neighboring walls of the cell to the wall list.
+                if (!wallList[randIdx].nodeA.visited && wallList[randIdx].nodeB.visited) {
+                    wallList[randIdx].nodeA.setVisited(true);
+                    wallList[randIdx].setIsPassage(true);
+                    wallList.concat(wallList[randIdx].nodeA.getWalls());
+                }
+                // NodeB hasn't been visited
+                else if (!wallList[randIdx].nodeB.visited && wallList[randIdx].nodeA.visited) {
+                    wallList[randIdx].nodeB.setVisited(true);
+                    wallList[randIdx].setIsPassage(true);
+                    wallList.concat(wallList[randIdx].nodeB.getWalls());
+                }
             }
-            // NodeB hasn't been visited
-            if (!wallList[randIdx].nodeB.visited && !wallList[randIdx].nodeA.visited) {
-                wallList[randIdx].setIsPassage(true);
-                wallList.concat(wallList[randIdx].nodeB.getWalls());
-            }
-            delete wallList[randIdx];
+            // b - Remove the wall from the list.
+            wallList.splice(randIdx, 1);
         }
-        //         i - Make the wall a passage and mark the unvisited cell as part of the maze.
-        //         ii - Add the neighboring walls of the cell to the wall list.
-        //     b - Remove the wall from the list.
-        
-        
     }
 
     // Generates an xCellCount X yCellCount board of cells, with each cell connected to other adjacent cells
@@ -115,7 +121,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     });
                     spec.walls.push(curCell);
                 }
-                
+
                 mazeRow.push(curCell);
             }
             spec.mazeBoard.push(mazeRow);
@@ -176,7 +182,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         }
         // walls are between normal cells
         if (cellI % 2 === 1 && cellJ % 2 === 0) {
-            return 'wall-verticle';
+            return 'wall-veritcal';
         }
         else if (cellI % 2 === 0 && cellJ % 2 === 1) {
             return 'wall-horizontal';
@@ -197,7 +203,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 cellFound = true;
             }
         }
-        return {x:randX, y:randY};
+        return { x: randX, y: randY };
     }
 
     // Returns a random integer -> https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range

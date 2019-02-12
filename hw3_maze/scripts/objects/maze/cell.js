@@ -22,7 +22,11 @@ MazeGame.objects.maze.Cell = function (spec) {
     spec.leftWall = null;
     spec.rightWall = null;
 
-    function setVisited (newVisted) {
+    function setType(newType) {
+        spec.type = newType;
+    }
+
+    function setVisited(newVisted) {
         spec.visited = newVisted;
     }
     function setTopWall(wall) {
@@ -41,10 +45,10 @@ MazeGame.objects.maze.Cell = function (spec) {
     // returns the x/y indices of neighboring cells
     function getNeighborCellCoords() {
         return {
-            up: {x: spec.xIdx, y: spec.yIdx + 1},
-            down: {x: spec.xIdx, y: spec.yIdx - 1},
-            right: {x: spec.xIdx + 1, y: spec.yIdx},
-            left: {x: spec.xIdx - 1, y: spec.yIdx},
+            up: { x: spec.xIdx, y: spec.yIdx + 1 },
+            down: { x: spec.xIdx, y: spec.yIdx - 1 },
+            right: { x: spec.xIdx + 1, y: spec.yIdx },
+            left: { x: spec.xIdx - 1, y: spec.yIdx },
         };
     }
 
@@ -73,6 +77,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setBottomWall: setBottomWall,
         setLeftWall: setLeftWall,
         setRightWall: setRightWall,
+        setType: setType,
         getNeighborCellCoords: getNeighborCellCoords,
         getWalls: getWalls,
     };
