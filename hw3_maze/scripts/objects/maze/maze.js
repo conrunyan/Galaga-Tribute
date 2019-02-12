@@ -18,6 +18,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     spec.shortestPath = [];
     spec.breadCrumbs = [];
 
+    // Set size to {}
     function setSize(mazeSize) {
         spec.size = mazeSize;
     }
@@ -51,7 +52,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     yCoord: j * spec.boardHeight,
                     xIdx: i,
                     yIdx: j,
-                    cellType: 'normal',
+                    cellType: _calcCellType(i, j),
                 });
                 mazeRow.push(curCell);
             }
@@ -69,12 +70,26 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         // list of walls.
     }
 
+    function _calcCellType(cellI, cellJ) {
+        if (cellI === 0 || cellJ === 0 || cellI === spec.size.xCellCount - 1 || cellJ === spec.size.yCellCount) {
+            return 'border-wall'
+        }
+        // walls are between normal cells
+        if ((cellI % 2 === 1 && cellJ % 2 === 0) || (cellI % 2 === 2 && cellJ % 2 === 1)) {
+            return 'wall'
+        }
+        else {
+            return 'cell'
+        }
+    }
+
     let api = {
         get mazeBoard() { return spec.mazeBoard },
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
         generateMaze: generateMaze,
         setSize: setSize,
+        info: info,
     };
 
     return api;

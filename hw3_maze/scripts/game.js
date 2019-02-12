@@ -7,7 +7,7 @@ MazeGame.main = (function (maze, renderer, graphics, input) {
     let cellCount = 5;
 
     let gameMaze = maze.Maze({
-        size: { xCellCount: cellCount, yCellCount: cellCount },
+        size: { xCellCount: (cellCount * 2) + 2, yCellCount: (cellCount * 2) + 2},
             CELL_SIZE,
         }, 
         maze
