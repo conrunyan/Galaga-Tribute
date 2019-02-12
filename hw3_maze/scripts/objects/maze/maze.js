@@ -29,13 +29,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         console.log('Generating maze...');
         _generateBaseBoard();
         _linkCells();
+        _primsMagicMazeMachine();
         // 1 - Generate a grid of walls
-        // 2 - Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
-        // 3 - While there are walls in the list:
-        //     a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
-        //         i - Make the wall a passage and mark the unvisited cell as part of the maze.
-        //         ii - Add the neighboring walls of the cell to the wall list.
-        //     b - Remove the wall from the list.
     }
 
     function info() {
@@ -49,40 +44,74 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 if (i === 0 || i === spec.size.xCellCount - 1) {
                     row += ' - ';
                 }
-                else if (spec.mazeBoard[i][j].cellType === 'cell') {
+                else if (spec.mazeBoard[i][j].type === 'cell') {
                     row += ' X ';
                 }
-                else if (spec.mazeBoard[i][j].wallType === 'wall-verticle') {
-                    row += ' | ';
+                else if (spec.mazeBoard[i][j].type === 'wall-verticle' || spec.mazeBoard[i][j].type === 'wall-horizontal') {
+                    if (spec.mazeBoard[i][j].isPassage) {
+                        row += ' P '
+                    }
+                    else {
+                        row += ' - '
+                    }
                 }
-                else {
-                    row += ' - ';
-                }
+                // else {
+                    // row += ' - ';
+                // }
             }
             console.log(row)
         }
     }
 
+    function _primsMagicMazeMachine() {
+        // 2 - Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
+        let wallList;
+        let startCoords = _getRandomCellCoords();
+        spec.mazeBoard[startCoords.x][startCoords.y].setVisited(true);
+        wallList = spec.mazeBoard[startCoords.x][startCoords.y].getWalls();
+        // 3 - While there are walls in the list:
+        while (wallList.length > 0) {
+            //     a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
+            let randIdx = _getRandomInt(0, wallList.length - 1);
+            // NodeA hasn't been visited
+            if (!wallList[randIdx].nodeA.visited && !wallList[randIdx].nodeB.visited) {
+                wallList[randIdx].setIsPassage(true);
+                wallList.concat(wallList[randIdx].nodeA.getWalls());
+            }
+            // NodeB hasn't been visited
+            if (!wallList[randIdx].nodeB.visited && !wallList[randIdx].nodeA.visited) {
+                wallList[randIdx].setIsPassage(true);
+                wallList.concat(wallList[randIdx].nodeB.getWalls());
+            }
+            delete wallList[randIdx];
+        }
+        //         i - Make the wall a passage and mark the unvisited cell as part of the maze.
+        //         ii - Add the neighboring walls of the cell to the wall list.
+        //     b - Remove the wall from the list.
+        
+        
+    }
+
     // Generates an xCellCount X yCellCount board of cells, with each cell connected to other adjacent cells
     function _generateBaseBoard() {
         for (let i = 0; i < spec.size.xCellCount; i++) {
-            console.log('Now on row:', i);
+            // console.log('Now on row:', i);
             let mazeRow = [];
             for (let j = 0; j < spec.size.yCellCount; j++) {
                 // 
-                let cellType = _calcCellType(i, j);
+                let type = _calcCellType(i, j);
                 let curCell;
-                if (cellType === 'cell') {
+                if (type === 'cell') {
                     curCell = mazeSpace.Cell({
                         xCoord: i * spec.boardWidth,
                         yCoord: j * spec.boardHeight,
                         xIdx: i,
                         yIdx: j,
-                        cellType: cellType,
+                        type: type,
                     });
                 } else {
                     curCell = mazeSpace.Wall({
-                        wallType: cellType,
+                        type: type,
                     });
                     spec.walls.push(curCell);
                 }
@@ -99,7 +128,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         for (let i = 0; i < spec.size.xCellCount; i++) {
             for (let j = 0; j < spec.size.yCellCount; j++) {
                 // if type is cell, link it to adjacent walls
-                if (spec.mazeBoard[i][j].cellType === 'cell') {
+                if (spec.mazeBoard[i][j].type === 'cell') {
                     let neighborCoords = spec.mazeBoard[i][j].getNeighborCellCoords();
                     // link walls to cells
                     // link wall above to NodeB
@@ -155,6 +184,27 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         else {
             return 'cell';
         }
+    }
+
+    function _getRandomCellCoords() {
+        let cellFound = false;
+        let randX;
+        let randY;
+        while (!cellFound) {
+            randX = _getRandomInt(1, spec.size.xCellCount - 1);
+            randY = _getRandomInt(1, spec.size.yCellCount - 1);
+            if (spec.mazeBoard[randX][randY].type === 'cell') {
+                cellFound = true;
+            }
+        }
+        return {x:randX, y:randY};
+    }
+
+    // Returns a random integer -> https://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
+    function _getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     let api = {

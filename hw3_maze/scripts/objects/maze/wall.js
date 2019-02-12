@@ -11,13 +11,13 @@
 MazeGame.objects.maze.Wall = function (spec) {
     'use strict';
 
-    spec.display = true;
+    spec.isPassage = false;
     spec.nodeA = { xIdx: undefined, yIdx: undefined };
     spec.nodeB = { xIdx: undefined, yIdx: undefined };
 
 
-    function setDisplay(displayVal) {
-        display = displayVal;
+    function setIsPassage(isPassage) {
+        spec.isPassage = isPassage;
     }
 
     function setNodeA(cell) {
@@ -28,6 +28,10 @@ MazeGame.objects.maze.Wall = function (spec) {
         spec.nodeB = cell;
     }
 
+    function setType(newType) {
+        spec.type = newType;
+    }
+
     function info() {
         console.log(`NodeA: ${spec.nodeA.xIdx},${spec.nodeA.yIdx} NodeB: ${spec.nodeB.xIdx},${spec.nodeB.yIdx}`);
     }
@@ -35,10 +39,12 @@ MazeGame.objects.maze.Wall = function (spec) {
     let api = {
         get nodeA() { return spec.nodeA },
         get nodeB() { return spec.nodeB },
-        get wallType() { return spec.wallType },
-        setDisplay: setDisplay,
+        get type() { return spec.type },
+        get isPassage() { return spec.isPassage },
+        setIsPassage: setIsPassage,
         setNodeA: setNodeA,
         setNodeB: setNodeB,
+        setType: setType,
         info: info,
     };
 

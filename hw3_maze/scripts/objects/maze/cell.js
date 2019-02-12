@@ -16,6 +16,7 @@ MazeGame.objects.maze.Cell = function (spec) {
     'use strict';
 
     spec.visited = false;
+    spec.partOfMaze = false;
     spec.topWall = null;
     spec.bottomWall = null;
     spec.leftWall = null;
@@ -47,6 +48,15 @@ MazeGame.objects.maze.Cell = function (spec) {
         };
     }
 
+    function getWalls() {
+        return [
+            spec.topWall,
+            spec.bottomWall,
+            spec.leftWall,
+            spec.rightWall,
+        ];
+    }
+
     let api = {
         get xCoord() { return spec.xCoord },
         get yCoord() { return spec.yCoord },
@@ -54,7 +64,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get bottomWall() { return spec.bottomWall },
         get leftWall() { return spec.leftWall },
         get rightWall() { return spec.rightWall },
-        get cellType() { return spec.cellType },
+        get type() { return spec.type },
         get visited() { return spec.visited },
         get xIdx() { return spec.xIdx },
         get yIdx() { return spec.yIdx },
@@ -64,6 +74,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setLeftWall: setLeftWall,
         setRightWall: setRightWall,
         getNeighborCellCoords: getNeighborCellCoords,
+        getWalls: getWalls,
     };
 
     return api;
