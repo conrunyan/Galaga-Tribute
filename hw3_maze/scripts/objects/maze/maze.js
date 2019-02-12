@@ -17,6 +17,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     let endXY = { x: spec.xCellCount - 1, y: spec.yCellCount - 1 }; // default locations
     spec.shortestPath = [];
     spec.breadCrumbs = [];
+    spec.walls = [];
 
     // Set size to {}
     function setSize(mazeSize) {
@@ -27,7 +28,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     function generateMaze() {
         console.log('Generating maze...');
         _generateBaseBoard();
-        // _linkCells();
+        _linkCells();
         // 1 - Generate a grid of walls
         // 2 - Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
         // 3 - While there are walls in the list:
@@ -51,7 +52,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 else if (spec.mazeBoard[i][j].cellType === 'cell') {
                     row += ' X ';
                 }
-                else if (spec.mazeBoard[i][j].cellType === 'wall-verticle') {
+                else if (spec.mazeBoard[i][j].wallType === 'wall-verticle') {
                     row += ' | ';
                 }
                 else {
@@ -83,6 +84,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     curCell = mazeSpace.Wall({
                         wallType: cellType,
                     });
+                    spec.walls.push(curCell);
                 }
                 
                 mazeRow.push(curCell);
@@ -93,6 +95,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     // Function links cells to walls
     function _linkCells() {
+        console.log('Linking cells...');
         for (let i = 0; i < spec.size.xCellCount; i++) {
             for (let j = 0; j < spec.size.yCellCount; j++) {
                 // if type is cell, link it to adjacent walls
