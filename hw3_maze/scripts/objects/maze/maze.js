@@ -101,31 +101,41 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 // if type is cell, link it to adjacent walls
                 if (spec.mazeBoard[i][j].cellType === 'cell') {
                     let neighborCoords = spec.mazeBoard[i][j].getNeighborCellCoords();
-                    // link cells together
+                    // link walls to cells
                     // link wall above to NodeB
-                    if (spec.mazeBoard[neighborCoords.up.x][neighborCoords.up.y] !== undefined) {
+                    let upperWall = spec.mazeBoard[neighborCoords.up.x][neighborCoords.up.y];
+                    let leftWall = spec.mazeBoard[neighborCoords.left.x][neighborCoords.left.y];
+                    let rightWall = spec.mazeBoard[neighborCoords.right.x][neighborCoords.right.y]
+                    let downWall = spec.mazeBoard[neighborCoords.down.x][neighborCoords.down.y]
+
+                    if (upperWall !== undefined) {
                         spec.mazeBoard[neighborCoords.up.x][neighborCoords.up.y].setNodeB(spec.mazeBoard[i][j]);
                     } else {
                         console.log(`out of bounds reference UP: [${neighborCoords.up.x}][${neighborCoords.up.y}]`);
                     }
                     // link wall left to NodeB
-                    if (spec.mazeBoard[neighborCoords.left.x][neighborCoords.left.y] !== undefined) {
+                    if (leftWall !== undefined) {
                         spec.mazeBoard[neighborCoords.left.x][neighborCoords.left.y].setNodeB(spec.mazeBoard[i][j]);
                     } else {
                         console.log(`out of bounds reference LEFT: [${neighborCoords.left.x}][${neighborCoords.left.y}]`);
                     }
                     // link wall right to NodeA
-                    if (spec.mazeBoard[neighborCoords.right.x][neighborCoords.right.y] !== undefined) {
+                    if (rightWall !== undefined) {
                         spec.mazeBoard[neighborCoords.right.x][neighborCoords.right.y].setNodeA(spec.mazeBoard[i][j]);
                     } else {
                         console.log(`out of bounds reference RIGHT: [${neighborCoords.right.x}][${neighborCoords.right.y}]`);
                     }
                     // link wall down to NodeA
-                    if (spec.mazeBoard[neighborCoords.down.x][neighborCoords.down.y] !== undefined) {
+                    if (downWall !== undefined) {
                         spec.mazeBoard[neighborCoords.down.x][neighborCoords.down.y].setNodeA(spec.mazeBoard[i][j]);
                     } else {
                         console.log(`out of bounds reference DOWN: [${neighborCoords.down.x}][${neighborCoords.down.y}]`);
                     }
+                    // set walls to cells
+                    spec.mazeBoard[i][j].setTopWall(upperWall);
+                    spec.mazeBoard[i][j].setBottomWall(downWall);
+                    spec.mazeBoard[i][j].setLeftWall(leftWall);
+                    spec.mazeBoard[i][j].setRightWall(rightWall);
                 }
             }
         }
