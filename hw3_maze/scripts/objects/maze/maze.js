@@ -45,19 +45,27 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     row += ' - ';
                 }
                 else if (spec.mazeBoard[i][j].type === 'cell') {
-                    row += '   ';
+                    row += ' X ';
                 }
-                else if (spec.mazeBoard[i][j].type.includes('wall')) {//|| spec.mazeBoard[i][j].type === 'wall-horizontal') {
+                else if (spec.mazeBoard[i][j].type === 'wall-verticle' ) {
                     if (spec.mazeBoard[i][j].isPassage) {
-                        row += '   '
+                        row += ' $ '
+                    }
+                    else {
+                        row += ' | '
+                    }
+                    // // row += ' | ';
+                }
+                else if (spec.mazeBoard[i][j].type === 'wall-horizontal') {
+                    if (spec.mazeBoard[i][j].isPassage) {
+                        row += ' $ '
                     }
                     else {
                         row += ' - '
                     }
-                    // // row += ' | ';
                 }
                 else {
-                    row += ' - ';
+                    row += ' - '
                 }
             }
             console.log(row)
@@ -78,7 +86,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             console.log('LENGTH: ', wallList.length);
             console.log('IDX: ', randIdx);
             // Make sure the wall isn't a passage and it's nodes are defined
-            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeB.visited !== undefined) {
+            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeB.visited !== undefined && !wallList[randIdx].isPassage) {
                 // i - Make the wall a passage and mark the unvisited cell as part of the maze.
                 // ii - Add the neighboring walls of the cell to the wall list.
                 console.log('Condition 1');
