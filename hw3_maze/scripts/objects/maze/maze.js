@@ -45,16 +45,16 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     row += ' - ';
                 }
                 else if (spec.mazeBoard[i][j].type === 'cell') {
-                    row += ' X ';
+                    row += '   ';
                 }
-                else if (spec.mazeBoard[i][j].type === 'wall-veritcal') {//|| spec.mazeBoard[i][j].type === 'wall-horizontal') {
+                else if (spec.mazeBoard[i][j].type.includes('wall')) {//|| spec.mazeBoard[i][j].type === 'wall-horizontal') {
                     if (spec.mazeBoard[i][j].isPassage) {
-                        row += ' P '
+                        row += '   '
                     }
                     else {
                         row += ' - '
                     }
-                    // row += ' | ';
+                    // // row += ' | ';
                 }
                 else {
                     row += ' - ';
@@ -78,19 +78,22 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             console.log('LENGTH: ', wallList.length);
             console.log('IDX: ', randIdx);
             // Make sure the wall isn't a passage and it's nodes are defined
-            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeA.visited !== undefined) {
+            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeB.visited !== undefined) {
                 // i - Make the wall a passage and mark the unvisited cell as part of the maze.
                 // ii - Add the neighboring walls of the cell to the wall list.
+                console.log('Condition 1');
                 if (!wallList[randIdx].nodeA.visited && wallList[randIdx].nodeB.visited) {
+                    console.log('Condition 2a')
                     wallList[randIdx].nodeA.setVisited(true);
                     wallList[randIdx].setIsPassage(true);
-                    wallList.concat(wallList[randIdx].nodeA.getWalls());
+                    wallList = wallList.concat(wallList[randIdx].nodeA.getWalls());
                 }
                 // NodeB hasn't been visited
                 else if (!wallList[randIdx].nodeB.visited && wallList[randIdx].nodeA.visited) {
+                    console.log('Condition 2b')
                     wallList[randIdx].nodeB.setVisited(true);
                     wallList[randIdx].setIsPassage(true);
-                    wallList.concat(wallList[randIdx].nodeB.getWalls());
+                    wallList = wallList.concat(wallList[randIdx].nodeB.getWalls());
                 }
             }
             // b - Remove the wall from the list.
