@@ -16,6 +16,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
 
     gameMaze.generateMaze();
     gameMaze.print();
+    console.log(gameMaze.mazeBoard);
     render();
 
     function processInput(elapsedTime) {

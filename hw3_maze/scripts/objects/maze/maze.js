@@ -47,7 +47,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 else if (spec.mazeBoard[i][j].type === 'cell') {
                     row += ' X ';
                 }
-                else if (spec.mazeBoard[i][j].type === 'wall-verticle' ) {
+                else if (spec.mazeBoard[i][j].type === 'wall-verticle') {
                     if (spec.mazeBoard[i][j].isPassage) {
                         row += ' $ '
                     }
@@ -79,27 +79,33 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let startCoords = _getRandomCellCoords();
         mazePieces.push(spec.mazeBoard[startCoords.x][startCoords.y]);
         wallList = spec.mazeBoard[startCoords.x][startCoords.y].getWalls();
+        spec.mazeBoard[startCoords.x][startCoords.y].setVisited(true);
         // 3 - While there are walls in the list:
         while (wallList.length > 0) {
             // a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
             let randIdx = _getRandomInt(0, wallList.length - 1);
-            // let wallList[randIdx] = wallList[randIdx];
-            if (mazePieces.includes(wallList[randIdx].nodeA) && !mazePieces.includes(wallList[randIdx].nodeB) && !wallList[randIdx].nodeB.getWalls === undefined) {
-                wallList[randIdx].setIsPassage(true);
-                mazePieces.push(wallList[randIdx].nodeB);
-                wallList.push(wallList[randIdx].nodeB.getWalls());
+            if (wallList[randIdx].nodeA !== undefined && wallList[randIdx].nodeB !== undefined) {
+                // let wallList[randIdx] = wallList[randIdx];
+                if (wallList[randIdx].nodeA.visited && !wallList[randIdx].nodeB.visited) { // && !wallList[randIdx].nodeB.getWalls === undefined) {
+                    wallList[randIdx].nodeB.setVisited(true);
+                    wallList[randIdx].setIsPassage(true);
+                    // mazePieces.push(wallList[randIdx].nodeB);
+                    wallList.concat(wallList[randIdx].nodeB.getWalls());
+                }
+                else if (!wallList[randIdx].nodeA.visited && wallList[randIdx].nodeB.visited) { // && !wallList[randIdx].nodeA.getWalls === undefined) {
+                    wallList[randIdx].nodeA.setVisited(true);
+                    wallList[randIdx].setIsPassage(true);
+                    // mazePieces.push(wallList[randIdx].nodeA);
+                    wallList.concat(wallList[randIdx].nodeA.getWalls());
+                }
             }
-            else if (mazePieces.includes(wallList[randIdx].nodeB) && !mazePieces.includes(wallList[randIdx].nodeA) && !wallList[randIdx].nodeA.getWalls === undefined) {
-                wallList[randIdx].setIsPassage(true);
-                mazePieces.push(wallList[randIdx].nodeA);
-                wallList.push(wallList[randIdx].nodeA.getWalls());
-            }
+
             console.log(wallList);
-                // Make the wall a passage and mark the unvisited cell as part of the maze.
+            // Make the wall a passage and mark the unvisited cell as part of the maze.
             wallList.splice(randIdx, 1);
-                // Add the neighboring walls of the cell to the wall list.
+            // Add the neighboring walls of the cell to the wall list.
             // Remove the wall from the list.
-            
+
         }
     }
 
