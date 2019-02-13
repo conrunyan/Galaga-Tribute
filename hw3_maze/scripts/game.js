@@ -4,11 +4,11 @@ MazeGame.main = (function (maze, myGraphics, input) {
     let boardDim = 500; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 11;
+    let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
 
     let gameMaze = maze.Maze({
-        size: { xCellCount: cellCount, yCellCount: cellCount},
+            size: { xCellCount: cellCount, yCellCount: cellCount},
             cellSize: cellSize,
         },
         maze
@@ -35,13 +35,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
         // render game board:
         for (let i = 0; i < cellCount; i++) {
             for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece({
-                    color: gameMaze.mazeBoard[i][j].color,
-                    xCoord: gameMaze.mazeBoard[i][j].xCoord,
-                    yCoord: gameMaze.mazeBoard[i][j].yCoord,
-                    height: cellSize,
-                    width: cellSize,
-                });
+                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]);
             }
         }
     }

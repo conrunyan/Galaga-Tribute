@@ -28,8 +28,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     function generateMaze() {
         console.log('Generating maze...');
         _generateBaseBoard();
-        _linkCells();
-        _primsMagicMazeMachine();
+        //_linkCells();
+        //_primsMagicMazeMachine();
         // 1 - Generate a grid of walls
     }
 
@@ -117,26 +117,20 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             for (let j = 0; j < spec.size.yCellCount; j++) {
                 // 
                 let type = _calcCellType(i, j);
-                let curCell;
-                if (type === 'cell') {
-                    curCell = mazeSpace.Cell({
-                        xCoord: i * spec.cellSize,
-                        yCoord: j * spec.cellSize,
-                        xIdx: i,
-                        yIdx: j,
-                        type: type,
-                        color: 'green'
-                    });
-                } else {
-                    curCell = mazeSpace.Wall({
-                        type: type,
-                        color: 'blue',
-                        xCoord: i * spec.cellSize,
-                        yCoord: j * spec.cellSize,
-                    });
-                    spec.walls.push(curCell);
-                }
-
+                let curCell = mazeSpace.Cell({
+                    xCoord: i * spec.cellSize,
+                    yCoord: j * spec.cellSize,
+                    xIdx: i,
+                    yIdx: j,
+                    size: spec.cellSize,
+                    edges: {
+                        topWall: null,
+                        bottomWall: null,
+                        leftWall: null,
+                        rightWall: null,
+                    },
+                    color: 'green'
+                });
                 mazeRow.push(curCell);
             }
             spec.mazeBoard.push(mazeRow);

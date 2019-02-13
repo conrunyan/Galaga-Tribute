@@ -1,4 +1,4 @@
-MazeGame.graphics = (function() {
+MazeGame.graphics = (function () {
     'use strict';
 
     let canvas = document.getElementById('id-canvas');
@@ -48,20 +48,28 @@ MazeGame.graphics = (function() {
         context.fillRect(
             spec.xCoord,
             spec.yCoord,
-            spec.width,
-            spec.height);
-        // if (specs.type !== 'background') {
-        //     context.strokeRect(
-        //         specs.xCoord,
-        //         specs.yCoord,
-        //         spec.width,
-        //         spec.height
-        //     );
-        // }
-        // context.lineWidth = 5;
-        // context.strokeStyle = border;
-        // context.stroke();
+            spec.size,
+            spec.size);
+        if (spec.edges.topWall === undefined) {
+            context.moveTo(spec.xIdx * spec.size, spec.yIdx * spec.size);
+            context.lineTo((spec.xIdx + 1) * spec.size, spec.yIdx * spec.size);
+        }
 
+        if (spec.edges.bottomWall === undefined) {
+            context.moveTo(spec.xIdx * spec.size, (spec.yIdx + 1) * spec.size);
+            context.lineTo((spec.xIdx + 1) * spec.size, (spec.yIdx + 1) * spec.size);
+        }
+
+        if (spec.edges.rightWall === undefined) {
+            context.moveTo((spec.xIdx + 1) * spec.size, spec.yIdx * spec.size);
+            context.lineTo((spec.xIdx + 1) * spec.size, (spec.yIdx + 1) * spec.size);
+        }
+
+        if (spec.edges.leftWall === undefined) {
+            context.moveTo(spec.xIdx * spec.size, spec.yIdx * spec.size);
+            context.lineTo(spec.xIdx * spec.size, (spec.yIdx + 1) * spec.size);
+        }
+        context.stroke();
         context.restore();
     }
 

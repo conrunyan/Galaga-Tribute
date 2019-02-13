@@ -17,10 +17,12 @@ MazeGame.objects.maze.Cell = function (spec) {
 
     spec.visited = false;
     spec.partOfMaze = false;
-    spec.topWall = null;
-    spec.bottomWall = null;
-    spec.leftWall = null;
-    spec.rightWall = null;
+    spec.edges = {
+        topWall: spec.topWall,
+        bottomWall: spec.bottomWall,
+        leftWall: spec.leftWall,
+        rightWall: spec.rightWall,
+    };
 
     function setType(newType) {
         spec.type = newType;
@@ -73,6 +75,8 @@ MazeGame.objects.maze.Cell = function (spec) {
         get xIdx() { return spec.xIdx },
         get yIdx() { return spec.yIdx },
         get color() { return spec.color },
+        get size() { return spec.size },
+        get edges() { return spec.edges },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
