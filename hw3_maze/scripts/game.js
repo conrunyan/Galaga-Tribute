@@ -1,9 +1,9 @@
-MazeGame.main = (function (maze, renderer, graphics, input) {
+MazeGame.main = (function (maze, graphics, input) {
     'use strict';
 
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let CELL_SIZE = 50; // TODO: Make this evenly divided by cell count and board width
+    let CELL_SIZE = 25; // TODO: Make this evenly divided by cell count and board width
     let cellCount = 10;
 
     let gameMaze = maze.Maze({
@@ -16,9 +16,11 @@ MazeGame.main = (function (maze, renderer, graphics, input) {
     gameMaze.generateMaze();
     gameMaze.print();
     console.log(gameMaze.mazeBoard);
+    console.log('GRAPHICS:', graphics);
+    // render();
 
     function processInput(elapsedTime) {
-        myKeyboard.update(elapsedTime)
+        myKeyboard.update(elapsedTime);
     }
 
     function update() {
@@ -29,8 +31,24 @@ MazeGame.main = (function (maze, renderer, graphics, input) {
     }
 
     function render() {
-        graphics.clear();
-
+        // graphics.clear();
+        // render game board:
+        for (let i = 0; i < cellCount; i++) {
+            for (let j = 0; j < cellCount; j++) {
+                // get color
+                let color = 'black'
+                if (gameMaze.mazeBoard[i][j].type === 'cell') {
+                    color = 'green'
+                }
+                graphics.drawGamePiece({
+                    color: color,
+                    xCoord: gameMaze.mazeBoard[i][j].xCoord,
+                    yCoord: gameMaze.mazeBoard[i][j].yCoord,
+                    height: CELL_SIZE,
+                    width: CELL_SIZE,
+                });
+            }
+        }
     }
 
     function gameLoop(time) {
@@ -52,4 +70,4 @@ MazeGame.main = (function (maze, renderer, graphics, input) {
     // Start of game
     //requestAnimationFrame(gameLoop);
 
-}(MazeGame.objects.maze, MazeGame.render, MazeGame.graphics, MazeGame.input));
+}(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input));

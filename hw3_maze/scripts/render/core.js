@@ -32,21 +32,36 @@ MazeGame.graphics = (function() {
         context.restore();
     }
 
-    function drawText(spec) {
+    /*
+    spec = {
+        color: ,
+        xCoord: ,
+        yCoord: ,
+        height: ,
+        width: ,
+    } 
+    */
+    function drawGamePiece(spec) {
         context.save();
 
-        context.font = spec.font;
-        context.fillStyle = spec.fillStyle;
-        context.strokeStyle = spec.strokeStyle;
-        context.textBaseline = 'top';
-
-        context.translate(spec.position.x, spec.position.y);
-        context.rotate(spec.rotation);
-        context.translate(-spec.position.x, -spec.position.y);
-
-
-        context.fillText(spec.text, spec.position.x, spec.position.y);
-        context.strokeText(spec.text, spec.position.x, spec.position.y);
+        context.fillStyle = spec.color;
+        context.lineWidth = 1;
+        context.fillRect(
+            spec.xCoord,
+            spec.yCoord,
+            spec.width,
+            spec.height);
+        // if (specs.type !== 'background') {
+        //     context.strokeRect(
+        //         specs.xCoord,
+        //         specs.yCoord,
+        //         spec.width,
+        //         spec.height
+        //     );
+        // }
+        // context.lineWidth = 5;
+        // context.strokeStyle = border;
+        context.stroke();
 
         context.restore();
     }
@@ -55,7 +70,8 @@ MazeGame.graphics = (function() {
         get canvas() { return canvas; },
         clear: clear,
         drawTexture: drawTexture,
-        drawText: drawText
+        drawText: drawText,
+        drawGamePiece: drawGamePiece,
     };
 
     return api;

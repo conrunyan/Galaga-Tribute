@@ -1,13 +1,14 @@
 <!DOCTYPE HTML>
-<html lang = "en-US">
+<html lang="en-US">
+
 <head>
-    <meta charset = "UTF-8">
+    <meta charset="UTF-8">
     <title>HW3 - Maze Game</title>
 </head>
+
 <body>
-    <canvas id = "id-canvas"
-        width = "500" height = "500"
-        style = "width: 500px; height: 500px; border-style: solid; border-width: 1px">
+    <canvas id="id-canvas" width="500" height="500"
+        style="width: 500px; height: 500px; border-style: solid; border-width: 1px">
     </canvas>
 
     <script>
@@ -16,15 +17,17 @@
                 maze: {},
                 player: {}
             },
-            render: {},
+            // render: {},
+            graphics: {},
             input: {}
         };
     </script>
-    <script src = "scripts/render/core.js"></script>
-    <script src = "scripts/input.js"></script>
+    <script src="scripts/input.js"></script>
+    <script src="scripts/render/core.js"></script>
     <script src="scripts/objects/maze/wall.js"></script>
     <script src="scripts/objects/maze/cell.js"></script>
     <script src="scripts/objects/maze/maze.js"></script>
-    <script src = "scripts/game.js"></script>
+    <script src="scripts/game.js"></script>
 </body>
+
 </html>
