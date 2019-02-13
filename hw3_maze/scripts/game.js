@@ -1,23 +1,22 @@
-MazeGame.main = (function (maze, graphics, input) {
+MazeGame.main = (function (maze, myGraphics, input) {
     'use strict';
 
+    let boardDim = 500; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let CELL_SIZE = 25; // TODO: Make this evenly divided by cell count and board width
     let cellCount = 10;
+    let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
 
     let gameMaze = maze.Maze({
-        size: { xCellCount: (cellCount * 2) + 1, yCellCount: (cellCount * 2) + 1},
-            CELL_SIZE,
+        size: { xCellCount: cellCount + 1, yCellCount: cellCount + 1},
+            cellSize: cellSize,
         },
         maze
     );
 
     gameMaze.generateMaze();
     gameMaze.print();
-    console.log(gameMaze.mazeBoard);
-    console.log('GRAPHICS:', graphics);
-    // render();
+    render();
 
     function processInput(elapsedTime) {
         myKeyboard.update(elapsedTime);
@@ -35,17 +34,12 @@ MazeGame.main = (function (maze, graphics, input) {
         // render game board:
         for (let i = 0; i < cellCount; i++) {
             for (let j = 0; j < cellCount; j++) {
-                // get color
-                let color = 'black'
-                if (gameMaze.mazeBoard[i][j].type === 'cell') {
-                    color = 'green'
-                }
-                graphics.drawGamePiece({
-                    color: color,
+                myGraphics.drawGamePiece({
+                    color: gameMaze.mazeBoard[i][j].color,
                     xCoord: gameMaze.mazeBoard[i][j].xCoord,
                     yCoord: gameMaze.mazeBoard[i][j].yCoord,
-                    height: CELL_SIZE,
-                    width: CELL_SIZE,
+                    height: cellSize,
+                    width: cellSize,
                 });
             }
         }

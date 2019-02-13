@@ -32,6 +32,10 @@ MazeGame.objects.maze.Wall = function (spec) {
         spec.type = newType;
     }
 
+    function setColor(newColor) {
+        spec.color = newColor;
+    }
+
     function info() {
         console.log(`NodeA: ${spec.nodeA.xIdx},${spec.nodeA.yIdx} NodeB: ${spec.nodeB.xIdx},${spec.nodeB.yIdx}`);
     }
@@ -39,12 +43,16 @@ MazeGame.objects.maze.Wall = function (spec) {
     let api = {
         get nodeA() { return spec.nodeA },
         get nodeB() { return spec.nodeB },
+        get xCoord() { return spec.xCoord },
+        get yCoord() { return spec.yCoord },
         get type() { return spec.type },
         get isPassage() { return spec.isPassage },
+        get color() { return spec.color },
         setIsPassage: setIsPassage,
         setNodeA: setNodeA,
         setNodeB: setNodeB,
         setType: setType,
+        setColor: setColor,
         info: info,
     };
 

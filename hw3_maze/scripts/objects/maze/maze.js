@@ -94,6 +94,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     console.log('Condition 2a')
                     wallList[randIdx].nodeA.setVisited(true);
                     wallList[randIdx].setIsPassage(true);
+                    wallList[randIdx].setColor('green');
                     wallList = wallList.concat(wallList[randIdx].nodeA.getWalls());
                 }
                 // NodeB hasn't been visited
@@ -101,6 +102,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     console.log('Condition 2b')
                     wallList[randIdx].nodeB.setVisited(true);
                     wallList[randIdx].setIsPassage(true);
+                    wallList[randIdx].setColor('green');
                     wallList = wallList.concat(wallList[randIdx].nodeB.getWalls());
                 }
             }
@@ -120,15 +122,19 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 let curCell;
                 if (type === 'cell') {
                     curCell = mazeSpace.Cell({
-                        xCoord: i * spec.boardWidth,
-                        yCoord: j * spec.boardHeight,
+                        xCoord: i * spec.cellSize,
+                        yCoord: j * spec.cellSize,
                         xIdx: i,
                         yIdx: j,
                         type: type,
+                        color: 'green'
                     });
                 } else {
                     curCell = mazeSpace.Wall({
                         type: type,
+                        color: 'blue',
+                        xCoord: i * spec.cellSize,
+                        yCoord: j * spec.cellSize,
                     });
                     spec.walls.push(curCell);
                 }

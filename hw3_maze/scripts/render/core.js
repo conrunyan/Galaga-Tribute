@@ -43,7 +43,6 @@ MazeGame.graphics = (function() {
     */
     function drawGamePiece(spec) {
         context.save();
-
         context.fillStyle = spec.color;
         context.lineWidth = 1;
         context.fillRect(
@@ -61,7 +60,7 @@ MazeGame.graphics = (function() {
         // }
         // context.lineWidth = 5;
         // context.strokeStyle = border;
-        context.stroke();
+        // context.stroke();
 
         context.restore();
     }
@@ -70,7 +69,6 @@ MazeGame.graphics = (function() {
         get canvas() { return canvas; },
         clear: clear,
         drawTexture: drawTexture,
-        drawText: drawText,
         drawGamePiece: drawGamePiece,
     };
 

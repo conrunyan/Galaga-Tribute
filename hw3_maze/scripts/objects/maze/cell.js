@@ -72,6 +72,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get visited() { return spec.visited },
         get xIdx() { return spec.xIdx },
         get yIdx() { return spec.yIdx },
+        get color() { return spec.color },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
