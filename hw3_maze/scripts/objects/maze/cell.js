@@ -32,16 +32,16 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.visited = newVisted;
     }
     function setTopWall(wall) {
-        spec.topWall = wall;
+        spec.edges.topWall = wall;
     }
     function setBottomWall(wall) {
-        spec.bottomWall = wall;
+        spec.edges.bottomWall = wall;
     }
     function setLeftWall(wall) {
-        spec.leftWall = wall;
+        spec.edges.leftWall = wall;
     }
     function setRightWall(wall) {
-        spec.rightWall = wall;
+        spec.edges.rightWall = wall;
     }
 
     // returns the x/y indices of neighboring cells
@@ -54,22 +54,22 @@ MazeGame.objects.maze.Cell = function (spec) {
         };
     }
 
-    function getWalls() {
+    function getNeighborCells() {
         return [
-            spec.topWall,
-            spec.bottomWall,
-            spec.leftWall,
-            spec.rightWall,
+            spec.edges.topWall,
+            spec.edges.bottomWall,
+            spec.edges.leftWall,
+            spec.edges.rightWall,
         ];
     }
 
     let api = {
         get xCoord() { return spec.xCoord },
         get yCoord() { return spec.yCoord },
-        get topWall() { return spec.topWall },
-        get bottomWall() { return spec.bottomWall },
-        get leftWall() { return spec.leftWall },
-        get rightWall() { return spec.rightWall },
+        // get topWall() { return spec.topWall },
+        // get bottomWall() { return spec.bottomWall },
+        // get leftWall() { return spec.leftWall },
+        // get rightWall() { return spec.rightWall },
         get type() { return spec.type },
         get visited() { return spec.visited },
         get xIdx() { return spec.xIdx },
@@ -84,7 +84,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setRightWall: setRightWall,
         setType: setType,
         getNeighborCellCoords: getNeighborCellCoords,
-        getWalls: getWalls,
+        getNeighborCells: getNeighborCells,
     };
 
     return api;
