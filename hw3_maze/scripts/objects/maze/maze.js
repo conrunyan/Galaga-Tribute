@@ -75,39 +75,31 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     function _primsMagicMazeMachine() {
         // 2 - Pick a cell, mark it as part of the maze. Add the walls of the cell to the wall list.
         let wallList;
+        let mazePieces = [];
         let startCoords = _getRandomCellCoords();
-        spec.mazeBoard[startCoords.x][startCoords.y].setVisited(true);
+        mazePieces.push(spec.mazeBoard[startCoords.x][startCoords.y]);
         wallList = spec.mazeBoard[startCoords.x][startCoords.y].getWalls();
         // 3 - While there are walls in the list:
         while (wallList.length > 0) {
             // a - Pick a random wall from the list. If only one of the two cells that the wall divides is visited, then:
             let randIdx = _getRandomInt(0, wallList.length - 1);
-            console.log(wallList);
-            console.log('LENGTH: ', wallList.length);
-            console.log('IDX: ', randIdx);
-            // Make sure the wall isn't a passage and it's nodes are defined
-            if (wallList[randIdx].nodeA.visited !== undefined && wallList[randIdx].nodeB.visited !== undefined && !wallList[randIdx].isPassage) {
-                // i - Make the wall a passage and mark the unvisited cell as part of the maze.
-                // ii - Add the neighboring walls of the cell to the wall list.
-                console.log('Condition 1');
-                if (!wallList[randIdx].nodeA.visited && wallList[randIdx].nodeB.visited) {
-                    console.log('Condition 2a')
-                    wallList[randIdx].nodeA.setVisited(true);
-                    wallList[randIdx].setIsPassage(true);
-                    wallList[randIdx].setColor('green');
-                    wallList = wallList.concat(wallList[randIdx].nodeA.getWalls());
-                }
-                // NodeB hasn't been visited
-                else if (!wallList[randIdx].nodeB.visited && wallList[randIdx].nodeA.visited) {
-                    console.log('Condition 2b')
-                    wallList[randIdx].nodeB.setVisited(true);
-                    wallList[randIdx].setIsPassage(true);
-                    wallList[randIdx].setColor('green');
-                    wallList = wallList.concat(wallList[randIdx].nodeB.getWalls());
-                }
+            // let wallList[randIdx] = wallList[randIdx];
+            if (mazePieces.includes(wallList[randIdx].nodeA) && !mazePieces.includes(wallList[randIdx].nodeB) && !wallList[randIdx].nodeB.getWalls === undefined) {
+                wallList[randIdx].setIsPassage(true);
+                mazePieces.push(wallList[randIdx].nodeB);
+                wallList.push(wallList[randIdx].nodeB.getWalls());
             }
-            // b - Remove the wall from the list.
+            else if (mazePieces.includes(wallList[randIdx].nodeB) && !mazePieces.includes(wallList[randIdx].nodeA) && !wallList[randIdx].nodeA.getWalls === undefined) {
+                wallList[randIdx].setIsPassage(true);
+                mazePieces.push(wallList[randIdx].nodeA);
+                wallList.push(wallList[randIdx].nodeA.getWalls());
+            }
+            console.log(wallList);
+                // Make the wall a passage and mark the unvisited cell as part of the maze.
             wallList.splice(randIdx, 1);
+                // Add the neighboring walls of the cell to the wall list.
+            // Remove the wall from the list.
+            
         }
     }
 
