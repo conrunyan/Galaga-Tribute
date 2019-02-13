@@ -28,7 +28,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     function generateMaze() {
         console.log('Generating maze...');
         _generateBaseBoard();
-        //_linkCells();
+        _linkCells();
         //_primsMagicMazeMachine();
         // 1 - Generate a grid of walls
     }
@@ -143,44 +143,18 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         for (let i = 0; i < spec.size.xCellCount; i++) {
             for (let j = 0; j < spec.size.yCellCount; j++) {
                 // if type is cell, link it to adjacent walls
-                if (spec.mazeBoard[i][j].type === 'cell') {
-                    let neighborCoords = spec.mazeBoard[i][j].getNeighborCellCoords();
-                    // link walls to cells
-                    // link wall above to NodeB
-                    let upperWall = spec.mazeBoard[neighborCoords.up.x][neighborCoords.up.y];
-                    let leftWall = spec.mazeBoard[neighborCoords.left.x][neighborCoords.left.y];
-                    let rightWall = spec.mazeBoard[neighborCoords.right.x][neighborCoords.right.y]
-                    let downWall = spec.mazeBoard[neighborCoords.down.x][neighborCoords.down.y]
-
-                    if (upperWall !== undefined) {
-                        spec.mazeBoard[neighborCoords.up.x][neighborCoords.up.y].setNodeB(spec.mazeBoard[i][j]);
-                    } else {
-                        console.log(`out of bounds reference UP: [${neighborCoords.up.x}][${neighborCoords.up.y}]`);
-                    }
-                    // link wall left to NodeB
-                    if (leftWall !== undefined) {
-                        spec.mazeBoard[neighborCoords.left.x][neighborCoords.left.y].setNodeB(spec.mazeBoard[i][j]);
-                    } else {
-                        console.log(`out of bounds reference LEFT: [${neighborCoords.left.x}][${neighborCoords.left.y}]`);
-                    }
-                    // link wall right to NodeA
-                    if (rightWall !== undefined) {
-                        spec.mazeBoard[neighborCoords.right.x][neighborCoords.right.y].setNodeA(spec.mazeBoard[i][j]);
-                    } else {
-                        console.log(`out of bounds reference RIGHT: [${neighborCoords.right.x}][${neighborCoords.right.y}]`);
-                    }
-                    // link wall down to NodeA
-                    if (downWall !== undefined) {
-                        spec.mazeBoard[neighborCoords.down.x][neighborCoords.down.y].setNodeA(spec.mazeBoard[i][j]);
-                    } else {
-                        console.log(`out of bounds reference DOWN: [${neighborCoords.down.x}][${neighborCoords.down.y}]`);
-                    }
-                    // set walls to cells
-                    spec.mazeBoard[i][j].setTopWall(upperWall);
-                    spec.mazeBoard[i][j].setBottomWall(downWall);
-                    spec.mazeBoard[i][j].setLeftWall(leftWall);
-                    spec.mazeBoard[i][j].setRightWall(rightWall);
-                }
+                let neighborCoords = spec.mazeBoard[i][j].getNeighborCellCoords();
+                // link walls to cells
+                // link wall above to NodeB
+                let upperCell = _getMazeCell(neighborCoords.up.x, neighborCoords.up.y);
+                let leftCell = _getMazeCell(neighborCoords.left.x, neighborCoords.left.y);
+                let rightCell = _getMazeCell(neighborCoords.right.x, neighborCoords.right.y);
+                let downCell = _getMazeCell(neighborCoords.down.x, neighborCoords.down.y);
+                // set walls to cells
+                spec.mazeBoard[i][j].setTopWall(upperCell);
+                spec.mazeBoard[i][j].setLeftWall(leftCell);
+                spec.mazeBoard[i][j].setRightWall(rightCell);
+                spec.mazeBoard[i][j].setBottomWall(downCell);
             }
         }
     }
@@ -220,6 +194,14 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // returns null if the referenced cell is not in the bounds of the maze
+    function _getMazeCell(x, y) {
+        if (x < 0 || y < 0 || x > spec.size.xCellCount - 1 || y > spec.size.yCellCount - 1) {
+            return null;
+        }
+        return spec.mazeBoard[x][y];
     }
 
     let api = {

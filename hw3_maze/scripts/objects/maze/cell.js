@@ -47,8 +47,8 @@ MazeGame.objects.maze.Cell = function (spec) {
     // returns the x/y indices of neighboring cells
     function getNeighborCellCoords() {
         return {
-            up: { x: spec.xIdx, y: spec.yIdx + 1 },
-            down: { x: spec.xIdx, y: spec.yIdx - 1 },
+            up: { x: spec.xIdx, y: spec.yIdx - 1 },
+            down: { x: spec.xIdx, y: spec.yIdx + 1 },
             right: { x: spec.xIdx + 1, y: spec.yIdx },
             left: { x: spec.xIdx - 1, y: spec.yIdx },
         };
