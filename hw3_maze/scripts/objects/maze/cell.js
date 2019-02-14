@@ -58,22 +58,25 @@ MazeGame.objects.maze.Cell = function (spec) {
         return `${spec.rowIdx},${spec.colIdx}`;
     }
 
-    function getNeighborCells() {
+    function getNeighborCells(mazeBoard) {
+        let nCoords = getNeighborCellCoords();
+        console.log(nCoords);
         let cells = [
-            spec.edges.topWall,
-            spec.edges.bottomWall,
-            spec.edges.leftWall,
-            spec.edges.rightWall,
+            mazeBoard[nCoords.up.x][nCoords.up.y],
+            mazeBoard[nCoords.down.x][nCoords.down.y],
+            mazeBoard[nCoords.right.x][nCoords.right.y],
+            mazeBoard[nCoords.left.x][nCoords.left.y],
         ];
 
-        return cells.filter(cell => cell !== null && cell !== 'path');
+        return cells;
     }
 
     function removeWall(cell) {
-        if (spec.edges.topWall !== null && spec.edges.topWall !== 'path' && cell.getRowColIdx() === spec.edges.topWall.getRowColIdx()) {
+        let cellDir = _getCellDir(cell);
+        if (cellDir === 'up') {
             // remove wall for the linked cell as well
-            spec.edges.topWall.edges.bottomWall = 'path';
-            spec.edges.topWall = 'path';
+            spec.edges.topWall = cell;
+            cell.edges.bottomWall = this;
         }
         else if (spec.edges.bottomWall !== null && spec.edges.bottomWall !== 'path' && cell.getRowColIdx() === spec.edges.bottomWall.getRowColIdx()) {
             // remove wall for the linked cell as well

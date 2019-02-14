@@ -29,7 +29,6 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         console.log('Generating maze...');
         // 1 - Generate a grid of walls
         _generateBaseBoard();
-        _linkCells();
         _primsMagicMazeMachine();
 
     }
@@ -82,30 +81,30 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         // let startCell = spec.mazeBoard[0][0];
         mazeCells.push(startCell.getRowColIdx());
         // Add its neighboring cells to the frontier
-        frontier = startCell.getNeighborCells();
+        frontier = startCell.getNeighborCells(spec.mazeBoard);
         let randIdx = _getRandomInt(0, frontier.length - 1);
         // 3.Randomly choose a cell in the frontier
         while (frontier.length > 0) {
             let randFrontierCell = frontier[randIdx];
             // (randomly) pick a "wall" that connects to a cell in the maze
-            let surroundingCells = randFrontierCell.getNeighborCells();
+            let surroundingCells = randFrontierCell.getNeighborCells(spec.mazeBoard);
             surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getRowColIdx()));
             let randWallIdx = _getRandomInt(0, surroundingCells.length - 1);
             let randomMazeCell = surroundingCells[randWallIdx];
             // Remove that wall
             try {
                 console.log(`Removing wall between: MAZE: ${randomMazeCell.getRowColIdx()} CELL: ${randFrontierCell.getRowColIdx()}`);
-                spec.mazeBoard[randFrontierCell.rowIdx][randFrontierCell.colIdx].removeWall(randomMazeCell);
+                _linkCells(randFrontierCell, randomMazeCell);
             }
-            catch(err) {
+            catch (err) {
                 console.log('error...', err);
             }
-            
+
             // Add cell to the maze
             mazeCells.push(randFrontierCell.getRowColIdx());
             console.log("MAZE CELLS", mazeCells);
-            let cellsLeftOver = randFrontierCell.getNeighborCells().filter(cell => !mazeCells.includes(cell.getRowColIdx()));
-            
+            let cellsLeftOver = randFrontierCell.getNeighborCells(spec.mazeBoard).filter(cell => !mazeCells.includes(cell.getRowColIdx()));
+
 
             // remove cell from frontier and reset index for next search
             frontier = frontier.filter(cell => cell.getRowColIdx() !== randFrontierCell.getRowColIdx());
@@ -146,24 +145,43 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     }
 
     // Function links cells to walls
-    function _linkCells() {
+    function _linkCells(cellA, cellB) {
         console.log('Linking cells...');
-        for (let i = 0; i < spec.size.xCellCount; i++) {
-            for (let j = 0; j < spec.size.yCellCount; j++) {
-                // if type is cell, link it to adjacent walls
-                let neighborCoords = spec.mazeBoard[i][j].getNeighborCellCoords();
-                // link walls to cells
-                // link wall above to NodeB
-                let upperCell = _getMazeCell(neighborCoords.up.x, neighborCoords.up.y);
-                let leftCell = _getMazeCell(neighborCoords.left.x, neighborCoords.left.y);
-                let rightCell = _getMazeCell(neighborCoords.right.x, neighborCoords.right.y);
-                let downCell = _getMazeCell(neighborCoords.down.x, neighborCoords.down.y);
-                // set walls to cells
-                spec.mazeBoard[i][j].setTopWall(upperCell);
-                spec.mazeBoard[i][j].setLeftWall(leftCell);
-                spec.mazeBoard[i][j].setRightWall(rightCell);
-                spec.mazeBoard[i][j].setBottomWall(downCell);
-            }
+        let wallDir = _getWallDir(cellA, cellB);
+        if (wallDir === 'up') {
+            // remove wall for the linked cell as well
+            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.topWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
+            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.bottomWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+        }
+        else if (wallDir === 'down') {
+            // remove wall for the linked cell as well
+            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.bottomWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
+            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.topWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+        }
+        else if (wallDir === 'left') {
+            // remove wall for the linked cell as well
+            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.leftWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
+            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.rightWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+        }
+        else if (wallDir === 'right') {
+            // remove wall for the linked cell as well
+            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.rightWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
+            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.leftWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+        }
+    }
+
+    function _getWallDir(cellA, cellB) {
+        if (cellA.rowIdx - 1 == cellB.rowIdx && cellA.colIdx == cellB.colIdx) {
+            return 'up';
+        }
+        else if (cellA.rowIdx + 1 == cellB.rowIdx && cellA.colIdx == cellB.colIdx) {
+            return 'down';
+        }
+        else if (cellA.rowIdx == cellB.rowIdx && cellA.colIdx - 1 == cellB.colIdx) {
+            return 'left';
+        }
+        else if (cellA.rowIdx == cellB.rowIdx && cellA.colIdx + 1 == cellB.colIdx) {
+            return 'right';
         }
     }
 
