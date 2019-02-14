@@ -78,8 +78,9 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let frontier;
         let mazeCells = [];
         let startCoords = _getRandomCellCoords();
+        // let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
         let startCell = spec.mazeBoard[0][0];
-        mazeCells.push(startCell.getXYIdx());
+        mazeCells.push(startCell.getRowColIdx());
         // Add its neighboring cells to the frontier
         frontier = startCell.getNeighborCells();
         let randIdx = _getRandomInt(0, frontier.length - 1);
@@ -88,18 +89,26 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             let randFrontierCell = frontier[randIdx];
             // (randomly) pick a "wall" that connects to a cell in the maze
             let surroundingCells = randFrontierCell.getNeighborCells();
-            surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getXYIdx()));
+            surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getRowColIdx()));
             let randWallIdx = _getRandomInt(0, surroundingCells.length - 1);
             let randomWallCell = surroundingCells[randWallIdx];
             // Remove that wall
-            spec.mazeBoard[randFrontierCell.xIdx][randFrontierCell.yIdx].removeWall(randomWallCell);
+            try {
+                console.log(`Removing wall between: MAZE: ${randomWallCell.getRowColIdx()} CELL: ${randFrontierCell.getRowColIdx()}`);
+                spec.mazeBoard[randFrontierCell.rowIdx][randFrontierCell.colIdx].removeWall(randomWallCell);
+            }
+            catch(err) {
+                console.log('error...', err);
+            }
+            
             // Add cell to the maze
-            mazeCells.push(randFrontierCell.getXYIdx());
-            let cellsLeftOver = randFrontierCell.getNeighborCells().filter(cell => !mazeCells.includes(cell.getXYIdx()));
-            frontier = frontier.concat(cellsLeftOver);
+            mazeCells.push(randFrontierCell.getRowColIdx());
+            let cellsLeftOver = randFrontierCell.getNeighborCells().filter(cell => !mazeCells.includes(cell.getRowColIdx()));
+            
 
             // remove cell from frontier and reset index for next search
             frontier.splice(randIdx, 1);
+            frontier = frontier.concat(cellsLeftOver);
             randIdx = _getRandomInt(0, frontier.length - 1);
         }
         console.log(frontier);
@@ -115,10 +124,10 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 // 
                 let type = _calcCellType(i, j);
                 let curCell = mazeSpace.Cell({
-                    xCoord: j * spec.cellSize,
-                    yCoord: i * spec.cellSize,
-                    xIdx: j,
-                    yIdx: i,
+                    xCoord: i * spec.cellSize,
+                    yCoord: j * spec.cellSize,
+                    rowIdx: i,
+                    colIdx: j,
                     size: spec.cellSize,
                     edges: {
                         topWall: null,

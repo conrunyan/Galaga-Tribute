@@ -44,7 +44,7 @@ MazeGame.graphics = (function () {
     function drawGamePiece(spec) {
         context.save();
         context.fillStyle = spec.color;
-        context.lineWidth = 1;
+        context.lineWidth = 2;
         context.fillRect(
             spec.xCoord,
             spec.yCoord,
