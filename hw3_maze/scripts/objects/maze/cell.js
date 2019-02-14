@@ -66,29 +66,29 @@ MazeGame.objects.maze.Cell = function (spec) {
             spec.edges.rightWall,
         ];
 
-        return cells.filter(cell => cell !== null);
+        return cells.filter(cell => cell !== null && cell !== 'path');
     }
 
     function removeWall(cell) {
-        if (spec.edges.topWall !== null && cell.getRowColIdx() === spec.edges.topWall.getRowColIdx()) {
+        if (spec.edges.topWall !== null && spec.edges.topWall !== 'path' && cell.getRowColIdx() === spec.edges.topWall.getRowColIdx()) {
             // remove wall for the linked cell as well
-            spec.edges.topWall.edges.bottomWall = null;
-            spec.edges.topWall = null;
+            spec.edges.topWall.edges.bottomWall = 'path';
+            spec.edges.topWall = 'path';
         }
-        else if (spec.edges.bottomWall !== null && cell.getRowColIdx() === spec.edges.bottomWall.getRowColIdx()) {
+        else if (spec.edges.bottomWall !== null && spec.edges.bottomWall !== 'path' && cell.getRowColIdx() === spec.edges.bottomWall.getRowColIdx()) {
             // remove wall for the linked cell as well
-            spec.edges.bottomWall.edges.topWall = null;
-            spec.edges.bottomWall = null;
+            spec.edges.bottomWall.edges.topWall = 'path';
+            spec.edges.bottomWall = 'path';
         }
-        else if (spec.edges.leftWall !== null && cell.getRowColIdx() === spec.edges.leftWall.getRowColIdx()) {
+        else if (spec.edges.leftWall !== null && spec.edges.leftWall !== 'path' && cell.getRowColIdx() === spec.edges.leftWall.getRowColIdx()) {
             // remove wall for the linked cell as well
-            spec.edges.leftWall.edges.rightWall = null;
-            spec.edges.leftWall = null;
+            spec.edges.leftWall.edges.rightWall = 'path';
+            spec.edges.leftWall = 'path';
         }
-        else if (spec.edges.rightWall !== null && cell.getRowColIdx() === spec.edges.rightWall.getRowColIdx()) {
+        else if (spec.edges.rightWall !== null && spec.edges.rightWall !== 'path' && cell.getRowColIdx() === spec.edges.rightWall.getRowColIdx()) {
             // remove wall for the linked cell as well
-            spec.edges.rightWall.edges.leftWall = null;
-            spec.edges.rightWall = null;
+            spec.edges.rightWall.edges.leftWall = 'path';
+            spec.edges.rightWall = 'path';
         }
     }
 

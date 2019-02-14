@@ -108,8 +108,9 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             
 
             // remove cell from frontier and reset index for next search
-            frontier.splice(randIdx, 1);
-            frontier = frontier.concat(cellsLeftOver);
+            frontier = frontier.filter(cell => cell.getRowColIdx() !== randFrontierCell.getRowColIdx());
+            // TODO: Do a set union on these. NO DUPLICATES!
+            frontier = Array.from(new Set(frontier.concat(cellsLeftOver)));
             randIdx = _getRandomInt(0, frontier.length - 1);
         }
         console.log(frontier);
