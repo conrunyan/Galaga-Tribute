@@ -54,13 +54,50 @@ MazeGame.objects.maze.Cell = function (spec) {
         };
     }
 
+    function getXYIdx() {
+        return `${spec.xIdx},${spec.yIdx}`;
+    }
+
     function getNeighborCells() {
-        return [
+        let cells = [
             spec.edges.topWall,
             spec.edges.bottomWall,
             spec.edges.leftWall,
             spec.edges.rightWall,
         ];
+
+        return cells.filter(cell => cell !== null);
+    }
+
+    function removeWall(cell) {
+        if (spec.edges.topWall.getXYIdx() !== null) {
+            if (cell.getXYIdx() === spec.edges.topWall.getXYIdx()) {
+                // remove wall for the linked cell as well
+                spec.edges.topWall.edges.bottomWall = null;
+                spec.edges.topWall = null;
+            }
+        }
+        else if (spec.edges.bottomWall.getXYIdx() !== null) {
+            if (cell.getXYIdx() === spec.edges.bottomWall.getXYIdx()) {
+                // remove wall for the linked cell as well
+                spec.edges.bottomWall.edges.topWall = null;
+                spec.edges.bottomWall = null;
+            }
+        }
+        else if (spec.edges.leftWall.getXYIdx() !== null) {
+            if (cell.getXYIdx() === spec.edges.leftWall.getXYIdx()) {
+                // remove wall for the linked cell as well
+                spec.edges.leftWall.edges.rightWall = null;
+                spec.edges.leftWall = null;
+            }
+        }
+        else if (spec.edges.rightWall.getXYIdx() !== null) {
+            if (cell.getXYIdx() === spec.edges.rightWall.getXYIdx()) {
+                // remove wall for the linked cell as well
+                spec.edges.rightWall.edges.leftWall = null;
+                spec.edges.rightWall = null;
+            }
+        }
     }
 
     let api = {
@@ -85,6 +122,8 @@ MazeGame.objects.maze.Cell = function (spec) {
         setType: setType,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,
+        getXYIdx: getXYIdx,
+        removeWall: removeWall,
     };
 
     return api;

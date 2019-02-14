@@ -79,12 +79,28 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let mazeCells = [];
         let startCoords = _getRandomCellCoords();
         let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
-        mazeCells.push(startCell);
+        mazeCells.push(startCell.getXYIdx());
         // Add its neighboring cells to the frontier
         frontier = startCell.getNeighborCells();
-        // 3.Randomly choose a cell in the frontier and (randomly) pick a wall that connects to a cell in the maze
+        let randIdx = _getRandomInt(0, frontier.length - 1);
+        // 3.Randomly choose a cell in the frontier
         while (frontier.length > 0) {
+            let randFrontierCell = frontier[randIdx];
+            // (randomly) pick a "wall" that connects to a cell in the maze
+            let surroundingCells = randFrontierCell.getNeighborCells();
+            surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getXYIdx()));
+            let randWallIdx = _getRandomInt(0, surroundingCells.length - 1);
+            let randomWallCell = surroundingCells[randWallIdx];
+            // Remove that wall
+            spec.mazeBoard[randFrontierCell.xIdx][randFrontierCell.yIdx].removeWall(randomWallCell);
+            // Add cell to the maze
+            mazeCells.push(randFrontierCell.getXYIdx());
+            let cellsLeftOver = randFrontierCell.getNeighborCells().filter(cell => !mazeCells.includes(cell.getXYIdx()));
+            frontier = frontier.concat(cellsLeftOver);
 
+            // remove cell from frontier and reset index for next search
+            frontier.splice(randIdx, 1);
+            randIdx = _getRandomInt(0, frontier.length - 1);
         }
         console.log(frontier);
 
