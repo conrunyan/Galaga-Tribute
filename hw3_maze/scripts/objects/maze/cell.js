@@ -47,10 +47,10 @@ MazeGame.objects.maze.Cell = function (spec) {
     // returns the x/y indices of neighboring cells
     function getNeighborCellCoords() {
         return {
-            up: { x: spec.xIdx, y: spec.yIdx - 1 },
-            down: { x: spec.xIdx, y: spec.yIdx + 1 },
-            right: { x: spec.xIdx + 1, y: spec.yIdx },
-            left: { x: spec.xIdx - 1, y: spec.yIdx },
+            up: { x: spec.xIdx - 1, y: spec.yIdx },
+            down: { x: spec.xIdx + 1, y: spec.yIdx },
+            right: { x: spec.xIdx, y: spec.yIdx + 1 },
+            left: { x: spec.xIdx, y: spec.yIdx - 1 },
         };
     }
 
@@ -70,33 +70,25 @@ MazeGame.objects.maze.Cell = function (spec) {
     }
 
     function removeWall(cell) {
-        if (spec.edges.topWall.getXYIdx() !== null) {
-            if (cell.getXYIdx() === spec.edges.topWall.getXYIdx()) {
-                // remove wall for the linked cell as well
-                spec.edges.topWall.edges.bottomWall = null;
-                spec.edges.topWall = null;
-            }
+        if (spec.edges.topWall !== null && cell.getXYIdx() === spec.edges.topWall.getXYIdx()) {
+            // remove wall for the linked cell as well
+            spec.edges.topWall.edges.bottomWall = null;
+            spec.edges.topWall = null;
         }
-        else if (spec.edges.bottomWall.getXYIdx() !== null) {
-            if (cell.getXYIdx() === spec.edges.bottomWall.getXYIdx()) {
-                // remove wall for the linked cell as well
-                spec.edges.bottomWall.edges.topWall = null;
-                spec.edges.bottomWall = null;
-            }
+        else if (spec.edges.bottomWall !== null && cell.getXYIdx() === spec.edges.bottomWall.getXYIdx()) {
+            // remove wall for the linked cell as well
+            spec.edges.bottomWall.edges.topWall = null;
+            spec.edges.bottomWall = null;
         }
-        else if (spec.edges.leftWall.getXYIdx() !== null) {
-            if (cell.getXYIdx() === spec.edges.leftWall.getXYIdx()) {
-                // remove wall for the linked cell as well
-                spec.edges.leftWall.edges.rightWall = null;
-                spec.edges.leftWall = null;
-            }
+        else if (spec.edges.leftWall !== null && cell.getXYIdx() === spec.edges.leftWall.getXYIdx()) {
+            // remove wall for the linked cell as well
+            spec.edges.leftWall.edges.rightWall = null;
+            spec.edges.leftWall = null;
         }
-        else if (spec.edges.rightWall.getXYIdx() !== null) {
-            if (cell.getXYIdx() === spec.edges.rightWall.getXYIdx()) {
-                // remove wall for the linked cell as well
-                spec.edges.rightWall.edges.leftWall = null;
-                spec.edges.rightWall = null;
-            }
+        else if (spec.edges.rightWall !== null && cell.getXYIdx() === spec.edges.rightWall.getXYIdx()) {
+            // remove wall for the linked cell as well
+            spec.edges.rightWall.edges.leftWall = null;
+            spec.edges.rightWall = null;
         }
     }
 

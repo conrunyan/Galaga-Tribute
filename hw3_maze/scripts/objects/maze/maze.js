@@ -78,7 +78,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let frontier;
         let mazeCells = [];
         let startCoords = _getRandomCellCoords();
-        let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
+        let startCell = spec.mazeBoard[0][0];
         mazeCells.push(startCell.getXYIdx());
         // Add its neighboring cells to the frontier
         frontier = startCell.getNeighborCells();
@@ -115,10 +115,10 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                 // 
                 let type = _calcCellType(i, j);
                 let curCell = mazeSpace.Cell({
-                    xCoord: i * spec.cellSize,
-                    yCoord: j * spec.cellSize,
-                    xIdx: i,
-                    yIdx: j,
+                    xCoord: j * spec.cellSize,
+                    yCoord: i * spec.cellSize,
+                    xIdx: j,
+                    yIdx: i,
                     size: spec.cellSize,
                     edges: {
                         topWall: null,
