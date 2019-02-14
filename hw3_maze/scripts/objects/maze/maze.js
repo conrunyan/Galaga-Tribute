@@ -78,8 +78,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let frontier;
         let mazeCells = [];
         let startCoords = _getRandomCellCoords();
-        // let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
-        let startCell = spec.mazeBoard[0][0];
+        let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
+        // let startCell = spec.mazeBoard[0][0];
         mazeCells.push(startCell.getRowColIdx());
         // Add its neighboring cells to the frontier
         frontier = startCell.getNeighborCells();
@@ -91,11 +91,11 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             let surroundingCells = randFrontierCell.getNeighborCells();
             surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getRowColIdx()));
             let randWallIdx = _getRandomInt(0, surroundingCells.length - 1);
-            let randomWallCell = surroundingCells[randWallIdx];
+            let randomMazeCell = surroundingCells[randWallIdx];
             // Remove that wall
             try {
-                console.log(`Removing wall between: MAZE: ${randomWallCell.getRowColIdx()} CELL: ${randFrontierCell.getRowColIdx()}`);
-                spec.mazeBoard[randFrontierCell.rowIdx][randFrontierCell.colIdx].removeWall(randomWallCell);
+                console.log(`Removing wall between: MAZE: ${randomMazeCell.getRowColIdx()} CELL: ${randFrontierCell.getRowColIdx()}`);
+                spec.mazeBoard[randFrontierCell.rowIdx][randFrontierCell.colIdx].removeWall(randomMazeCell);
             }
             catch(err) {
                 console.log('error...', err);
@@ -103,6 +103,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             
             // Add cell to the maze
             mazeCells.push(randFrontierCell.getRowColIdx());
+            console.log("MAZE CELLS", mazeCells);
             let cellsLeftOver = randFrontierCell.getNeighborCells().filter(cell => !mazeCells.includes(cell.getRowColIdx()));
             
 

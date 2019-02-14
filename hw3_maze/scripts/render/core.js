@@ -51,23 +51,23 @@ MazeGame.graphics = (function () {
             spec.size,
             spec.size);
         if (spec.edges.topWall === null) {
-            context.moveTo(spec.xIdx * spec.size, spec.yIdx * spec.size);
-            context.lineTo((spec.xIdx + 1) * spec.size, spec.yIdx * spec.size);
+            context.moveTo(spec.rowIdx * spec.size, spec.colIdx * spec.size);
+            context.lineTo((spec.rowIdx + 1) * spec.size, spec.colIdx * spec.size);
         }
 
         if (spec.edges.bottomWall === null) {
-            context.moveTo(spec.xIdx * spec.size, (spec.yIdx + 1) * spec.size);
-            context.lineTo((spec.xIdx + 1) * spec.size, (spec.yIdx + 1) * spec.size);
+            context.moveTo(spec.rowIdx * spec.size, (spec.colIdx + 1) * spec.size);
+            context.lineTo((spec.rowIdx + 1) * spec.size, (spec.colIdx + 1) * spec.size);
         }
 
         if (spec.edges.rightWall === null) {
-            context.moveTo((spec.xIdx + 1) * spec.size, spec.yIdx * spec.size);
-            context.lineTo((spec.xIdx + 1) * spec.size, (spec.yIdx + 1) * spec.size);
+            context.moveTo((spec.rowIdx + 1) * spec.size, spec.colIdx * spec.size);
+            context.lineTo((spec.rowIdx + 1) * spec.size, (spec.colIdx + 1) * spec.size);
         }
 
         if (spec.edges.leftWall === null) {
-            context.moveTo(spec.xIdx * spec.size, spec.yIdx * spec.size);
-            context.lineTo(spec.xIdx * spec.size, (spec.yIdx + 1) * spec.size);
+            context.moveTo(spec.rowIdx * spec.size, spec.colIdx * spec.size);
+            context.lineTo(spec.rowIdx * spec.size, (spec.colIdx + 1) * spec.size);
         }
         context.stroke();
         context.restore();
