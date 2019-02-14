@@ -50,22 +50,22 @@ MazeGame.graphics = (function () {
             spec.yCoord,
             spec.size,
             spec.size);
-        if (spec.edges.topWall === null) {
+        if (spec.edges.topWall === undefined) {
             context.moveTo(spec.rowIdx * spec.size, spec.colIdx * spec.size);
             context.lineTo((spec.rowIdx + 1) * spec.size, spec.colIdx * spec.size);
         }
 
-        if (spec.edges.bottomWall === null) {
+        if (spec.edges.bottomWall === undefined) {
             context.moveTo(spec.rowIdx * spec.size, (spec.colIdx + 1) * spec.size);
             context.lineTo((spec.rowIdx + 1) * spec.size, (spec.colIdx + 1) * spec.size);
         }
 
-        if (spec.edges.rightWall === null) {
+        if (spec.edges.rightWall === undefined) {
             context.moveTo((spec.rowIdx + 1) * spec.size, spec.colIdx * spec.size);
             context.lineTo((spec.rowIdx + 1) * spec.size, (spec.colIdx + 1) * spec.size);
         }
 
-        if (spec.edges.leftWall === null) {
+        if (spec.edges.leftWall === undefined) {
             context.moveTo(spec.rowIdx * spec.size, spec.colIdx * spec.size);
             context.lineTo(spec.rowIdx * spec.size, (spec.colIdx + 1) * spec.size);
         }

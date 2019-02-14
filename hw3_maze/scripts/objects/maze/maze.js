@@ -77,8 +77,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let frontier;
         let mazeCells = [];
         let startCoords = _getRandomCellCoords();
-        let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
-        // let startCell = spec.mazeBoard[0][0];
+        // let startCell = spec.mazeBoard[startCoords.x][startCoords.y];
+        let startCell = spec.mazeBoard[0][0];
         mazeCells.push(startCell.getRowColIdx());
         // Add its neighboring cells to the frontier
         frontier = startCell.getNeighborCells(spec.mazeBoard);
@@ -93,7 +93,6 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             let randomMazeCell = surroundingCells[randWallIdx];
             // Remove that wall
             try {
-                console.log(`Removing wall between: MAZE: ${randomMazeCell.getRowColIdx()} CELL: ${randFrontierCell.getRowColIdx()}`);
                 _linkCells(randFrontierCell, randomMazeCell);
             }
             catch (err) {
@@ -145,42 +144,43 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     }
 
     // Function links cells to walls
-    function _linkCells(cellA, cellB) {
-        console.log('Linking cells...');
-        let wallDir = _getWallDir(cellA, cellB);
+    function _linkCells(cellFrontier, cellMaze) {
+        console.log('');
+        let wallDir = _getWallDir(cellFrontier, cellMaze);
+        console.log(`Linking wall ${wallDir} MAZE: ${cellFrontier.getRowColIdx()} CELL: ${cellMaze.getRowColIdx()}`);
         if (wallDir === 'up') {
             // remove wall for the linked cell as well
-            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.topWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
-            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.bottomWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+            spec.mazeBoard[cellMaze.rowIdx][cellMaze.colIdx].setBottomWall(cellFrontier);
+            spec.mazeBoard[cellFrontier.rowIdx][cellFrontier.colIdx].setTopWall(cellMaze);
         }
         else if (wallDir === 'down') {
             // remove wall for the linked cell as well
-            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.bottomWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
-            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.topWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+            spec.mazeBoard[cellMaze.rowIdx][cellMaze.colIdx].setTopWall(cellFrontier);
+            spec.mazeBoard[cellFrontier.rowIdx][cellFrontier.colIdx].setBottomWall(cellMaze);
         }
         else if (wallDir === 'left') {
             // remove wall for the linked cell as well
-            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.leftWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
-            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.rightWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+            spec.mazeBoard[cellFrontier.rowIdx][cellFrontier.colIdx].setLeftWall(cellMaze);
+            spec.mazeBoard[cellMaze.rowIdx][cellMaze.colIdx].setRightWall(cellFrontier);
         }
         else if (wallDir === 'right') {
             // remove wall for the linked cell as well
-            spec.mazeBoard[cellA.rowIdx][cellA.colIdx].edges.rightWall = spec.mazeBoard[cellB.rowIdx][cellB.colIdx];
-            spec.mazeBoard[cellB.rowIdx][cellB.colIdx].edges.leftWall = spec.mazeBoard[cellA.rowIdx][cellA.colIdx];
+            spec.mazeBoard[cellFrontier.rowIdx][cellFrontier.colIdx].setRightWall(cellMaze);
+            spec.mazeBoard[cellMaze.rowIdx][cellMaze.colIdx].setLeftWall(cellFrontier);
         }
     }
 
-    function _getWallDir(cellA, cellB) {
-        if (cellA.rowIdx - 1 == cellB.rowIdx && cellA.colIdx == cellB.colIdx) {
+    function _getWallDir(cellFrontier, cellMaze) {
+        if (cellFrontier.rowIdx - 1 == cellMaze.rowIdx && cellFrontier.colIdx == cellMaze.colIdx) {
             return 'up';
         }
-        else if (cellA.rowIdx + 1 == cellB.rowIdx && cellA.colIdx == cellB.colIdx) {
+        else if (cellFrontier.rowIdx + 1 == cellMaze.rowIdx && cellFrontier.colIdx == cellMaze.colIdx) {
             return 'down';
         }
-        else if (cellA.rowIdx == cellB.rowIdx && cellA.colIdx - 1 == cellB.colIdx) {
+        else if (cellFrontier.rowIdx == cellMaze.rowIdx && cellFrontier.colIdx - 1 == cellMaze.colIdx) {
             return 'left';
         }
-        else if (cellA.rowIdx == cellB.rowIdx && cellA.colIdx + 1 == cellB.colIdx) {
+        else if (cellFrontier.rowIdx == cellMaze.rowIdx && cellFrontier.colIdx + 1 == cellMaze.colIdx) {
             return 'right';
         }
     }

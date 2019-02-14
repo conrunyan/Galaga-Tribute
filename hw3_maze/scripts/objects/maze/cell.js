@@ -60,13 +60,19 @@ MazeGame.objects.maze.Cell = function (spec) {
 
     function getNeighborCells(mazeBoard) {
         let nCoords = getNeighborCellCoords();
-        console.log(nCoords);
-        let cells = [
-            mazeBoard[nCoords.up.x][nCoords.up.y],
-            mazeBoard[nCoords.down.x][nCoords.down.y],
-            mazeBoard[nCoords.right.x][nCoords.right.y],
-            mazeBoard[nCoords.left.x][nCoords.left.y],
-        ];
+        let cells = [];
+        if (nCoords.up.x >= 0 && nCoords.up.x < mazeBoard.length && nCoords.up.y >= 0 && nCoords.up.y < mazeBoard.length) {
+            cells.push(mazeBoard[nCoords.up.x][nCoords.up.y]);
+        }
+        if (nCoords.down.x >= 0 && nCoords.down.x < mazeBoard.length && nCoords.down.y >= 0 && nCoords.down.y < mazeBoard.length) {
+            cells.push(mazeBoard[nCoords.down.x][nCoords.down.y]);
+        }
+        if (nCoords.left.x >= 0 && nCoords.left.x < mazeBoard.length && nCoords.left.y >= 0 && nCoords.left.y < mazeBoard.length) {
+            cells.push(mazeBoard[nCoords.left.x][nCoords.left.y]);
+        }
+        if (nCoords.right.x >= 0 && nCoords.right.x < mazeBoard.length && nCoords.right.y >= 0 && nCoords.right.y < mazeBoard.length) {
+            cells.push(mazeBoard[nCoords.right.x][nCoords.right.y]);
+        }
 
         return cells;
     }
