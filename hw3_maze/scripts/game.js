@@ -4,7 +4,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
     let boardDim = 500; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 3;
+    let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
 
     let gameMaze = maze.Maze({

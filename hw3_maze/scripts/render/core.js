@@ -75,12 +75,22 @@ MazeGame.graphics = (function () {
         context.restore();
     }
 
+    function renderCharacter(character, spec) {
+        if (character.image.isReady) {
+            context.drawImage(character.image,
+            character.location.x * spec.size, character.location.y * spec.size);
+        }
+    }
+
     let api = {
         get canvas() { return canvas; },
         clear: clear,
         drawTexture: drawTexture,
+        renderCharacter: renderCharacter,
         drawGamePiece: drawGamePiece,
     };
+
+    
 
     return api;
 }());
