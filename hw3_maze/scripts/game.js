@@ -14,10 +14,11 @@ MazeGame.main = (function (maze, myGraphics, input) {
         maze
     );
 
-    gameMaze.generateMaze();
-    gameMaze.print();
-    console.log(gameMaze.mazeBoard);
-    render();
+
+    // initialize event handlers, set board size, generate maze, etc.
+    function init() {
+        gameMaze.generateMaze();
+    }
 
     function processInput(elapsedTime) {
         myKeyboard.update(elapsedTime);
@@ -57,6 +58,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
     // myKeyboard.register('d', myLogo.moveRight);
 
     // Start of game
-    //requestAnimationFrame(gameLoop);
+    init();
+    requestAnimationFrame(gameLoop);
 
 }(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input));

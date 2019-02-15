@@ -37,41 +37,6 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         console.log(`Size: ${spec.size.xCellCount}X${spec.size.yCellCount}`)
     }
 
-    function print() {
-        for (let i = 0; i < spec.size.xCellCount; i++) {
-            let row = ''
-            for (let j = 0; j < spec.size.yCellCount; j++) {
-                if (i === 0 || i === spec.size.xCellCount - 1) {
-                    row += ' - ';
-                }
-                else if (spec.mazeBoard[i][j].type === 'cell') {
-                    row += ' X ';
-                }
-                else if (spec.mazeBoard[i][j].type === 'wall-verticle') {
-                    if (spec.mazeBoard[i][j].isPassage) {
-                        row += ' $ '
-                    }
-                    else {
-                        row += ' | '
-                    }
-                    // // row += ' | ';
-                }
-                else if (spec.mazeBoard[i][j].type === 'wall-horizontal') {
-                    if (spec.mazeBoard[i][j].isPassage) {
-                        row += ' $ '
-                    }
-                    else {
-                        row += ' - '
-                    }
-                }
-                else {
-                    row += ' - '
-                }
-            }
-            console.log(row)
-        }
-    }
-
     function _primsMagicMazeMachine() {
         // 2 - Randomly pick a cell, add it to the maze
         let frontier;
@@ -86,24 +51,19 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         // 3.Randomly choose a cell in the frontier
         while (frontier.length > 0) {
             let randFrontierCell = frontier[randIdx];
+
             // (randomly) pick a "wall" that connects to a cell in the maze
             let surroundingCells = randFrontierCell.getNeighborCells(spec.mazeBoard);
             surroundingCells = surroundingCells.filter(cell => mazeCells.includes(cell.getRowColIdx()));
             let randWallIdx = _getRandomInt(0, surroundingCells.length - 1);
             let randomMazeCell = surroundingCells[randWallIdx];
+
             // Remove that wall
-            try {
-                _linkCells(randFrontierCell, randomMazeCell);
-            }
-            catch (err) {
-                console.log('error...', err);
-            }
+            _linkCells(randFrontierCell, randomMazeCell);
 
             // Add cell to the maze
             mazeCells.push(randFrontierCell.getRowColIdx());
-            console.log("MAZE CELLS", mazeCells);
             let cellsLeftOver = randFrontierCell.getNeighborCells(spec.mazeBoard).filter(cell => !mazeCells.includes(cell.getRowColIdx()));
-
 
             // remove cell from frontier and reset index for next search
             frontier = frontier.filter(cell => cell.getRowColIdx() !== randFrontierCell.getRowColIdx());
@@ -111,8 +71,6 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             frontier = Array.from(new Set(frontier.concat(cellsLeftOver)));
             randIdx = _getRandomInt(0, frontier.length - 1);
         }
-        console.log(frontier);
-
     }
 
     // Generates an xCellCount X yCellCount board of cells, with each cell connected to other adjacent cells
@@ -145,9 +103,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     // Function links cells to walls
     function _linkCells(cellFrontier, cellMaze) {
-        console.log('');
         let wallDir = _getWallDir(cellFrontier, cellMaze);
-        console.log(`Linking wall ${wallDir} MAZE: ${cellFrontier.getRowColIdx()} CELL: ${cellMaze.getRowColIdx()}`);
         if (wallDir === 'up') {
             // remove wall for the linked cell as well
             spec.mazeBoard[cellMaze.rowIdx][cellMaze.colIdx].setBottomWall(cellFrontier);
