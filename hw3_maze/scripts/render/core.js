@@ -64,11 +64,11 @@ MazeGame.graphics = (function () {
 
         if (spec.edges.rightWall === undefined) {
             context.moveTo(spec.xCoord + spec.size, spec.yCoord);
-            context.lineTo(spec.xCoord + spec.size, spec.yCoord - spec.size);
+            context.lineTo(spec.xCoord + spec.size, spec.yCoord + spec.size);
         }
 
         if (spec.edges.leftWall === undefined) {
-            context.moveTo(spec.xCoord, spec.yCoord - spec.size);
+            context.moveTo(spec.xCoord, spec.yCoord);
             context.lineTo(spec.xCoord, spec.yCoord + spec.size);
         }
         context.stroke();
