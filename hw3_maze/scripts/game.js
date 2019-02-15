@@ -4,7 +4,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
     let boardDim = 500; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 20;
+    let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
 
     let gameMaze = maze.Maze({
@@ -18,6 +18,8 @@ MazeGame.main = (function (maze, myGraphics, input) {
     // initialize event handlers, set board size, generate maze, etc.
     function init() {
         gameMaze.generateMaze();
+        render();
+        console.log(gameMaze.mazeBoard);
     }
 
     function processInput(elapsedTime) {
@@ -59,6 +61,6 @@ MazeGame.main = (function (maze, myGraphics, input) {
 
     // Start of game
     init();
-    requestAnimationFrame(gameLoop);
+    // requestAnimationFrame(gameLoop);
 
 }(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input));

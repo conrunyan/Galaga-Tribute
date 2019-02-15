@@ -14,7 +14,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     spec.mazeBoard = [];
     let startXY = { x: 0, y: 0 }; // default locations
-    let endXY = { x: spec.xCellCount - 1, y: spec.yCellCount - 1 }; // default locations
+    let endXY = { x: spec.size.xCellCount - 1, y: spec.size.yCellCount - 1 }; // default locations
     spec.shortestPath = [];
     spec.breadCrumbs = [];
     spec.walls = [];
@@ -30,7 +30,24 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         // 1 - Generate a grid of walls
         _generateBaseBoard();
         _primsMagicMazeMachine();
+        // set start and end places
+        spec.mazeBoard[startXY.x][startXY.y].setType('start');
+        spec.mazeBoard[endXY.x][endXY.y].setType('end');
 
+    }
+
+    // returns a list of cells in order in the shortest path
+    function getShortestPath(curCell) {
+         let firstDirection = 'right';
+         return _breadFirstSearch(curCell, firstDirection);
+    }
+
+    function _breadFirstSearch(curCell, direction) {
+        // base cases 
+        if (curCell.type === 'end') {
+            return [curCell];
+        }
+        if cell
     }
 
     function info() {

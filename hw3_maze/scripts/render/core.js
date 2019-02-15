@@ -56,8 +56,6 @@ MazeGame.graphics = (function () {
         }
 
         if (spec.edges.bottomWall === undefined) {
-            // context.moveTo(spec.rowIdx * spec.size, (spec.colIdx + 1) * spec.size);
-            // context.lineTo((spec.rowIdx + 1) * spec.size, (spec.colIdx + 1) * spec.size);
             context.moveTo(spec.xCoord, spec.yCoord + spec.size);
             context.lineTo(spec.xCoord + spec.size, spec.yCoord + spec.size);
         }

@@ -54,6 +54,21 @@ MazeGame.objects.maze.Cell = function (spec) {
         };
     }
 
+    function getWall(direction) {
+        if (direction === 'up') {
+            return spec.edges.topWall;
+        }
+        else if (direction === 'down') {
+            return spec.edges.downWall;
+        }
+        else if (direction === 'down') {
+            return spec.edges.topWall;
+        }
+        else if (direction === 'down') {
+            return spec.edges.topWall;
+        }
+    }
+
     function getRowColIdx() {
         return `${spec.rowIdx},${spec.colIdx}`;
     }
