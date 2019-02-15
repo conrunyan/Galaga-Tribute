@@ -38,16 +38,33 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     // returns a list of cells in order in the shortest path
     function getShortestPath(curCell) {
-         let firstDirection = 'right';
-         return _breadFirstSearch(curCell, firstDirection);
+        if (curCell === undefined) {
+            curCell = spec.mazeBoard[startXY.x][startXY.y];
+        }
+        let firstDirection = 'right';
+        return _breadthFirstSearch(curCell, firstDirection, 0);
     }
 
-    function _breadFirstSearch(curCell, direction) {
+    function _breadthFirstSearch(curCell, direction, distance) {
         // base cases 
+        let path = [];
+        let directions = ['up', 'down', 'right', 'left'];
+        if (curCell === undefined) {
+            return []
+        }
+        if (curCell.getWall(direction) === undefined) {
+            return []
+        }
         if (curCell.type === 'end') {
+            console.log('FOUND THE END!');
             return [curCell];
         }
-        if cell
+        // visit paths, and find the route to the end
+        for (let i = 0; i < direction.length; i++) {
+            path = path.concat(_breadthFirstSearch(curCell.getWall(directions[i]), directions[i], distance + 1), [curCell]);
+        }
+
+        return path
     }
 
     function info() {
@@ -203,6 +220,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
         generateMaze: generateMaze,
+        getShortestPath: getShortestPath,
         setSize: setSize,
         info: info,
         print: print,

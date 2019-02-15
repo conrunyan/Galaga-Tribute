@@ -61,11 +61,11 @@ MazeGame.objects.maze.Cell = function (spec) {
         else if (direction === 'down') {
             return spec.edges.downWall;
         }
-        else if (direction === 'down') {
-            return spec.edges.topWall;
+        else if (direction === 'left') {
+            return spec.edges.leftWall;
         }
-        else if (direction === 'down') {
-            return spec.edges.topWall;
+        else if (direction === 'right') {
+            return spec.edges.rightWall;
         }
     }
 
@@ -139,6 +139,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,
         getRowColIdx: getRowColIdx,
+        getWall: getWall,
         removeWall: removeWall,
     };
 
