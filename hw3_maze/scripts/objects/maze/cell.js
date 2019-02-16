@@ -52,6 +52,10 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.cameFrom = prevCell;
     }
 
+    function setInShortPath(inShortPath) {
+        spec.inShortPath = inShortPath;
+    }
+
     function incrNodeCount() {
         spec.nodes++;
     }
@@ -145,6 +149,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get distanceTraveled() { return spec.distanceTraveled },
         get cameFrom() { return spec.cameFrom },
         get nodeCount() { return spec.nodes },
+        get inShortPath() { return spec.inShortPath },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
@@ -152,6 +157,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setRightWall: setRightWall,
         setType: setType,
         setDistanceTraveled: setDistanceTraveled,
+        setInShortPath: setInShortPath;
         setCameFrom: setCameFrom,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,

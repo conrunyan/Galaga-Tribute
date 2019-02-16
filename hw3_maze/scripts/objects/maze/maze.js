@@ -47,30 +47,22 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         }
         let firstDirection = 'right';
         startCell.setVisited(true);
-        let bfsInfo = _breadthFirstSearch(startCell, firstDirection, 0);
-        _findShortestPath(bfsInfo);
+        let endCell = _breadthFirstSearch(startCell, firstDirection, 0);
+        // follow cameFrom path to the start
+        _findShortestPath(endCell)
     }
 
     // loop over visited cells, and determine shortest path from start to finish
-    function _findShortestPath(bfsInfo) {
-        let visitedCells = bfsInfo.cells;
-        let cellGroups = {}; // cells split into distance from start groups
-        for (let i = 0; i < visitedCells.length; i++) {
-            let dist = visitedCells[i].distanceTraveled;
-            if (cellGroups[dist] === undefined) {
-                cellGroups[dist] = [{ cell: visitedCells[i], coords: visitedCells[i].getRowColIdx(), nodeCount: visitedCells[i].nodeCount }];
-            }
-            else {
-                cellGroups[dist].push({ cell: visitedCells[i], coords: visitedCells[i].getRowColIdx(), nodeCount: visitedCells[i].nodeCount });
-            }
+    function _findShortestPath(endCell) {
+        let prevCell = endCell.cameFrom;
+        let path = [endCell.getRowColIdx()];
+        while (prevCell !== undefined) {
+            path.push(prevCell.getRowColIdx());
+            prevCell = prevCell.cameFrom;
         }
-
-        // sort cell groups based on node count
-        for (let key in Object.keys(cellGroups)) {
-            cellGroups[key].sort(function (cell) { return cell.nodeCount });
-        }
-
-        console.log('CELL GROUPS:', cellGroups);
+        path.reverse();
+        spec.shortestPath = path;
+        console.log(path);
     }
     // returns a list of visited cells, and the minimum distance
     function _breadthFirstSearch(curCell, direction, distance) {
@@ -78,19 +70,15 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         let pathQueue = [curCell];
         let visitedCells = [];
         let directions = ['up', 'down', 'left', 'right'];
-        let minDist = Infinity;
+        let finalCell;
         // loop until queue is empty
         while (pathQueue.length > 0) {
             let curCell = pathQueue.shift();
             let dist = curCell.distanceTraveled;
-            console.log('Visiting Cell: ', curCell.getRowColIdx());
             curCell.setVisited(true);
-            visitedCells.push(curCell);
             // get paths surrounding current cell
             if (curCell.type === 'end') {
-                console.log('found end!');
-                console.log('distance:', curCell.distanceTraveled);
-                break
+                finalCell = curCell;
             }
             for (let i = 0; i < directions.length; i++) {
                 let nextCell = curCell.getWall(directions[i]);
@@ -98,12 +86,11 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     // update all info for backtracking of cell
                     nextCell.setDistanceTraveled(dist + 1);
                     nextCell.setCameFrom(curCell);
-                    curCell.incrNodeCount();
                     pathQueue.push(nextCell);
                 }
             }
         }
-        return { cells: visitedCells, minDist: minDist };
+        return finalCell;
     }
 
     function info() {
@@ -169,6 +156,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     type: 'cell',
                     color: 'green',
                     visited: false,
+                    inShortPath: false,
                     distanceTraveled: 0,
                     nodes: 0,
                 });
