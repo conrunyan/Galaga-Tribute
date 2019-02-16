@@ -2,10 +2,16 @@ MazeGame.graphics = (function () {
     'use strict';
 
     let canvas = document.getElementById('id-canvas');
+    let canvas2 = document.getElementById('id-canvas2');
     let context = canvas.getContext('2d');
+    let context2 = canvas2.getContext('2d');
 
-    function clear() {
+    function clear1() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function clear2() {
+        context2.clearRect(0, 0, canvas2.width, canvas2.height);
     }
 
     // --------------------------------------------------------------
@@ -17,19 +23,19 @@ MazeGame.graphics = (function () {
     //
     // --------------------------------------------------------------
     function drawTexture(image, center, rotation, size) {
-        context.save();
+        context2.save();
 
         // context.translate(center.x, center.y);
         // context.rotate(rotation);
         // context.translate(-center.x, -center.y);
 
-        context.drawImage(
+        context2.drawImage(
             image,
             center.x - size.width / 2,
             center.y - size.height / 2,
             size.width, size.height);
 
-        context.restore();
+        context2.restore();
     }
 
     /*
@@ -75,7 +81,8 @@ MazeGame.graphics = (function () {
 
     let api = {
         get canvas() { return canvas; },
-        clear: clear,
+        clear: clear1,
+        clear2: clear2,
         drawTexture: drawTexture,
         drawGamePiece: drawGamePiece,
     };
