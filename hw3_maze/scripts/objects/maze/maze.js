@@ -58,6 +58,11 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         });
     }
 
+    function updatePlayer(player) {
+        // TODO: Add step here to get player cell. If next wall in their direction is null, don't update the location
+        
+    }
+
     function _resetShortestPathTiles() {
         for (let i = 0; i < spec.mazeBoard.length; i++) {
             for (let j = 0; j < spec.mazeBoard.length; j++) {

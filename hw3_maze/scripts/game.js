@@ -19,6 +19,8 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
         colIdx: 0,
         imageSrc: 'SOURCE_PATH_HERE',
         cellSize: cellSize,
+        direction: 'down',
+        map: '',
     })
 
 
@@ -26,6 +28,7 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
     function init() {
         gameMaze.generateMaze();
         gameMaze.setShortestPath({x:0, y:0});
+        player.givePlayerMap(gameMaze.mazeBoard);
         render();
         console.log(gameMaze.mazeBoard);
     }
@@ -69,6 +72,6 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
 
     // Start of game
     init();
-    // requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop);
 
 }(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.player));
