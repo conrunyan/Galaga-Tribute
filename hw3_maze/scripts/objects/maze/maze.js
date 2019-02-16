@@ -42,29 +42,45 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             curCell = spec.mazeBoard[startXY.x][startXY.y];
         }
         let firstDirection = 'right';
-        return _breadthFirstSearch(curCell, firstDirection, 0);
+        curCell.setVisited(true);
+        let visitedCells = _breadthFirstSearch(curCell, firstDirection, 0);
+        console.log(visitedCells);
+    }
+
+    //
+    function _findShortestPath(visitedCells) {
+        spec.shortestPath = [];
+        for 
     }
 
     function _breadthFirstSearch(curCell, direction, distance) {
         // base cases 
-        let path = [];
-        let directions = ['up', 'down', 'right', 'left'];
-        if (curCell === undefined) {
-            return []
+        let pathQueue = [curCell];
+        let visitedCells = [];
+        let directions = ['up', 'down', 'left', 'right'];
+        let minDist = Infinity;
+        // loop until queue is empty
+        while (pathQueue.length > 0) {
+            let curCell = pathQueue.shift();
+            let dist = curCell.distanceTraveled;
+            console.log('Visiting Cell: ', curCell.getRowColIdx());
+            curCell.setVisited(true);
+            visitedCells.push(curCell);
+            // get paths surrounding current cell
+            if (curCell.type === 'end') {
+                console.log('found end!');
+                console.log('distance:', curCell.distanceTraveled);
+                break
+            }
+            for (let i = 0; i < directions.length; i++) {
+                let nextCell = curCell.getWall(directions[i]);
+                if (nextCell !== undefined && !nextCell.visited) {
+                    nextCell.setDistanceTraveled(dist + 1);
+                    pathQueue.push(nextCell);
+                }
+            }
         }
-        if (curCell.getWall(direction) === undefined) {
-            return []
-        }
-        if (curCell.type === 'end') {
-            console.log('FOUND THE END!');
-            return [curCell];
-        }
-        // visit paths, and find the route to the end
-        for (let i = 0; i < direction.length; i++) {
-            path = path.concat(_breadthFirstSearch(curCell.getWall(directions[i]), directions[i], distance + 1), [curCell]);
-        }
-
-        return path
+        return visitedCells;
     }
 
     function info() {
@@ -127,7 +143,10 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                         leftWall: null,
                         rightWall: null,
                     },
-                    color: 'green'
+                    type: 'cell',
+                    color: 'green',
+                    visited: false,
+                    distanceTraveled: 0,
                 });
                 mazeRow.push(curCell);
             }

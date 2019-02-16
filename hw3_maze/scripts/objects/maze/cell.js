@@ -44,6 +44,14 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.edges.rightWall = wall;
     }
 
+    function setDistanceTraveled(newDist) {
+        spec.distanceTraveled = newDist;
+    }
+
+    function setCameFrom(prevCell) {
+        spec.cameFrom = prevCell;
+    }
+
     // returns the x/y indices of neighboring cells
     function getNeighborCellCoords() {
         return {
@@ -59,7 +67,7 @@ MazeGame.objects.maze.Cell = function (spec) {
             return spec.edges.topWall;
         }
         else if (direction === 'down') {
-            return spec.edges.downWall;
+            return spec.edges.bottomWall;
         }
         else if (direction === 'left') {
             return spec.edges.leftWall;
@@ -130,12 +138,16 @@ MazeGame.objects.maze.Cell = function (spec) {
         get color() { return spec.color },
         get size() { return spec.size },
         get edges() { return spec.edges },
+        get distanceTraveled() { return spec.distanceTraveled },
+        get cameFrom() { return spec.cameFrom },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
         setLeftWall: setLeftWall,
         setRightWall: setRightWall,
         setType: setType,
+        setDistanceTraveled: setDistanceTraveled,
+        setCameFrom: setCameFrom,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,
         getRowColIdx: getRowColIdx,
