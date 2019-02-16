@@ -11,6 +11,7 @@
 //  direction: ,
 // }
 //
+// CREDITS: Character art from https://opengameart.org/content/jumping-galaxy-asset-cc-by-30
 // --------------------------------------------------------------
 MazeGame.objects.player.Player = function (spec) {
     'use strict';
@@ -18,31 +19,32 @@ MazeGame.objects.player.Player = function (spec) {
     // load image
     let image = new Image();
     image.isReady = false;
-    image.onload = function() {
+    image.src = spec.imageSrc;
+    image.onload = function () {
+        console.log('loaded image...')
         this.isReady = true;
     };
-    image.src = spec.imageSrc;
 
     function moveUp() {
-        if (spec.map[spec.rowIdx][spec.colIdx - 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx - 1].topWall !== undefined) {
+        if (spec.map[spec.rowIdx][spec.colIdx - 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx - 1].edges.topWall !== undefined) {
             spec.colIdx -= 1;
             spec.direction = 'up';
         }
     }
     function moveDown() {
-        if (spec.map[spec.rowIdx][spec.colIdx + 1] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].bottonWall !== undefined) {
-            pec.colIdx += 1;
+        if (spec.map[spec.rowIdx][spec.colIdx + 1] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.bottomWall !== undefined) {
+            spec.colIdx += 1;
             spec.direction = 'down';
         }
     }
     function moveLeft() {
-        if (spec.map[spec.rowIdx - 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].topWall !== undefined) {
+        if (spec.map[spec.rowIdx - 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.topWall !== undefined) {
             spec.rowIdx -= 1;
             spec.direction = 'left';
         }
     }
     function moveRight() {
-        if (spec.map[spec.rowIdx + 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx + 1][spec.colIdx].topWall !== undefined) {
+        if (spec.map[spec.rowIdx + 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx + 1][spec.colIdx].edges.topWall !== undefined) {
             spec.rowIdx += 1;
             spec.direction = 'right';
         }
@@ -57,7 +59,8 @@ MazeGame.objects.player.Player = function (spec) {
         get colIdx() { return spec.colIdx },
         get xCoord() { return spec.rowIdx * spec.cellSize },
         get yCoord() { return spec.colIdx * spec.cellSize },
-        get image() { return spec.image },
+        get image() { return image },
+        get cellSize() { return spec.cellSize },
         moveUp: moveUp,
         moveDown: moveDown,
         moveLeft: moveLeft,

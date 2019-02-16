@@ -19,9 +19,9 @@ MazeGame.graphics = (function () {
     function drawTexture(image, center, rotation, size) {
         context.save();
 
-        context.translate(center.x, center.y);
-        context.rotate(rotation);
-        context.translate(-center.x, -center.y);
+        // context.translate(center.x, center.y);
+        // context.rotate(rotation);
+        // context.translate(-center.x, -center.y);
 
         context.drawImage(
             image,
