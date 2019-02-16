@@ -52,6 +52,10 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.cameFrom = prevCell;
     }
 
+    function incrNodeCount() {
+        spec.nodes++;
+    }
+
     // returns the x/y indices of neighboring cells
     function getNeighborCellCoords() {
         return {
@@ -140,6 +144,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get edges() { return spec.edges },
         get distanceTraveled() { return spec.distanceTraveled },
         get cameFrom() { return spec.cameFrom },
+        get nodeCount() { return spec.nodes },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
@@ -153,6 +158,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         getRowColIdx: getRowColIdx,
         getWall: getWall,
         removeWall: removeWall,
+        incrNodeCount: incrNodeCount,
     };
 
     return api;
