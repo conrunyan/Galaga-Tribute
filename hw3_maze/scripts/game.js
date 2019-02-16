@@ -1,4 +1,4 @@
-MazeGame.main = (function (maze, myGraphics, input, player) {
+MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     'use strict';
 
     let boardDim = 500; // measurement in pixels
@@ -21,14 +21,14 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
         cellSize: cellSize,
         direction: 'down',
         map: '',
-    })
+    });
 
 
     // initialize event handlers, set board size, generate maze, etc.
     function init() {
         gameMaze.generateMaze();
         gameMaze.setShortestPath({x:0, y:0});
-        player.givePlayerMap(gameMaze.mazeBoard);
+        myPlayer.givePlayerMap(gameMaze.mazeBoard);
         render();
         console.log(gameMaze.mazeBoard);
     }
@@ -52,6 +52,7 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
                 myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]);
             }
         }
+        renderer.Player.renderPlayer(myPlayer);
     }
 
     function gameLoop(time) {
@@ -74,4 +75,4 @@ MazeGame.main = (function (maze, myGraphics, input, player) {
     init();
     requestAnimationFrame(gameLoop);
 
-}(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.player));
+}(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.objects.player, MazeGame.render));

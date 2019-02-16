@@ -15,6 +15,14 @@
 MazeGame.objects.player.Player = function (spec) {
     'use strict';
 
+    // load image
+    let image = new Image();
+    image.isReady = false;
+    image.onload = function() {
+        this.isReady = true;
+    };
+    image.src = spec.imageSrc;
+
     function moveUp() {
         if (spec.map[spec.rowIdx][spec.colIdx - 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx - 1].topWall !== undefined) {
             spec.colIdx -= 1;
@@ -49,11 +57,12 @@ MazeGame.objects.player.Player = function (spec) {
         get colIdx() { return spec.colIdx },
         get xCoord() { return spec.rowIdx * spec.cellSize },
         get yCoord() { return spec.colIdx * spec.cellSize },
-        get imageSrc() { return spec.imageSrc },
+        get image() { return spec.image },
         moveUp: moveUp,
         moveDown: moveDown,
         moveLeft: moveLeft,
         moveRight: moveRight,
+        givePlayerMap: givePlayerMap,
     };
 
     return api;
