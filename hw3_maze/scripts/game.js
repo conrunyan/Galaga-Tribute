@@ -19,7 +19,7 @@ MazeGame.main = (function (maze, myGraphics, input) {
     function init() {
         gameMaze.generateMaze();
         render();
-        gameMaze.getShortestPath({x:4, y:2});
+        gameMaze.getShortestPath({x:0, y:0});
         console.log(gameMaze.mazeBoard);
     }
 

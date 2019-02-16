@@ -58,12 +58,18 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         for (let i = 0; i < visitedCells.length; i++) {
             let dist = visitedCells[i].distanceTraveled;
             if (cellGroups[dist] === undefined) {
-                cellGroups[dist] = [{ cell: visitedCells[i], nodeCount: visitedCells[i].nodeCount }]
+                cellGroups[dist] = [{ cell: visitedCells[i], coords: visitedCells[i].getRowColIdx(), nodeCount: visitedCells[i].nodeCount }];
             }
             else {
-                cellGroups[dist].push({ cell: visitedCells[i], nodeCount: visitedCells[i].nodeCount })
+                cellGroups[dist].push({ cell: visitedCells[i], coords: visitedCells[i].getRowColIdx(), nodeCount: visitedCells[i].nodeCount });
             }
         }
+
+        // sort cell groups based on node count
+        for (let key in Object.keys(cellGroups)) {
+            cellGroups[key].sort(function (cell) { return cell.nodeCount });
+        }
+
         console.log('CELL GROUPS:', cellGroups);
     }
     // returns a list of visited cells, and the minimum distance
