@@ -44,6 +44,10 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.edges.rightWall = wall;
     }
 
+    function setColor(newColor) {
+        spec.color = newColor;
+    }
+
     function setDistanceTraveled(newDist) {
         spec.distanceTraveled = newDist;
     }
@@ -157,7 +161,8 @@ MazeGame.objects.maze.Cell = function (spec) {
         setRightWall: setRightWall,
         setType: setType,
         setDistanceTraveled: setDistanceTraveled,
-        setInShortPath: setInShortPath;
+        setInShortPath: setInShortPath,
+        setColor: setColor,
         setCameFrom: setCameFrom,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,

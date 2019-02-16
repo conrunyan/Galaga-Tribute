@@ -1,4 +1,4 @@
-MazeGame.main = (function (maze, myGraphics, input) {
+MazeGame.main = (function (maze, myGraphics, input, player) {
     'use strict';
 
     let boardDim = 500; // measurement in pixels
@@ -14,12 +14,19 @@ MazeGame.main = (function (maze, myGraphics, input) {
         maze
     );
 
+    let myPlayer = player.Player({
+        rowIdx: 0,
+        colIdx: 0,
+        imageSrc: 'SOURCE_PATH_HERE',
+        cellSize: cellSize,
+    })
+
 
     // initialize event handlers, set board size, generate maze, etc.
     function init() {
         gameMaze.generateMaze();
+        gameMaze.setShortestPath({x:0, y:0});
         render();
-        gameMaze.getShortestPath({x:0, y:0});
         console.log(gameMaze.mazeBoard);
     }
 
@@ -55,13 +62,13 @@ MazeGame.main = (function (maze, myGraphics, input) {
         requestAnimationFrame(gameLoop);
     }
     // Example of keyboard registering
-    // myKeyboard.register('s', myLogo.moveDown);
-    // myKeyboard.register('w', myLogo.moveUp);
-    // myKeyboard.register('a', myLogo.moveLeft);
-    // myKeyboard.register('d', myLogo.moveRight);
+    myKeyboard.register('s', myPlayer.moveDown);
+    myKeyboard.register('w', myPlayer.moveUp);
+    myKeyboard.register('a', myPlayer.moveLeft);
+    myKeyboard.register('d', myPlayer.moveRight);
 
     // Start of game
     init();
     // requestAnimationFrame(gameLoop);
 
-}(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input));
+}(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.player));

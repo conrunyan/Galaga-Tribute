@@ -37,7 +37,9 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     }
 
     // returns a list of cells in order in the shortest path
-    function getShortestPath(curCellCoords) {
+    function setShortestPath(curCellCoords) {
+        // reset previous shortest path
+        _resetShortestPathTiles();
         let startCell;
         if (curCellCoords === undefined) {
             startCell = spec.mazeBoard[startXY.x][startXY.y];
@@ -49,15 +51,27 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         startCell.setVisited(true);
         let endCell = _breadthFirstSearch(startCell, firstDirection, 0);
         // follow cameFrom path to the start
-        _findShortestPath(endCell)
+        _findShortestPath(endCell);
+        // mark shortest path cells
+        spec.shortestPath.forEach(element => {
+            element.setInShortPath(true);
+        });
+    }
+
+    function _resetShortestPathTiles() {
+        for (let i = 0; i < spec.mazeBoard.length; i++) {
+            for (let j = 0; j < spec.mazeBoard.length; j++) {
+                spec.mazeBoard[i][j].setInShortPath(false);
+            }
+        }
     }
 
     // loop over visited cells, and determine shortest path from start to finish
     function _findShortestPath(endCell) {
         let prevCell = endCell.cameFrom;
-        let path = [endCell.getRowColIdx()];
+        let path = [endCell];
         while (prevCell !== undefined) {
-            path.push(prevCell.getRowColIdx());
+            path.push(prevCell);
             prevCell = prevCell.cameFrom;
         }
         path.reverse();
@@ -251,7 +265,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
         generateMaze: generateMaze,
-        getShortestPath: getShortestPath,
+        setShortestPath: setShortestPath,
         setSize: setSize,
         info: info,
         print: print,
