@@ -19,6 +19,14 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     spec.breadCrumbs = [];
     spec.walls = [];
 
+    let image = new Image();
+    image.isReady = false;
+    image.onload = function () {
+        console.log('loaded image...')
+        this.isReady = true;
+    };
+    image.src = spec.imageSrc;
+
     // Set size to {}
     function setSize(mazeSize) {
         spec.size = mazeSize;
@@ -269,6 +277,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get mazeBoard() { return spec.mazeBoard },
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
+        get image() { return image },
         generateMaze: generateMaze,
         setShortestPath: setShortestPath,
         setSize: setSize,

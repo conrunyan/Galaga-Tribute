@@ -47,15 +47,16 @@ MazeGame.graphics = (function () {
         width: ,
     } 
     */
-    function drawGamePiece(spec) {
+ function drawGamePiece(spec, image) {
         context.save();
         context.fillStyle = spec.color;
         context.lineWidth = 2;
-        context.fillRect(
+        context.drawImage(
+            image,
             spec.xCoord,
             spec.yCoord,
-            spec.size,
-            spec.size);
+            spec.size, spec.size);
+
         if (spec.edges.topWall === undefined) {
             context.moveTo(spec.xCoord, spec.yCoord);
             context.lineTo(spec.xCoord + spec.size, spec.yCoord);
@@ -87,7 +88,7 @@ MazeGame.graphics = (function () {
         drawGamePiece: drawGamePiece,
     };
 
-    
+
 
     return api;
 }());

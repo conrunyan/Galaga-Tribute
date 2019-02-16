@@ -10,6 +10,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let gameMaze = maze.Maze({
             size: { xCellCount: cellCount, yCellCount: cellCount},
             cellSize: cellSize,
+            imageSrc: './assets/space_dn.png',
         },
         maze
     );
@@ -33,7 +34,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // draw the game board. Only need to do this once
         for (let i = 0; i < cellCount; i++) {
             for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]);
+                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j], gameMaze.image);
             }
         }
     }
