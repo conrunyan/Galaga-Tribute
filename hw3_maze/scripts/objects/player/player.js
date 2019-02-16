@@ -26,28 +26,40 @@ MazeGame.objects.player.Player = function (spec) {
     };
 
     function moveUp() {
+        console.log('trying to move up...');
         if (spec.map[spec.rowIdx][spec.colIdx - 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx - 1].edges.topWall !== undefined) {
+            console.log('moved up!');
             spec.colIdx -= 1;
             spec.direction = 'up';
         }
+        console.log(spec);
     }
     function moveDown() {
-        if (spec.map[spec.rowIdx][spec.colIdx + 1] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.bottomWall !== undefined) {
+        console.log('trying to move down...');
+        if (spec.map[spec.rowIdx][spec.colIdx + 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx + 1].edges.bottomWall !== undefined) {
+            console.log('moved down!');
             spec.colIdx += 1;
             spec.direction = 'down';
         }
+        console.log(spec);
     }
     function moveLeft() {
-        if (spec.map[spec.rowIdx - 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.topWall !== undefined) {
+        console.log('trying to move left...');
+        if (spec.map[spec.rowIdx - 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.leftWall !== undefined) {
+            console.log('moved left!');
             spec.rowIdx -= 1;
             spec.direction = 'left';
         }
+        console.log(spec);
     }
     function moveRight() {
-        if (spec.map[spec.rowIdx + 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx + 1][spec.colIdx].edges.topWall !== undefined) {
+        console.log('trying to move right...');
+        if (spec.map[spec.rowIdx + 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx + 1][spec.colIdx].edges.rightWall !== undefined) {
+            console.log('moved right!');
             spec.rowIdx += 1;
             spec.direction = 'right';
         }
+        console.log(spec);
     }
 
     function givePlayerMap(map) {

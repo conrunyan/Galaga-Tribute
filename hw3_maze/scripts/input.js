@@ -30,4 +30,4 @@ MazeGame.input.Keyboard = function () {
     window.addEventListener('keyup', keyRelease);
 
     return that;
-}
+};

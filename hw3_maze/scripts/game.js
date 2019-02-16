@@ -44,6 +44,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     }
 
     function render() {
+        myGraphics.clear()
         // draw the game board. Only need to do this once
         for (let i = 0; i < cellCount; i++) {
             for (let j = 0; j < cellCount; j++) {
@@ -54,6 +55,10 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         renderer.Player.renderPlayer(myPlayer);
     }
 
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     function gameLoop(time) {
         let elapsedTime = time - lastTimeStamp;
         lastTimeStamp = time;
@@ -61,7 +66,6 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         processInput(elapsedTime);
         update();
         render();
-
         requestAnimationFrame(gameLoop);
     }
     // Example of keyboard registering
