@@ -10,14 +10,16 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let gameWon = false;
 
     let gameMaze = maze.Maze({
-            size: { xCellCount: cellCount, yCellCount: cellCount},
-            cellSize: cellSize,
-            cellBackgroundImgSrc: './assets/stars_aa.png',
-            breadCrumbImgSrc: './assets/toast.png',
-            homePlanetImgSrc: './assets/mars-icon.png',
-            markerImageSrc: './assets/path_marker.png',
-            showBreadCrumbs: false,
-        },
+        size: { xCellCount: cellCount, yCellCount: cellCount },
+        cellSize: cellSize,
+        cellBackgroundImgSrc: './assets/stars_aa.png',
+        breadCrumbImgSrc: './assets/toast.png',
+        homePlanetImgSrc: './assets/mars-icon.png',
+        markerImageSrc: './assets/path_marker.png',
+        showBreadCrumbs: false,
+        showHint: false,
+        showFullPath: false,
+    },
         maze
     );
 
@@ -39,7 +41,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         console.log('Player:', myPlayer);
         // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
         // draw the game board. Only need to do this once
-        
+
     }
 
     function processInput(elapsedTime) {
@@ -48,7 +50,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function update() {
         // TODO: Update player state
-            // if player is on the end, game is over and display win screen
+        // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
         // TODO: Update bread-crumb state
 
@@ -69,18 +71,24 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             }
         }
         // render full path, if toggled on
-        // if (gameMaze.showFullPath) {
-
-        // }
-        for (let i = 0; i < gameMaze.shortestPath.length; i++) {
-            renderer.Marker.renderMarker(gameMaze.shortestPath[i]);
+        if (gameMaze.showPath) {
+            for (let i = 0; i < gameMaze.shortestPath.length; i++) {
+                renderer.Marker.renderMarker(gameMaze.shortestPath[i]);
+            }
         }
+        // render hint, if toggled on
+        if (gameMaze.showHint) {
+            for (let i = 0; i < gameMaze.shortestPath.length; i++) {
+                renderer.Marker.renderMarker(gameMaze.hint);
+            }
+        }
+
         renderer.Planet.renderPlanet(gameMaze.mazeBoard[cellCount - 1][cellCount - 1]);
         renderer.Player.renderPlayer(myPlayer);
     }
 
     function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     function gameLoop(time) {
@@ -96,12 +104,14 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         }
         requestAnimationFrame(gameLoop);
     }
-    // Example of keyboard registering
+    // Register AWSD keyboard, and other feature keys
     myKeyboard.register('s', myPlayer.moveDown);
     myKeyboard.register('w', myPlayer.moveUp);
     myKeyboard.register('a', myPlayer.moveLeft);
     myKeyboard.register('d', myPlayer.moveRight);
     myKeyboard.register('b', gameMaze.toggleShowCrumbs);
+    myKeyboard.register('h', gameMaze.toggleShowHint);
+    myKeyboard.register('p', gameMaze.toggleShowPath);
 
     // Start of game
     init();

@@ -66,8 +66,18 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     }
 
     function toggleShowCrumbs() {
-        console.log("toggling bread crumbs");
+        console.log("toggling bread crumbs:", !spec.showBreadCrumbs);
         spec.showBreadCrumbs = !spec.showBreadCrumbs;
+    }
+
+    function toggleShowHint() {
+        console.log("toggling hint");
+        spec.showHint = !spec.showHint;
+    }
+
+    function toggleShowPath() {
+        console.log("toggling full path");
+        spec.showPath = !spec.showPath;
     }
 
     // Function uses Randomized Prim's algorithm to generate a maze
@@ -327,11 +337,16 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get showBreadCrumbs() { return spec.showBreadCrumbs },
         get drawnMaze() { return spec.drawnMaze },
         get endCell() { return spec.mazeBoard[spec.size.xCellCount - 1][spec.size.yCellCount - 1] },
+        get showHint() { return spec.showHint },
+        get showPath() { return spec.showPath },
+        get hint() { return spec.shortestPath[0] },
         generateMaze: generateMaze,
         setShortestPath: setShortestPath,
         setSize: setSize,
         setDrawnMaze: setDrawnMaze,
         toggleShowCrumbs: toggleShowCrumbs,
+        toggleShowHint: toggleShowHint,
+        toggleShowPath: toggleShowPath,
         addBreadCrumb: addBreadCrumb,
         info: info,
         print: print,
