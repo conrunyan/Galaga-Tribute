@@ -38,6 +38,15 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     };
     breadCrumbImg.src = spec.breadCrumbImgSrc;
 
+    // load maze end image
+    spec.homePlanetImg = new Image();
+    spec.homePlanetImg.isReady = false;
+    spec.homePlanetImg.onload = function () {
+        console.log('loaded space background...')
+        this.isReady = true;
+    };
+    spec.homePlanetImg.src = spec.homePlanetImgSrc;
+
     // Set size to {}
     function setSize(mazeSize) {
         spec.size = mazeSize;
@@ -216,6 +225,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             }
             spec.mazeBoard.push(mazeRow);
         }
+        // set home planet image
+        spec.mazeBoard[spec.size.xCellCount - 1][spec.size.yCellCount - 1].setPlanet(cellBackgroundImg);
     }
 
     // Function links cells to walls

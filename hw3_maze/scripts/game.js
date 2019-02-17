@@ -4,7 +4,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let boardDim = 750; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 10;
+    let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
 
@@ -13,6 +13,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             cellSize: cellSize,
             cellBackgroundImgSrc: './assets/stars_aa.png',
             breadCrumbImgSrc: './assets/toast.png',
+            homePlanetImgSrc: './assets/mars-icon.png',
             showBreadCrumbs: false,
         },
         maze
@@ -56,7 +57,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function render() {
         // render board, if it hasn't been yet
-        drawnGameBoard = myGraphics.drawGameBoard(gameMaze, drawnGameBoard);
+        myGraphics.drawGameBoard(gameMaze, drawnGameBoard);
         myGraphics.clear2()
         // render bread crumbs, if toggled on
         if (gameMaze.showBreadCrumbs) {
@@ -65,6 +66,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             }
         }
         renderer.Player.renderPlayer(myPlayer);
+        renderer.Planet.renderPlanet(gameMaze.mazeBoard[cellCount - 1][cellCount - 1]);
     }
 
     function sleep(ms) {
