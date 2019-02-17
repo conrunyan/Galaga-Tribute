@@ -10,6 +10,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
     let gameWon = false;
+    let timeSinceLastClockTick = 0;
+    let clock = 0;
 
     let gameMaze = maze.Maze({
         size: { xCellCount: cellCount, yCellCount: cellCount },
@@ -53,12 +55,12 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         myKeyboard2.update(elapsedTime);
     }
 
-    function update() {
+    function update(elapsedTime) {
+        updateTime(elapsedTime);
         // TODO: Update player state
         // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
         // TODO: Update bread-crumb state
-
         // check win condition
         if (myPlayer.rowColIdx === gameMaze.endCell.getRowColIdx()) {
             gameWon = true;
@@ -92,16 +94,21 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         renderer.Player.renderPlayer(myPlayer);
     }
 
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    function updateTime(elapsedTime) {
+        timeSinceLastClockTick += elapsedTime;
+        if (timeSinceLastClockTick >= 1000) {
+            console.log(clock);
+            clock += 1;
+            timeSinceLastClockTick = 0;
+        }
     }
 
     function gameLoop(time) {
-        let elapsedTime = time - lastTimeStamp;
+        let elapsedTime = Math.ceil(time - lastTimeStamp);
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        update();
+        update(elapsedTime);
         render();
         if (gameWon) {
             console.log('GAME WON!');

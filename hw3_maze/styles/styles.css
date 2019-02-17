@@ -1,0 +1,38 @@
+/* Maze Game container items */
+.maze-game {
+    display: flex;
+    flex-wrap: wrap
+}
+
+ /* Maze Board items */
+.maze-board {
+    flex: 1;
+}
+
+#id-canvas {
+    position: absolute;
+    z-index: 0;
+    left: 30;
+    top: 30;
+    width: 750px;
+    height: 750px;
+    border-style: solid;
+    border-width: 1px
+}
+
+#id-canvas2 {
+    position: absolute;
+    z-index: 1;
+    left: 30;
+    top: 30;
+    width: 750px;
+    height: 750px;
+    border-style: solid;
+    border-width: 1px
+}
+
+.menu {
+    flex: 1;
+    background-color: lightgreen;
+    margin-left: 40%;
+}
