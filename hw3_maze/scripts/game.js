@@ -65,8 +65,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
                 renderer.Crumb.renderCrumb(gameMaze.breadCrumbs[i]);
             }
         }
-        renderer.Player.renderPlayer(myPlayer);
         renderer.Planet.renderPlanet(gameMaze.mazeBoard[cellCount - 1][cellCount - 1]);
+        renderer.Player.renderPlayer(myPlayer);
     }
 
     function sleep(ms) {

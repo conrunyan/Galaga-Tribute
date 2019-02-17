@@ -42,7 +42,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     spec.homePlanetImg = new Image();
     spec.homePlanetImg.isReady = false;
     spec.homePlanetImg.onload = function () {
-        console.log('loaded space background...')
+        console.log('loaded home planet...')
         this.isReady = true;
     };
     spec.homePlanetImg.src = spec.homePlanetImgSrc;
@@ -226,7 +226,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
             spec.mazeBoard.push(mazeRow);
         }
         // set home planet image
-        spec.mazeBoard[spec.size.xCellCount - 1][spec.size.yCellCount - 1].setPlanet(cellBackgroundImg);
+        spec.mazeBoard[spec.size.xCellCount - 1][spec.size.yCellCount - 1].setPlanet(spec.homePlanetImg);
     }
 
     // Function links cells to walls
