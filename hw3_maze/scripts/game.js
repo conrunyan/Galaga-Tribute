@@ -4,9 +4,10 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let boardDim = 750; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 5;
+    let cellCount = 15;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
+    let gameWon = false;
 
     let gameMaze = maze.Maze({
             size: { xCellCount: cellCount, yCellCount: cellCount},
@@ -49,10 +50,14 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // TODO: Update player state
             // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
-        // console.log('CRUMBS:', gameMaze.breadCrumbs);
         // TODO: Update shortest path state
         // gameMaze.setShortestPath(myPlayer);
         // TODO: Update bread-crumb state
+
+        // check win condition
+        if (myPlayer.rowColIdx === gameMaze.endCell.getRowColIdx()) {
+            gameWon = true;
+        }
     }
 
     function render() {
@@ -80,6 +85,10 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         processInput(elapsedTime);
         update();
         render();
+        if (gameWon) {
+            console.log('GAME WON!');
+            return;
+        }
         requestAnimationFrame(gameLoop);
     }
     // Example of keyboard registering

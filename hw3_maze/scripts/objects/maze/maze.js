@@ -316,6 +316,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get cellBackgroundImg() { return spec.cellBackgroundImg },
         get showBreadCrumbs() { return spec.showBreadCrumbs },
         get drawnMaze() { return spec.drawnMaze },
+        get endCell() { return spec.mazeBoard[spec.size.xCellCount - 1][spec.size.yCellCount - 1] },
         generateMaze: generateMaze,
         setShortestPath: setShortestPath,
         setSize: setSize,
