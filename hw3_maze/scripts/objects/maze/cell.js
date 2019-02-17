@@ -68,6 +68,10 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.planetImage = image;
     }
 
+    function setMarker(image) {
+        spec.markerImage = image;
+    }
+
     function incrNodeCount() {
         spec.nodes++;
     }
@@ -165,6 +169,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get breadCrumbImage() { return spec.breadCrumbImage },
         get planetImage() { return spec.planetImage },
         get cellBackgroundImg() { return spec.cellBackgroundImg },
+        get markerImage() { return spec.markerImage },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
@@ -177,6 +182,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setCameFrom: setCameFrom,
         setBreadCrumb: setBreadCrumb,
         setPlanet: setPlanet,
+        setMarker: setMarker,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,
         getRowColIdx: getRowColIdx,

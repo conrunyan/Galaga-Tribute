@@ -47,6 +47,15 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     };
     spec.homePlanetImg.src = spec.homePlanetImgSrc;
 
+    // load maze end image
+    spec.markerImage = new Image();
+    spec.markerImage.isReady = false;
+    spec.markerImage.onload = function () {
+        console.log('loaded marker...')
+        this.isReady = true;
+    };
+    spec.markerImage.src = spec.markerImageSrc;
+
     // Set size to {}
     function setSize(mazeSize) {
         spec.size = mazeSize;
@@ -84,7 +93,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     // returns a list of cells in order in the shortest path
     function setShortestPath(myPlayer) {
         console.log('calling set shortest path');
-        let curCellCoords = { x: myPlayer.rowIdx, y: myPlayer.colIdx };
+        let curCellCoords = { x: myPlayer.colIdx, y: myPlayer.rowIdx };
         // reset previous shortest path
         console.log('calling reset path tiles');
         _resetShortestPathTiles();
@@ -100,6 +109,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         console.log('setting short path cells');
         spec.shortestPath.forEach(element => {
             element.setInShortPath(true);
+            element.setMarker(spec.markerImage);
         });
     }
 

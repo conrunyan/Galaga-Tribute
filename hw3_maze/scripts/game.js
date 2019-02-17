@@ -15,6 +15,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             cellBackgroundImgSrc: './assets/stars_aa.png',
             breadCrumbImgSrc: './assets/toast.png',
             homePlanetImgSrc: './assets/mars-icon.png',
+            markerImageSrc: './assets/path_marker.png',
             showBreadCrumbs: false,
         },
         maze
@@ -49,8 +50,6 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // TODO: Update player state
             // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
-        // TODO: Update shortest path state
-        // gameMaze.setShortestPath(myPlayer);
         // TODO: Update bread-crumb state
 
         // check win condition
@@ -68,6 +67,13 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             for (let i = 0; i < gameMaze.breadCrumbs.length; i++) {
                 renderer.Crumb.renderCrumb(gameMaze.breadCrumbs[i]);
             }
+        }
+        // render full path, if toggled on
+        // if (gameMaze.showFullPath) {
+
+        // }
+        for (let i = 0; i < gameMaze.shortestPath.length; i++) {
+            renderer.Marker.renderMarker(gameMaze.shortestPath[i]);
         }
         renderer.Planet.renderPlanet(gameMaze.mazeBoard[cellCount - 1][cellCount - 1]);
         renderer.Player.renderPlayer(myPlayer);
