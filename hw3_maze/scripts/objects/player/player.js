@@ -31,6 +31,8 @@ MazeGame.objects.player.Player = function (spec) {
             console.log('moved up!');
             spec.colIdx -= 1;
             spec.direction = 'up';
+            // get new shortest path
+            spec.maze.setShortestPath(spec);
         }
         console.log(spec);
     }
@@ -40,6 +42,8 @@ MazeGame.objects.player.Player = function (spec) {
             console.log('moved down!');
             spec.colIdx += 1;
             spec.direction = 'down';
+            // get new shortest path
+            spec.maze.setShortestPath(spec);
         }
         console.log(spec);
     }
@@ -49,6 +53,8 @@ MazeGame.objects.player.Player = function (spec) {
             console.log('moved left!');
             spec.rowIdx -= 1;
             spec.direction = 'left';
+            // get new shortest path
+            spec.maze.setShortestPath(spec);
         }
         console.log(spec);
     }
@@ -58,12 +64,15 @@ MazeGame.objects.player.Player = function (spec) {
             console.log('moved right!');
             spec.rowIdx += 1;
             spec.direction = 'right';
+            // get new shortest path
+            spec.maze.setShortestPath(spec);
         }
         console.log(spec);
     }
 
-    function givePlayerMap(map) {
+    function givePlayerMap(map, mazeObj) {
         spec.map = map;
+        spec.maze = mazeObj
     }
 
     let api = {

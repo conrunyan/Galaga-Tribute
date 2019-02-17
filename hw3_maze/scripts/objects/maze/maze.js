@@ -83,22 +83,21 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
 
     // returns a list of cells in order in the shortest path
     function setShortestPath(myPlayer) {
+        console.log('calling set shortest path');
         let curCellCoords = { x: myPlayer.rowIdx, y: myPlayer.colIdx };
         // reset previous shortest path
+        console.log('calling reset path tiles');
         _resetShortestPathTiles();
-        let startCell;
-        if (curCellCoords === undefined) {
-            startCell = spec.mazeBoard[startXY.x][startXY.y];
-        }
-        else {
-            startCell = spec.mazeBoard[curCellCoords.x][curCellCoords.y]
-        }
+        let startCell = spec.mazeBoard[curCellCoords.x][curCellCoords.y]
         let firstDirection = 'right';
         startCell.setVisited(true);
+        console.log('calling bfs');
         let endCell = _breadthFirstSearch(startCell, firstDirection, 0);
         // follow cameFrom path to the start
-        _findShortestPath(endCell);
+        console.log('calling find shortest path');
+        _findShortestPath(endCell, startCell);
         // mark shortest path cells
+        console.log('setting short path cells');
         spec.shortestPath.forEach(element => {
             element.setInShortPath(true);
         });
@@ -108,15 +107,16 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         for (let i = 0; i < spec.mazeBoard.length; i++) {
             for (let j = 0; j < spec.mazeBoard.length; j++) {
                 spec.mazeBoard[i][j].setInShortPath(false);
+                spec.mazeBoard[i][j].setVisited(false);
             }
         }
     }
 
     // loop over visited cells, and determine shortest path from start to finish
-    function _findShortestPath(endCell) {
+    function _findShortestPath(endCell, startCell) {
         let prevCell = endCell.cameFrom;
         let path = [endCell];
-        while (prevCell !== undefined) {
+        while (prevCell !== startCell) {
             path.push(prevCell);
             prevCell = prevCell.cameFrom;
         }
