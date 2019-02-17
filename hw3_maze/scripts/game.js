@@ -6,12 +6,18 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let myKeyboard = input.Keyboard();
     let myKeyboard1 = input.Keyboard();
     let myKeyboard2 = input.Keyboard();
+    let myKeyboard3 = input.Keyboard();
     let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
     let gameWon = false;
     let timeSinceLastClockTick = 0;
     let clock = 0;
+    let totalPoints = 1000;
+    let POINTSLOSTFORPATH = 250;
+    let POINTSLOSTFORHINT = 100;
+    let POINTSLOSTFORCRUMBS = 30;
+    let POINTSLOSTPERSECOND = 10;
 
     let gameMaze = maze.Maze({
         size: { xCellCount: cellCount, yCellCount: cellCount },
@@ -47,6 +53,18 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
         // draw the game board. Only need to do this once
 
+    }
+
+    function dockPointsForPath() {
+        totalPoints -= POINTSLOSTFORPATH;
+    }
+
+    function dockPointsForHint() {
+        totalPoints -= POINTSLOSTFORHINT;
+    }
+
+    function dockPointsForCrumbs() {
+        totalPoints -= POINTSLOSTFORCRUMBS;
     }
 
     function processInput(elapsedTime) {
@@ -99,6 +117,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         if (timeSinceLastClockTick >= 1000) {
             console.log(clock);
             clock += 1;
+            totalPoints -= POINTSLOSTPERSECOND;
+            console.log('POINTS:', totalPoints);
             timeSinceLastClockTick = 0;
         }
     }
@@ -114,8 +134,13 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             console.log('GAME WON!');
             return;
         }
+        if (totalPoints <= 0) {
+            console.log('GAME LOST...');
+            return;
+        }
         requestAnimationFrame(gameLoop);
     }
+
     // Register AWSD keyboard, and other feature keys
     myKeyboard.register('s', myPlayer.moveDown);
     myKeyboard.register('w', myPlayer.moveUp);
@@ -134,6 +159,11 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     myKeyboard2.register('ArrowUp', myPlayer.moveUp);
     myKeyboard2.register('ArrowLeft', myPlayer.moveLeft);
     myKeyboard2.register('ArrowRight', myPlayer.moveRight);
+    // Register scoring events 
+    // TODO: Need to figure out how to link multiple events to the same key.
+    myKeyboard.register('b', dockPointsForCrumbs);
+    myKeyboard.register('h', dockPointsForHint);
+    myKeyboard.register('p', dockPointsForPath);
 
     // Start of game
     init();
