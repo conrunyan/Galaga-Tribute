@@ -19,13 +19,20 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     spec.breadCrumbs = [];
     spec.walls = [];
 
-    let image = new Image();
-    image.isReady = false;
-    image.onload = function () {
-        console.log('loaded image...')
+    let cellBackgroundImg = new Image();
+    cellBackgroundImg.isReady = false;
+    cellBackgroundImg.onload = function () {
+        console.log('loaded space background...')
         this.isReady = true;
     };
-    image.src = spec.imageSrc;
+
+    let breadCrumbImg = new Image();
+    breadCrumbImg.isReady = false;
+    breadCrumbImg.onload = function () {
+        console.log('loaded breadcrum...')
+        this.isReady = true;
+    };
+    breadCrumbImg.src = spec.breadCrumbImgSrc;
 
     // Set size to {}
     function setSize(mazeSize) {
@@ -45,7 +52,8 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     }
 
     // returns a list of cells in order in the shortest path
-    function setShortestPath(curCellCoords) {
+    function setShortestPath(myPlayer) {
+        let curCellCoords = {x: myPlayer.rowIdx, y: myPlayer.colIdx};
         // reset previous shortest path
         _resetShortestPathTiles();
         let startCell;
@@ -66,9 +74,9 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         });
     }
 
-    function updatePlayer(player) {
-        // TODO: Add step here to get player cell. If next wall in their direction is null, don't update the location
-        
+    function addBreadCrumb(player) {
+        spec.mazeBoard[player.rowIdx][player.colIdx].setBreadCrumb(breadCrumbImg);
+        spec.breadCrumbs.push(spec.mazeBoard[player.rowIdx][player.colIdx]);
     }
 
     function _resetShortestPathTiles() {
@@ -277,10 +285,11 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get mazeBoard() { return spec.mazeBoard },
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
-        get image() { return image },
+        get image() { return cellBackgroundImg },
         generateMaze: generateMaze,
         setShortestPath: setShortestPath,
         setSize: setSize,
+        addBreadCrumb: addBreadCrumb,
         info: info,
         print: print,
     };

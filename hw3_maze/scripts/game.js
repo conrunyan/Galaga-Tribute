@@ -33,11 +33,6 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         myPlayer.givePlayerMap(gameMaze.mazeBoard);
         console.log('Player:', myPlayer);
         // draw the game board. Only need to do this once
-        for (let i = 0; i < cellCount; i++) {
-            for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]); //, gameMaze.image);
-            }
-        }
     }
 
     function processInput(elapsedTime) {
@@ -46,14 +41,21 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function update() {
         // TODO: Update player state
-        // TODO: Update maze state
+            // if player is on the end, game is over and display win screen
+        gameMaze.addBreadCrumb(myPlayer);
         // TODO: Update shortest path state
+        gameMaze.setShortestPath(myPlayer);
         // TODO: Update bread-crumb state
     }
 
     function render() {
         myGraphics.clear2()
         // render game board:
+        for (let i = 0; i < cellCount; i++) {
+            for (let j = 0; j < cellCount; j++) {
+                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]); //, gameMaze.image);
+            }
+        }
         renderer.Player.renderPlayer(myPlayer);
     }
 

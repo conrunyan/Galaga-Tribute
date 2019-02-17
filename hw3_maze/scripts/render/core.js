@@ -47,7 +47,15 @@ MazeGame.graphics = (function () {
         width: ,
     } 
     */
- function drawGamePiece(spec, image) {
+
+    function drawBreadCrumb(spec) {
+        if (spec.hasBreadCrumb) {
+            drawTexture(spec.breadCrumb)
+        }
+    }
+
+
+    function drawGamePiece(spec, image) {
         context.save();
         context.fillStyle = spec.color;
         context.lineWidth = 2;
@@ -56,6 +64,10 @@ MazeGame.graphics = (function () {
         //     spec.xCoord,
         //     spec.yCoord,
         //     spec.size, spec.size);
+
+        // draw breadCrumb, if applicable
+
+        // draw shortest path, if applicable
 
         if (spec.edges.topWall === undefined) {
             context.moveTo(spec.xCoord, spec.yCoord);
@@ -78,6 +90,7 @@ MazeGame.graphics = (function () {
         }
         context.stroke();
         context.restore();
+
     }
 
     let api = {

@@ -60,6 +60,10 @@ MazeGame.objects.maze.Cell = function (spec) {
         spec.inShortPath = inShortPath;
     }
 
+    function setBreadCrumb(image) {
+        spec.breadCrumbImage = image;
+    }
+
     function incrNodeCount() {
         spec.nodes++;
     }
@@ -154,6 +158,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get cameFrom() { return spec.cameFrom },
         get nodeCount() { return spec.nodes },
         get inShortPath() { return spec.inShortPath },
+        get breadCrumbImage() { return spec.breadCrumbImage },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,
@@ -164,6 +169,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         setInShortPath: setInShortPath,
         setColor: setColor,
         setCameFrom: setCameFrom,
+        setBreadCrumb: setBreadCrumb,
         getNeighborCellCoords: getNeighborCellCoords,
         getNeighborCells: getNeighborCells,
         getRowColIdx: getRowColIdx,
