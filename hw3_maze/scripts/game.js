@@ -4,6 +4,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let boardDim = 750; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
+    let myKeyboard1 = input.Keyboard();
+    let myKeyboard2 = input.Keyboard();
     let cellCount = 5;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
@@ -47,6 +49,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function processInput(elapsedTime) {
         myKeyboard.update(elapsedTime);
+        myKeyboard1.update(elapsedTime);
+        myKeyboard2.update(elapsedTime);
     }
 
     function update() {
@@ -113,6 +117,16 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     myKeyboard.register('b', gameMaze.toggleShowCrumbs);
     myKeyboard.register('h', gameMaze.toggleShowHint);
     myKeyboard.register('p', gameMaze.toggleShowPath);
+    // Register arrow keys
+    myKeyboard1.register('k', myPlayer.moveDown);
+    myKeyboard1.register('i', myPlayer.moveUp);
+    myKeyboard1.register('j', myPlayer.moveLeft);
+    myKeyboard1.register('l', myPlayer.moveRight);
+    // Register IJKL keys
+    myKeyboard2.register('ArrowDown', myPlayer.moveDown);
+    myKeyboard2.register('ArrowUp', myPlayer.moveUp);
+    myKeyboard2.register('ArrowLeft', myPlayer.moveLeft);
+    myKeyboard2.register('ArrowRight', myPlayer.moveRight);
 
     // Start of game
     init();
