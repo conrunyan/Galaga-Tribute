@@ -39,6 +39,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         console.log('BOARD:', gameMaze.mazeBoard);
         myPlayer.givePlayerMap(gameMaze.mazeBoard, gameMaze);
         console.log('Player:', myPlayer);
+        gameMaze.setShortestPath(myPlayer);
         // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
         // draw the game board. Only need to do this once
 
