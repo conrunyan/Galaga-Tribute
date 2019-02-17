@@ -1,8 +1,8 @@
 MazeGame.graphics = (function () {
     'use strict';
 
-    let canvas = document.getElementById('id-canvas');
-    let canvas2 = document.getElementById('id-canvas2');
+    let canvas = document.getElementById('id-canvas'); // canvas for main game board. 
+    let canvas2 = document.getElementById('id-canvas2'); // canvas for images, on top of main game board
     let context = canvas.getContext('2d');
     let context2 = canvas2.getContext('2d');
 
@@ -47,13 +47,6 @@ MazeGame.graphics = (function () {
         width: ,
     } 
     */
-
-    function drawBreadCrumb(spec) {
-        if (spec.hasBreadCrumb) {
-            drawTexture(spec.breadCrumb)
-        }
-    }
-
 
     function drawGamePiece(spec, image) {
         context.save();

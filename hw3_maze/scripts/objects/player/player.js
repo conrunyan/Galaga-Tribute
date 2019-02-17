@@ -73,6 +73,7 @@ MazeGame.objects.player.Player = function (spec) {
         get yCoord() { return spec.colIdx * spec.cellSize },
         get image() { return image },
         get cellSize() { return spec.cellSize },
+        get rowColIdx() { return `${spec.rowIdx},${spec.colIdx}` },
         moveUp: moveUp,
         moveDown: moveDown,
         moveLeft: moveLeft,

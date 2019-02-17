@@ -10,7 +10,9 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let gameMaze = maze.Maze({
             size: { xCellCount: cellCount, yCellCount: cellCount},
             cellSize: cellSize,
-            imageSrc: './assets/space_dn.png',
+            cellBackgroundImgSrc: './assets/space_dn.png',
+            breadCrumbImgSrc: './assets/toast.png',
+            showBreadCrumbs: false,
         },
         maze
     );
@@ -28,11 +30,16 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     // initialize event handlers, set board size, generate maze, etc.
     function init() {
         gameMaze.generateMaze();
-        gameMaze.setShortestPath({x:0, y:0});
+        // gameMaze.setShortestPath({x:0, y:0});
         console.log('BOARD:', gameMaze.mazeBoard);
         myPlayer.givePlayerMap(gameMaze.mazeBoard);
         console.log('Player:', myPlayer);
         // draw the game board. Only need to do this once
+        for (let i = 0; i < cellCount; i++) {
+            for (let j = 0; j < cellCount; j++) {
+                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]);
+            }
+        }
     }
 
     function processInput(elapsedTime) {
@@ -43,17 +50,18 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // TODO: Update player state
             // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
+        // console.log('CRUMBS:', gameMaze.breadCrumbs);
         // TODO: Update shortest path state
-        gameMaze.setShortestPath(myPlayer);
+        // gameMaze.setShortestPath(myPlayer);
         // TODO: Update bread-crumb state
     }
 
     function render() {
         myGraphics.clear2()
-        // render game board:
-        for (let i = 0; i < cellCount; i++) {
-            for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]); //, gameMaze.image);
+        // render bread crumbs, if toggled on
+        if (gameMaze.showBreadCrumbs) {
+            for (let i = 0; i < gameMaze.breadCrumbs.length; i++) {
+                renderer.Crumb.renderCrumb(gameMaze.breadCrumbs[i]);
             }
         }
         renderer.Player.renderPlayer(myPlayer);
@@ -68,7 +76,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        // update();
+        update();
         render();
         requestAnimationFrame(gameLoop);
     }
@@ -77,6 +85,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     myKeyboard.register('w', myPlayer.moveUp);
     myKeyboard.register('a', myPlayer.moveLeft);
     myKeyboard.register('d', myPlayer.moveRight);
+    myKeyboard.register('b', gameMaze.toggleShowCrumbs);
 
     // Start of game
     init();
