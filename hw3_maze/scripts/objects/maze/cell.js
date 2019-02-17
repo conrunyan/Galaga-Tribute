@@ -159,6 +159,7 @@ MazeGame.objects.maze.Cell = function (spec) {
         get nodeCount() { return spec.nodes },
         get inShortPath() { return spec.inShortPath },
         get breadCrumbImage() { return spec.breadCrumbImage },
+        get cellBackgroundImg() { return spec.cellBackgroundImg },
         setVisited: setVisited,
         setTopWall: setTopWall,
         setBottomWall: setBottomWall,

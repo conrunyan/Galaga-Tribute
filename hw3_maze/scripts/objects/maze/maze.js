@@ -18,15 +18,16 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     spec.shortestPath = [];
     spec.breadCrumbs = [];
     spec.crumbCoords = [];
+    spec.drawnMaze = false;
 
     // load background image
-    let cellBackgroundImg = new Image();
-    cellBackgroundImg.isReady = false;
-    cellBackgroundImg.onload = function () {
+    spec.cellBackgroundImg = new Image();
+    spec.cellBackgroundImg.isReady = false;
+    spec.cellBackgroundImg.onload = function () {
         console.log('loaded space background...')
         this.isReady = true;
     };
-    cellBackgroundImg.src = spec.cellBackgroundImgSrc;
+    spec.cellBackgroundImg.src = spec.cellBackgroundImgSrc;
 
     // load bread image
     let breadCrumbImg = new Image();
@@ -40,6 +41,10 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
     // Set size to {}
     function setSize(mazeSize) {
         spec.size = mazeSize;
+    }
+
+    function setDrawnMaze(val) {
+        spec.drawnMaze = val;
     }
 
     function toggleShowCrumbs() {
@@ -57,6 +62,14 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         spec.mazeBoard[startXY.x][startXY.y].setType('start');
         spec.mazeBoard[endXY.x][endXY.y].setType('end');
 
+    }
+
+    function addBreadCrumb(player) {
+        if (!spec.crumbCoords.includes(player.rowColIdx)) {
+            spec.mazeBoard[player.colIdx][player.rowIdx].setBreadCrumb(breadCrumbImg);
+            spec.breadCrumbs.push(spec.mazeBoard[player.colIdx][player.rowIdx]);
+            spec.crumbCoords.push(player.rowColIdx);
+        }
     }
 
     // returns a list of cells in order in the shortest path
@@ -80,14 +93,6 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         spec.shortestPath.forEach(element => {
             element.setInShortPath(true);
         });
-    }
-
-    function addBreadCrumb(player) {
-        if (!spec.crumbCoords.includes(player.rowColIdx)) {
-            spec.mazeBoard[player.colIdx][player.rowIdx].setBreadCrumb(breadCrumbImg);
-            spec.breadCrumbs.push(spec.mazeBoard[player.colIdx][player.rowIdx]);
-            spec.crumbCoords.push(player.rowColIdx);
-        }
     }
 
     function _resetShortestPathTiles() {
@@ -204,6 +209,7 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
                     visited: false,
                     inShortPath: false,
                     distanceTraveled: 0,
+                    cellBackgroundImg: spec.cellBackgroundImg,
                     nodes: 0,
                 });
                 mazeRow.push(curCell);
@@ -296,11 +302,13 @@ MazeGame.objects.maze.Maze = function (spec, mazeSpace) {
         get mazeBoard() { return spec.mazeBoard },
         get shortestPath() { return spec.shortestPath },
         get breadCrumbs() { return spec.breadCrumbs },
-        get image() { return cellBackgroundImg },
+        get cellBackgroundImg() { return spec.cellBackgroundImg },
         get showBreadCrumbs() { return spec.showBreadCrumbs },
+        get drawnMaze() { return spec.drawnMaze },
         generateMaze: generateMaze,
         setShortestPath: setShortestPath,
         setSize: setSize,
+        setDrawnMaze: setDrawnMaze,
         toggleShowCrumbs: toggleShowCrumbs,
         addBreadCrumb: addBreadCrumb,
         info: info,

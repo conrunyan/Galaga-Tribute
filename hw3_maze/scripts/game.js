@@ -1,16 +1,17 @@
 MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     'use strict';
 
-    let boardDim = 500; // measurement in pixels
+    let boardDim = 750; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
-    let cellCount = 5;
+    let cellCount = 10;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
+    let drawnGameBoard = false;
 
     let gameMaze = maze.Maze({
             size: { xCellCount: cellCount, yCellCount: cellCount},
             cellSize: cellSize,
-            cellBackgroundImgSrc: './assets/space_dn.png',
+            cellBackgroundImgSrc: './assets/stars_aa.png',
             breadCrumbImgSrc: './assets/toast.png',
             showBreadCrumbs: false,
         },
@@ -34,12 +35,9 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         console.log('BOARD:', gameMaze.mazeBoard);
         myPlayer.givePlayerMap(gameMaze.mazeBoard);
         console.log('Player:', myPlayer);
+        // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
         // draw the game board. Only need to do this once
-        for (let i = 0; i < cellCount; i++) {
-            for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]);
-            }
-        }
+        
     }
 
     function processInput(elapsedTime) {
@@ -57,6 +55,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     }
 
     function render() {
+        // render board, if it hasn't been yet
+        drawnGameBoard = myGraphics.drawGameBoard(gameMaze, drawnGameBoard);
         myGraphics.clear2()
         // render bread crumbs, if toggled on
         if (gameMaze.showBreadCrumbs) {

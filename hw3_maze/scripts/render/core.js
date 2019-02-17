@@ -48,15 +48,29 @@ MazeGame.graphics = (function () {
     } 
     */
 
-    function drawGamePiece(spec, image) {
+    // returns true if the board was drawn
+    function drawGameBoard(gameMaze) {
+        if (gameMaze.cellBackgroundImg.isReady && !gameMaze.drawnMaze) {
+            console.log('drawing game baord...');
+            for (let i = 0; i < gameMaze.mazeBoard.length; i++) {
+                for (let j = 0; j < gameMaze.mazeBoard.length; j++) {
+                    drawGamePiece(gameMaze.mazeBoard[i][j]);
+                }
+            }
+            gameMaze.setDrawnMaze(true);
+        }
+    }
+
+    function drawGamePiece(spec) {
         context.save();
         context.fillStyle = spec.color;
+        context.strokeStyle = "#FFFFFF";
         context.lineWidth = 2;
-        // context.drawImage(
-        //     image,
-        //     spec.xCoord,
-        //     spec.yCoord,
-        //     spec.size, spec.size);
+        context.drawImage(
+            spec.cellBackgroundImg,
+            spec.xCoord,
+            spec.yCoord,
+            spec.size, spec.size);
 
         // draw breadCrumb, if applicable
 
@@ -92,6 +106,7 @@ MazeGame.graphics = (function () {
         clear2: clear2,
         drawTexture: drawTexture,
         drawGamePiece: drawGamePiece,
+        drawGameBoard: drawGameBoard,
     };
 
 
