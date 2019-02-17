@@ -51,11 +51,11 @@ MazeGame.graphics = (function () {
         context.save();
         context.fillStyle = spec.color;
         context.lineWidth = 2;
-        context.drawImage(
-            image,
-            spec.xCoord,
-            spec.yCoord,
-            spec.size, spec.size);
+        // context.drawImage(
+        //     image,
+        //     spec.xCoord,
+        //     spec.yCoord,
+        //     spec.size, spec.size);
 
         if (spec.edges.topWall === undefined) {
             context.moveTo(spec.xCoord, spec.yCoord);

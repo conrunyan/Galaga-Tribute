@@ -27,7 +27,7 @@ MazeGame.objects.player.Player = function (spec) {
 
     function moveUp() {
         console.log('trying to move up...');
-        if (spec.map[spec.rowIdx][spec.colIdx - 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx - 1].edges.topWall !== undefined) {
+        if (spec.map[spec.colIdx][spec.rowIdx].edges.topWall !== undefined) {
             console.log('moved up!');
             spec.colIdx -= 1;
             spec.direction = 'up';
@@ -36,7 +36,7 @@ MazeGame.objects.player.Player = function (spec) {
     }
     function moveDown() {
         console.log('trying to move down...');
-        if (spec.map[spec.rowIdx][spec.colIdx + 1] !== undefined && spec.map[spec.rowIdx][spec.colIdx + 1].edges.bottomWall !== undefined) {
+        if (spec.map[spec.colIdx][spec.rowIdx].edges.bottomWall !== undefined) {
             console.log('moved down!');
             spec.colIdx += 1;
             spec.direction = 'down';
@@ -45,7 +45,7 @@ MazeGame.objects.player.Player = function (spec) {
     }
     function moveLeft() {
         console.log('trying to move left...');
-        if (spec.map[spec.rowIdx - 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx - 1][spec.colIdx].edges.leftWall !== undefined) {
+        if (spec.map[spec.colIdx][spec.rowIdx].edges.leftWall !== undefined) {
             console.log('moved left!');
             spec.rowIdx -= 1;
             spec.direction = 'left';
@@ -54,7 +54,7 @@ MazeGame.objects.player.Player = function (spec) {
     }
     function moveRight() {
         console.log('trying to move right...');
-        if (spec.map[spec.rowIdx + 1][spec.colIdx] !== undefined && spec.map[spec.rowIdx + 1][spec.colIdx].edges.rightWall !== undefined) {
+        if (spec.map[spec.colIdx][spec.rowIdx].edges.rightWall !== undefined) {
             console.log('moved right!');
             spec.rowIdx += 1;
             spec.direction = 'right';

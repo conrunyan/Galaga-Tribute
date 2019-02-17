@@ -29,12 +29,13 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     function init() {
         gameMaze.generateMaze();
         gameMaze.setShortestPath({x:0, y:0});
+        console.log('BOARD:', gameMaze.mazeBoard);
         myPlayer.givePlayerMap(gameMaze.mazeBoard);
         console.log('Player:', myPlayer);
         // draw the game board. Only need to do this once
         for (let i = 0; i < cellCount; i++) {
             for (let j = 0; j < cellCount; j++) {
-                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j], gameMaze.image);
+                myGraphics.drawGamePiece(gameMaze.mazeBoard[i][j]); //, gameMaze.image);
             }
         }
     }
@@ -65,7 +66,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        update();
+        // update();
         render();
         requestAnimationFrame(gameLoop);
     }
