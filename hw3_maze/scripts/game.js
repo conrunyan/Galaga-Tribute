@@ -226,10 +226,12 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             console.log('GAME WON!');
             insertScore(totalPoints);
             displayScore(totalPoints);
+            myGraphics.winMessage(boardDim, boardDim);
             return;
         }
         if (totalPoints <= 0) {
             console.log('GAME LOST...');
+            myGraphics.gameOverMessage(boardDim, boardDim);
             return;
         }
         renderID = requestAnimationFrame(gameLoop);

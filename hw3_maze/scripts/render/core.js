@@ -72,6 +72,24 @@ MazeGame.graphics = (function () {
         }
     }
 
+    function gameOverMessage(BOARD_WIDTH, BOARD_HEIGHT) {
+        context.save();
+        context.font = '32pt Courier New MS';
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText('GAME OVER!', BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
+        context.restore();
+    }
+
+    function winMessage(BOARD_WIDTH, BOARD_HEIGHT) {
+        context.save();
+        context.font = '32pt Courier New MS';
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText('WINNER!', BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
+        context.restore();
+    }
+
     function drawGamePiece(spec) {
         // context.save();
         context.fillStyle = spec.color;
@@ -119,6 +137,8 @@ MazeGame.graphics = (function () {
         drawGamePiece: drawGamePiece,
         drawGameBoard: drawGameBoard,
         resetCore: resetCore,
+        gameOverMessage: gameOverMessage,
+        winMessage: winMessage,
     };
 
 
