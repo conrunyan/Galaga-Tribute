@@ -11,23 +11,26 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
     let gameWon = false;
+    let stopGame = false;
+    let renderID = 0;
     let timeSinceLastClockTick = 0;
     let clock = 0;
-    let totalPoints = 1000;
-    let POINTSLOSTFORPATH = 250;
-    let POINTSLOSTFORHINT = 100;
-    let POINTSLOSTFORCRUMBS = 30;
-    let POINTSLOSTPERSECOND = 10;
+    let totalPoints;
+    let POINTSLOSTFORPATH;
+    let POINTSLOSTFORHINT;
+    let POINTSLOSTFORCRUMBS;
+    let POINTSLOSTPERSECOND;
+    let requestID;
 
     // add event listeners for size setup
     let newGame5x5 = document.getElementById('id-startbutton5x5');
     let newGame10x10 = document.getElementById('id-startbutton10x10');
     let newGame15x15 = document.getElementById('id-startbutton15x15');
     let newGame20x20 = document.getElementById('id-startbutton20x20');
-    newGame5x5.addEventListener('click', function () {newGame(5)});
-    newGame10x10.addEventListener('click', function () {newGame(10)});
-    newGame15x15.addEventListener('click', function () {newGame(15)});
-    newGame20x20.addEventListener('click', function () {newGame(20)});
+    newGame5x5.addEventListener('click', function () { newGame(5) });
+    newGame10x10.addEventListener('click', function () { newGame(10) });
+    newGame15x15.addEventListener('click', function () { newGame(15) });
+    newGame20x20.addEventListener('click', function () { newGame(20) });
 
     let gameMaze = maze.Maze({
         size: { xCellCount: cellCount, yCellCount: cellCount },
@@ -55,19 +58,69 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     // initialize event handlers, set board size, generate maze, etc.
     function init() {
+        registerKeyEvents();
         gameMaze.generateMaze();
         console.log('BOARD:', gameMaze.mazeBoard);
         myPlayer.givePlayerMap(gameMaze.mazeBoard, gameMaze);
         console.log('Player:', myPlayer);
         gameMaze.setShortestPath(myPlayer);
-        // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
-        // draw the game board. Only need to do this once
+        // set scoring method
+        setScoring();
 
     }
 
-    function newGame(size) {
-        cellCount = size;
+    function newGame(count) {
+        // // stop the game
+        for (let i = 1; i < renderID; i++) {
+            window.cancelAnimationFrame(i);
+        }
+        cellCount = count;
+        resetBoard(count);
         init();
+        myGraphics.resetCore();
+        renderID = requestAnimationFrame(gameLoop);
+    }
+
+    function resetBoard(cellCount) {
+        // wipe canvases
+        myGraphics.clear();
+        myGraphics.clear2();
+        // reset game objects & board settings
+        drawnGameBoard = false;
+        cellSize = boardDim / cellCount;
+
+        gameMaze = maze.Maze({
+            size: { xCellCount: cellCount, yCellCount: cellCount },
+            cellSize: cellSize,
+            cellBackgroundImgSrc: './assets/stars_aa.png',
+            breadCrumbImgSrc: './assets/toast.png',
+            homePlanetImgSrc: './assets/mars-icon.png',
+            markerImageSrc: './assets/path_marker.png',
+            showBreadCrumbs: false,
+            showHint: false,
+            showFullPath: false,
+            mazeBoard: [],
+        },
+            maze
+        );
+        myPlayer = player.Player({
+            rowIdx: 0,
+            colIdx: 0,
+            imageSrc: './assets/pre__002.png',
+            cellSize: cellSize,
+            direction: 'down',
+            map: '',
+        });
+    }
+
+    function setScoring() {
+        // set point increments. more points for a larger board, but also greater loss
+        // for hints
+        totalPoints = 1000 * cellCount;
+        POINTSLOSTFORPATH = 250 * cellCount;
+        POINTSLOSTFORHINT = 100 * cellCount;
+        POINTSLOSTFORCRUMBS = 30 * cellCount;
+        POINTSLOSTPERSECOND = 10 * cellCount;
     }
 
     function dockPointsForPath() {
@@ -89,7 +142,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     }
 
     function update(elapsedTime) {
-        updateTime(elapsedTime);
+        // updateTime(elapsedTime);
         // TODO: Update player state
         // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
@@ -102,8 +155,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function render() {
         // render board, if it hasn't been yet
-        myGraphics.drawGameBoard(gameMaze, drawnGameBoard);
-        myGraphics.clear2()
+        myGraphics.clear2();
+        myGraphics.drawGameBoard(gameMaze);
         // render bread crumbs, if toggled on
         if (gameMaze.showBreadCrumbs) {
             for (let i = 0; i < gameMaze.breadCrumbs.length; i++) {
@@ -153,35 +206,38 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             console.log('GAME LOST...');
             return;
         }
-        requestAnimationFrame(gameLoop);
+        renderID = requestAnimationFrame(gameLoop);
     }
 
-    // Register AWSD keyboard, and other feature keys
-    myKeyboard.register('s', myPlayer.moveDown);
-    myKeyboard.register('w', myPlayer.moveUp);
-    myKeyboard.register('a', myPlayer.moveLeft);
-    myKeyboard.register('d', myPlayer.moveRight);
-    myKeyboard.register('b', gameMaze.toggleShowCrumbs);
-    myKeyboard.register('h', gameMaze.toggleShowHint);
-    myKeyboard.register('p', gameMaze.toggleShowPath);
-    // Register arrow keys
-    myKeyboard1.register('k', myPlayer.moveDown);
-    myKeyboard1.register('i', myPlayer.moveUp);
-    myKeyboard1.register('j', myPlayer.moveLeft);
-    myKeyboard1.register('l', myPlayer.moveRight);
-    // Register IJKL keys
-    myKeyboard2.register('ArrowDown', myPlayer.moveDown);
-    myKeyboard2.register('ArrowUp', myPlayer.moveUp);
-    myKeyboard2.register('ArrowLeft', myPlayer.moveLeft);
-    myKeyboard2.register('ArrowRight', myPlayer.moveRight);
-    // Register scoring events 
-    // TODO: Need to figure out how to link multiple events to the same key.
-    // myKeyboard.register('b', dockPointsForCrumbs);
-    // myKeyboard.register('h', dockPointsForHint);
-    // myKeyboard.register('p', dockPointsForPath);
+    function registerKeyEvents() {
+        // Register AWSD keyboard, and other feature keys
+        myKeyboard.register('s', myPlayer.moveDown);
+        myKeyboard.register('w', myPlayer.moveUp);
+        myKeyboard.register('a', myPlayer.moveLeft);
+        myKeyboard.register('d', myPlayer.moveRight);
+        myKeyboard.register('b', gameMaze.toggleShowCrumbs);
+        myKeyboard.register('h', gameMaze.toggleShowHint);
+        myKeyboard.register('p', gameMaze.toggleShowPath);
+        // Register arrow keys
+        myKeyboard1.register('k', myPlayer.moveDown);
+        myKeyboard1.register('i', myPlayer.moveUp);
+        myKeyboard1.register('j', myPlayer.moveLeft);
+        myKeyboard1.register('l', myPlayer.moveRight);
+        // Register IJKL keys
+        myKeyboard2.register('ArrowDown', myPlayer.moveDown);
+        myKeyboard2.register('ArrowUp', myPlayer.moveUp);
+        myKeyboard2.register('ArrowLeft', myPlayer.moveLeft);
+        myKeyboard2.register('ArrowRight', myPlayer.moveRight);
+        // Register scoring events 
+        // TODO: Need to figure out how to link multiple events to the same key.
+        // myKeyboard.register('b', dockPointsForCrumbs);
+        // myKeyboard.register('h', dockPointsForHint);
+        // myKeyboard.register('p', dockPointsForPath);
+    }
+
 
     // Start of game
     init();
-    requestAnimationFrame(gameLoop);
+    renderID = requestAnimationFrame(gameLoop);
 
 }(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.objects.player, MazeGame.render));

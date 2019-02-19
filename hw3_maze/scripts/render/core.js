@@ -14,6 +14,17 @@ MazeGame.graphics = (function () {
         context2.clearRect(0, 0, canvas2.width, canvas2.height);
     }
 
+    function resetCore() {
+        canvas = null;
+        canvas2 = null;
+        context = null;
+        context2 = null;
+        canvas = document.getElementById('id-canvas'); 
+        canvas2 = document.getElementById('id-canvas2');
+        context = canvas.getContext('2d');
+        context2 = canvas2.getContext('2d');
+    }
+
     // --------------------------------------------------------------
     //
     // Draws a texture to the canvas with the following specification:
@@ -23,7 +34,7 @@ MazeGame.graphics = (function () {
     //
     // --------------------------------------------------------------
     function drawTexture(image, center, rotation, size) {
-        context2.save();
+        // context2.save();
 
         // context.translate(center.x, center.y);
         // context.rotate(rotation);
@@ -35,7 +46,7 @@ MazeGame.graphics = (function () {
             center.y - size.height / 2,
             size.width, size.height);
 
-        context2.restore();
+        // context2.restore();
     }
 
     /*
@@ -52,6 +63,7 @@ MazeGame.graphics = (function () {
     function drawGameBoard(gameMaze) {
         if (gameMaze.cellBackgroundImg.isReady && !gameMaze.drawnMaze) {
             console.log('drawing game baord...');
+            clear1();
             for (let i = 0; i < gameMaze.mazeBoard.length; i++) {
                 for (let j = 0; j < gameMaze.mazeBoard.length; j++) {
                     drawGamePiece(gameMaze.mazeBoard[i][j]);
@@ -62,7 +74,7 @@ MazeGame.graphics = (function () {
     }
 
     function drawGamePiece(spec) {
-        context.save();
+        // context.save();
         context.fillStyle = spec.color;
         context.strokeStyle = "#FFFFFF";
         context.lineWidth = 2;
@@ -96,7 +108,7 @@ MazeGame.graphics = (function () {
             context.lineTo(spec.xCoord, spec.yCoord + spec.size);
         }
         context.stroke();
-        context.restore();
+        // context.restore();
 
     }
 
@@ -107,6 +119,7 @@ MazeGame.graphics = (function () {
         drawTexture: drawTexture,
         drawGamePiece: drawGamePiece,
         drawGameBoard: drawGameBoard,
+        resetCore: resetCore,
     };
 
 

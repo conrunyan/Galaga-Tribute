@@ -41,5 +41,11 @@
 }
 
 .size-options {
+    height: 50%;
     background-color: blue;
 }
+
+ #id-highscore {
+     height: 50%;
+     background-color: yellowgreen;
+ }
