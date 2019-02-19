@@ -63,7 +63,6 @@ MazeGame.graphics = (function () {
     function drawGameBoard(gameMaze) {
         if (gameMaze.cellBackgroundImg.isReady && !gameMaze.drawnMaze) {
             console.log('drawing game baord...');
-            clear1();
             for (let i = 0; i < gameMaze.mazeBoard.length; i++) {
                 for (let j = 0; j < gameMaze.mazeBoard.length; j++) {
                     drawGamePiece(gameMaze.mazeBoard[i][j]);

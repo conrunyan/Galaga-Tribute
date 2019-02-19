@@ -20,7 +20,9 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let POINTSLOSTFORHINT;
     let POINTSLOSTFORCRUMBS;
     let POINTSLOSTPERSECOND;
+    let MAX_SCORES_KEPT = 5;
     let requestID;
+    let scores = [];
 
     // add event listeners for size setup
     let newGame5x5 = document.getElementById('id-startbutton5x5');
@@ -71,9 +73,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     function newGame(count) {
         // // stop the game
-        for (let i = 1; i < renderID; i++) {
-            window.cancelAnimationFrame(i);
-        }
+        gameWon = false;
         cellCount = count;
         resetBoard(count);
         init();
@@ -123,6 +123,38 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         POINTSLOSTPERSECOND = 10 * cellCount;
     }
 
+    
+    function insertScore(latestScore) {
+        let idxToPlace = scores.length;
+        // check where score goes in the score list
+        for (let i = 0; i < scores.length; i++) {
+            if (latestScore >= scores[i].score) {
+                idxToPlace = i;
+                break;
+            }
+        }
+        // turn off animation for each of the scores
+        scores.forEach((item) => {
+            item.animate = false;
+        });
+        // insert new score where it belongs, with a max of MAX_SCORES_KEPT
+        scores.splice(idxToPlace, 0, {score: latestScore, animate: true});
+        scores = scores.slice(0,MAX_SCORES_KEPT);
+        console.log(scores);
+    }
+
+    function displayScore(latestScore) {
+        let myHighscoreDiv = document.getElementById('id-hscontainer');
+        myHighscoreDiv.innerHTML = '';
+        for (let i = 0; i < scores.length; i++) {
+            let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i].score}</p>`;
+            if (scores[i].animate) {
+                hsHTML = `<p id="id-hsEntryAnimated">Score #${i+1} - ${scores[i].score} - Size: ${cellCount}x${cellCount}</p>`;
+            }
+            myHighscoreDiv.innerHTML += hsHTML;
+        }
+    }
+
     function dockPointsForPath() {
         totalPoints -= POINTSLOSTFORPATH;
     }
@@ -142,7 +174,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     }
 
     function update(elapsedTime) {
-        // updateTime(elapsedTime);
+        updateTime(elapsedTime);
         // TODO: Update player state
         // if player is on the end, game is over and display win screen
         gameMaze.addBreadCrumb(myPlayer);
@@ -200,6 +232,8 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         render();
         if (gameWon) {
             console.log('GAME WON!');
+            insertScore(totalPoints);
+            displayScore(totalPoints);
             return;
         }
         if (totalPoints <= 0) {
