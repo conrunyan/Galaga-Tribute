@@ -6,7 +6,7 @@
 
  /* Maze Board items */
 .maze-board {
-    flex: 1;
+    flex: 0.75;
 }
 
 #id-canvas {
@@ -34,5 +34,12 @@
 .menu {
     flex: 1;
     background-color: lightgreen;
-    margin-left: 40%;
+    text-align: center;
+    height: 750px;
+    width: 50%;
+    align-content: center;
+}
+
+.size-options {
+    background-color: blue;
 }

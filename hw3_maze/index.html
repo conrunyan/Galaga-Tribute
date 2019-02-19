@@ -3,16 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="./styles/styles.css" type="text/css" />
     <title>HW3 - Maze Game</title>
 </head>
 
 <body>
+    <div class="maze-game">
         <div class="maze-board">
             <canvas id="id-canvas" width="750" height="750"
-                style="position: absolute; z-index: 0; left: 530; top: 30; width: 750px; height: 750px; border-style: solid; border-width: 1px">
+                style="position: absolute; z-index: 0; left: 30px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
             </canvas>
             <canvas id="id-canvas2" width="750" height="750"
-                style="position: absolute; z-index: 1; left: 530; top: 30; width: 750px; height: 750px; border-style: solid; border-width: 1px">
+                style="position: absolute; z-index: 1; left: 30px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
             </canvas>
         </div>
         <div class='menu'>
@@ -20,14 +22,19 @@
                 <h1> - HIGH SCORES - </h1>
                 <div id="id-hscontainer"></div>
             </div>
-            <div id='id-startbutton'>
-                <button type="submit" onclick="runGame()">START!</button>
+            <div class='size-options'>
+                <div id='id-startbutton'>
+                    <button id="id-startbutton5x5" type="submit">5x5</button>
+                    <button id="id-startbutton10x10" type="submit">10x10</button>
+                    <button id="id-startbutton15x15" type="submit">15x15</button>
+                    <button id="id-startbutton20x20" type="submit">20x20</button>
+                </div>
             </div>
-            <div id='id-currentscore'>
-
+            <div class='game-stats'>
             </div>
         </div>
-
+    </div>
+    </div>
 
     <script>
         let MazeGame = {

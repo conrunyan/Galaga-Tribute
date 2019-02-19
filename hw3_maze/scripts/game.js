@@ -7,7 +7,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let myKeyboard1 = input.Keyboard();
     let myKeyboard2 = input.Keyboard();
     let myKeyboard3 = input.Keyboard();
-    let cellCount = 5;
+    let cellCount = 15;
     let cellSize = boardDim / cellCount; // TODO: Make this evenly divided by cell count and board width
     let drawnGameBoard = false;
     let gameWon = false;
@@ -18,6 +18,16 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     let POINTSLOSTFORHINT = 100;
     let POINTSLOSTFORCRUMBS = 30;
     let POINTSLOSTPERSECOND = 10;
+
+    // add event listeners for size setup
+    let newGame5x5 = document.getElementById('id-startbutton5x5');
+    let newGame10x10 = document.getElementById('id-startbutton10x10');
+    let newGame15x15 = document.getElementById('id-startbutton15x15');
+    let newGame20x20 = document.getElementById('id-startbutton20x20');
+    newGame5x5.addEventListener('click', function () {newGame(5)});
+    newGame10x10.addEventListener('click', function () {newGame(10)});
+    newGame15x15.addEventListener('click', function () {newGame(15)});
+    newGame20x20.addEventListener('click', function () {newGame(20)});
 
     let gameMaze = maze.Maze({
         size: { xCellCount: cellCount, yCellCount: cellCount },
@@ -53,6 +63,11 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         // myGraphics.drawGameBoard(gameMaze, drawnGameBoard)
         // draw the game board. Only need to do this once
 
+    }
+
+    function newGame(size) {
+        cellCount = size;
+        init();
     }
 
     function dockPointsForPath() {
@@ -161,9 +176,9 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     myKeyboard2.register('ArrowRight', myPlayer.moveRight);
     // Register scoring events 
     // TODO: Need to figure out how to link multiple events to the same key.
-    myKeyboard.register('b', dockPointsForCrumbs);
-    myKeyboard.register('h', dockPointsForHint);
-    myKeyboard.register('p', dockPointsForPath);
+    // myKeyboard.register('b', dockPointsForCrumbs);
+    // myKeyboard.register('h', dockPointsForHint);
+    // myKeyboard.register('p', dockPointsForPath);
 
     // Start of game
     init();
