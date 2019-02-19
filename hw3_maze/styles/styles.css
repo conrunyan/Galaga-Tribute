@@ -9,7 +9,7 @@
     flex: 0.75;
 }
 
-#id-canvas {
+/* #id-canvas {
     position: absolute;
     z-index: 0;
     left: 30;
@@ -29,7 +29,7 @@
     height: 750px;
     border-style: solid;
     border-width: 1px
-}
+} */
 
 .menu {
     flex: 1;
@@ -41,11 +41,25 @@
 }
 
 .size-options {
-    height: 50%;
+    /* margin: 10px; */
+    padding: 10px;
+    height: 25%;
     background-color: blue;
+    margin-top: auto;
+    margin-bottom: auto;
+    
 }
 
  #id-highscore {
      height: 50%;
      background-color: yellowgreen;
+     border: 2px solid black;
+     border-bottom: 0px;
+     
+ }
+
+ #game-stats {
+    align-content: center;
+    border: 2px solid black;
+
  }

@@ -138,7 +138,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             item.animate = false;
         });
         // insert new score where it belongs, with a max of MAX_SCORES_KEPT
-        scores.splice(idxToPlace, 0, {score: latestScore, animate: true});
+        scores.splice(idxToPlace, 0, {score: latestScore, animate: true, size: cellCount});
         scores = scores.slice(0,MAX_SCORES_KEPT);
         console.log(scores);
     }
@@ -147,24 +147,12 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         let myHighscoreDiv = document.getElementById('id-hscontainer');
         myHighscoreDiv.innerHTML = '';
         for (let i = 0; i < scores.length; i++) {
-            let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i].score}</p>`;
+            let hsHTML = `<p id="id-hsEntry">Score #${i+1} - ${scores[i].score} - Size: ${scores[i].size}x${scores[i].size}</p>`;
             if (scores[i].animate) {
-                hsHTML = `<p id="id-hsEntryAnimated">Score #${i+1} - ${scores[i].score} - Size: ${cellCount}x${cellCount}</p>`;
+                hsHTML = `<p id="id-hsEntryAnimated">Score #${i+1} - ${scores[i].score} - Size: ${scores[i].size}x${scores[i].size}</p>`;
             }
             myHighscoreDiv.innerHTML += hsHTML;
         }
-    }
-
-    function dockPointsForPath() {
-        totalPoints -= POINTSLOSTFORPATH;
-    }
-
-    function dockPointsForHint() {
-        totalPoints -= POINTSLOSTFORHINT;
-    }
-
-    function dockPointsForCrumbs() {
-        totalPoints -= POINTSLOSTFORCRUMBS;
     }
 
     function processInput(elapsedTime) {
@@ -207,7 +195,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
                 renderer.Marker.renderMarker(gameMaze.hint);
             }
         }
-
+        renderTime();
         renderer.Planet.renderPlanet(gameMaze.mazeBoard[cellCount - 1][cellCount - 1]);
         renderer.Player.renderPlayer(myPlayer);
     }
@@ -215,12 +203,16 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     function updateTime(elapsedTime) {
         timeSinceLastClockTick += elapsedTime;
         if (timeSinceLastClockTick >= 1000) {
-            console.log(clock);
             clock += 1;
             totalPoints -= POINTSLOSTPERSECOND;
-            console.log('POINTS:', totalPoints);
             timeSinceLastClockTick = 0;
         }
+    }
+    
+    function renderTime() {
+        let statDiv = document.getElementById('game-stats');
+        statDiv.innerHTML = `<p id="id-gamestat">Current Score: ${totalPoints}</p>
+                            <p id="id-gamestat">Time Elapsed: ${clock}</p>`
     }
 
     function gameLoop(time) {
@@ -249,9 +241,6 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         myKeyboard.register('w', myPlayer.moveUp);
         myKeyboard.register('a', myPlayer.moveLeft);
         myKeyboard.register('d', myPlayer.moveRight);
-        myKeyboard.register('b', gameMaze.toggleShowCrumbs);
-        myKeyboard.register('h', gameMaze.toggleShowHint);
-        myKeyboard.register('p', gameMaze.toggleShowPath);
         // Register arrow keys
         myKeyboard1.register('k', myPlayer.moveDown);
         myKeyboard1.register('i', myPlayer.moveUp);
@@ -263,10 +252,45 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
         myKeyboard2.register('ArrowLeft', myPlayer.moveLeft);
         myKeyboard2.register('ArrowRight', myPlayer.moveRight);
         // Register scoring events 
-        // TODO: Need to figure out how to link multiple events to the same key.
-        // myKeyboard.register('b', dockPointsForCrumbs);
-        // myKeyboard.register('h', dockPointsForHint);
-        // myKeyboard.register('p', dockPointsForPath);
+        myKeyboard.register('b', crumbAction);
+        myKeyboard.register('h', hintAction);
+        myKeyboard.register('p', pathAction);
+    }
+
+    function dockPointsForPath() {
+        totalPoints -= POINTSLOSTFORPATH;
+    }
+
+    function dockPointsForHint() {
+        totalPoints -= POINTSLOSTFORHINT;
+    }
+
+    function dockPointsForCrumbs() {
+        totalPoints -= POINTSLOSTFORCRUMBS;
+    }
+
+    function pathAction() {
+        gameMaze.toggleShowPath();
+        // only deduct points for path if the user is displaying it
+        if (gameMaze.showPath) {
+            dockPointsForPath();
+        }
+    }
+
+    function hintAction() {
+        gameMaze.toggleShowHint()
+        // only deduct points for hint if the user is displaying it
+        if (gameMaze.showHint) {
+            dockPointsForHint();
+        }
+    }
+
+    function crumbAction() {
+        gameMaze.toggleShowCrumbs()
+        // only deduct points for crumbs if the user is displaying it
+        if (gameMaze.showBreadCrumbs) {
+            dockPointsForCrumbs();
+        }
     }
 
 
