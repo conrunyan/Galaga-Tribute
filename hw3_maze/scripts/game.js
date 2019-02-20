@@ -74,10 +74,11 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
     function newGame(count) {
         // // stop the game
         gameWon = false;
+        clock = 0;
         cellCount = count;
         resetBoard(count);
         init();
-        myGraphics.resetCore();
+        displayInfo();
         renderID = requestAnimationFrame(gameLoop);
     }
 
@@ -153,6 +154,15 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
             }
             myHighscoreDiv.innerHTML += hsHTML;
         }
+    }
+
+    function displayInfo() {
+        let gameInfoDiv = document.getElementById('game-info');
+        gameInfoDiv.innerHTML = `
+            <p id="game-info-line">Path display Point Loss: ${POINTSLOSTFORPATH}</p>
+            <p id="game-info-line">Hint display Point Loss: ${POINTSLOSTFORHINT}</p>
+            <p id="game-info-line">Breadcrum display Point Loss: ${POINTSLOSTFORCRUMBS}</p>
+        `
     }
 
     function processInput(elapsedTime) {
@@ -298,6 +308,7 @@ MazeGame.main = (function (maze, myGraphics, input, player, renderer) {
 
     // Start of game
     init();
+    displayInfo();
     renderID = requestAnimationFrame(gameLoop);
 
 }(MazeGame.objects.maze, MazeGame.graphics, MazeGame.input, MazeGame.objects.player, MazeGame.render));

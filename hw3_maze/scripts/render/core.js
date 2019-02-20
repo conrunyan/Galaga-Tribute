@@ -91,7 +91,7 @@ MazeGame.graphics = (function () {
     }
 
     function drawGamePiece(spec) {
-        // context.save();
+        context.save();
         context.fillStyle = spec.color;
         context.strokeStyle = "#FFFFFF";
         context.lineWidth = 2;
@@ -125,8 +125,8 @@ MazeGame.graphics = (function () {
             context.lineTo(spec.xCoord, spec.yCoord + spec.size);
         }
         context.stroke();
-        context.closePath()
-        // context.restore();
+        context.closePath();
+        context.restore();
 
     }
 

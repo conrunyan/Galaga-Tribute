@@ -7,14 +7,14 @@
     <title>HW3 - Maze Game</title>
 </head>
 
-<body>
+<body background="assets\Milky-Way-Stars-Space-Wallpaper-1920x1180.jpg">
     <div class="maze-game">
         <div class="maze-board">
             <canvas id="id-canvas" width="750" height="750"
-                style="position: absolute; z-index: 0; left: 30px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
+                style="position: absolute; z-index: 0; left: 100px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
             </canvas>
             <canvas id="id-canvas2" width="750" height="750"
-                style="position: absolute; z-index: 1; left: 30px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
+                style="position: absolute; z-index: 1; left: 100px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
             </canvas>
         </div>
         <div class='menu'>
@@ -25,12 +25,20 @@
             <div id='game-stats'>
             </div>
             <div class='size-options'>
+                <p id="size-option-title">Select a Size</p>
                 <div id='id-startbutton'>
                     <button id="id-startbutton5x5" type="submit">5x5</button>
                     <button id="id-startbutton10x10" type="submit">10x10</button>
                     <button id="id-startbutton15x15" type="submit">15x15</button>
                     <button id="id-startbutton20x20" type="submit">20x20</button>
                 </div>
+            </div>
+            <div id='game-info'></div>
+            <div id='control-info'>
+                <p>Movement: AWSD, IJKL, Arrow Keys</p>
+                <p>Toggle Shortest Path: P</p>
+                <p>Toggle Hint Path: H</p>
+                <p>Toggle Breadcrumbs: B</p>
             </div>
         </div>
     </div>
