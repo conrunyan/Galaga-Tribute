@@ -104,7 +104,7 @@ MazeGame.graphics = (function () {
         // draw breadCrumb, if applicable
 
         // draw shortest path, if applicable
-
+        context.beginPath();
         if (spec.edges.topWall === undefined) {
             context.moveTo(spec.xCoord, spec.yCoord);
             context.lineTo(spec.xCoord + spec.size, spec.yCoord);
@@ -125,6 +125,7 @@ MazeGame.graphics = (function () {
             context.lineTo(spec.xCoord, spec.yCoord + spec.size);
         }
         context.stroke();
+        context.closePath()
         // context.restore();
 
     }
