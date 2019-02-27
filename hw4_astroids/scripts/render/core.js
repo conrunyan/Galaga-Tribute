@@ -1,4 +1,4 @@
-MazeGame.graphics = (function () {
+Asteroids.graphics = (function () {
     'use strict';
 
     let canvas = document.getElementById('id-canvas'); // canvas for main game board. 
@@ -6,23 +6,8 @@ MazeGame.graphics = (function () {
     let context = canvas.getContext('2d');
     let context2 = canvas2.getContext('2d');
 
-    function clear1() {
+    function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function clear2() {
-        context2.clearRect(0, 0, canvas2.width, canvas2.height);
-    }
-
-    function resetCore() {
-        canvas = null;
-        canvas2 = null;
-        context = null;
-        context2 = null;
-        canvas = document.getElementById('id-canvas'); 
-        canvas2 = document.getElementById('id-canvas2');
-        context = canvas.getContext('2d');
-        context2 = canvas2.getContext('2d');
     }
 
     // --------------------------------------------------------------
@@ -49,48 +34,13 @@ MazeGame.graphics = (function () {
         // context2.restore();
     }
 
-    /*
-    spec = {
-        color: ,
-        xCoord: ,
-        yCoord: ,
-        height: ,
-        width: ,
-    } 
-    */
-
-    // returns true if the board was drawn
-    function drawGameBoard(gameMaze) {
-        if (gameMaze.cellBackgroundImg.isReady && !gameMaze.drawnMaze) {
-            console.log('drawing game baord...');
-            for (let i = 0; i < gameMaze.mazeBoard.length; i++) {
-                for (let j = 0; j < gameMaze.mazeBoard.length; j++) {
-                    drawGamePiece(gameMaze.mazeBoard[i][j]);
-                }
-            }
-            gameMaze.setDrawnMaze(true);
-        }
-    }
-
-    function gameOverMessage(BOARD_WIDTH, BOARD_HEIGHT) {
-        context.save();
-        context.font = '32pt Courier New MS';
-        context.fillStyle = 'white';
-        context.textAlign = 'center';
-        context.fillText('GAME OVER!', BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
-        context.restore();
-    }
-
-    function winMessage(BOARD_WIDTH, BOARD_HEIGHT) {
-        context.save();
-        context.font = '32pt Courier New MS';
-        context.fillStyle = 'white';
-        context.textAlign = 'center';
-        context.fillText('WINNER!', BOARD_WIDTH / 2, BOARD_HEIGHT / 2);
-        context.restore();
-    }
-
-    function drawGamePiece(spec) {
+    // spec = {
+    //  coords: {x: y:},
+    //  velocities: {x: y:},
+    //  rotation: {x: y:},
+    //  image: imgSrc,
+    //}
+    function drawPlayer(spec) {
         context.save();
         context.fillStyle = spec.color;
         context.strokeStyle = "#FFFFFF";
@@ -104,45 +54,16 @@ MazeGame.graphics = (function () {
         // draw breadCrumb, if applicable
 
         // draw shortest path, if applicable
-        context.beginPath();
-        if (spec.edges.topWall === undefined) {
-            context.moveTo(spec.xCoord, spec.yCoord);
-            context.lineTo(spec.xCoord + spec.size, spec.yCoord);
-        }
-
-        if (spec.edges.bottomWall === undefined) {
-            context.moveTo(spec.xCoord, spec.yCoord + spec.size);
-            context.lineTo(spec.xCoord + spec.size, spec.yCoord + spec.size);
-        }
-
-        if (spec.edges.rightWall === undefined) {
-            context.moveTo(spec.xCoord + spec.size, spec.yCoord);
-            context.lineTo(spec.xCoord + spec.size, spec.yCoord + spec.size);
-        }
-
-        if (spec.edges.leftWall === undefined) {
-            context.moveTo(spec.xCoord, spec.yCoord);
-            context.lineTo(spec.xCoord, spec.yCoord + spec.size);
-        }
-        context.stroke();
-        context.closePath();
         context.restore();
 
     }
 
     let api = {
         get canvas() { return canvas; },
-        clear: clear1,
-        clear2: clear2,
+        clear: clear,
         drawTexture: drawTexture,
-        drawGamePiece: drawGamePiece,
-        drawGameBoard: drawGameBoard,
-        resetCore: resetCore,
-        gameOverMessage: gameOverMessage,
-        winMessage: winMessage,
+        drawPlayer: drawPlayer,
     };
-
-
 
     return api;
 }());

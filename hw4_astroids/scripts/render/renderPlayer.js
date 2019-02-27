@@ -1,4 +1,4 @@
-MazeGame.render.Player = (function (graphics) {
+Asteroids.render.Player = (function (graphics) {
     'use strict';
 
     //drawTexture(image, center, rotation, size)
@@ -20,4 +20,4 @@ MazeGame.render.Player = (function (graphics) {
 
     return api;
 
-}(MazeGame.graphics));
+}(Asteroids.graphics));

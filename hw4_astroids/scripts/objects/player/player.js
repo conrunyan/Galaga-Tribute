@@ -12,15 +12,15 @@
 //
 // CREDITS: Character art from https://opengameart.org/content/jumping-galaxy-asset-cc-by-30
 // --------------------------------------------------------------
-MazeGame.objects.player.Player = function (spec) {
+Asteroids.objects.player.Player = function (spec) {
     'use strict';
 
     // load image
-    let image = new Image();
+    let image = new Image(); 
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        console.log('loaded image...')
+        console.log('loaded image...');
         this.isReady = true;
     };
 
