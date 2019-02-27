@@ -24,63 +24,14 @@ Asteroids.objects.player.Player = function (spec) {
         this.isReady = true;
     };
 
-    function moveUp() {
-        console.log('trying to move up...');
-        if (spec.map[spec.colIdx][spec.rowIdx].edges.topWall !== undefined) {
-            console.log('moved up!');
-            spec.colIdx -= 1;
-            spec.direction = 'up';
-            // get new shortest path
-            spec.maze.setShortestPath(spec);
-        }
-        console.log(spec);
-    }
-    function moveDown() {
-        console.log('trying to move down...');
-        if (spec.map[spec.colIdx][spec.rowIdx].edges.bottomWall !== undefined) {
-            console.log('moved down!');
-            spec.colIdx += 1;
-            spec.direction = 'down';
-            // get new shortest path
-            spec.maze.setShortestPath(spec);
-        }
-        console.log(spec);
-    }
-    function moveLeft() {
-        console.log('trying to move left...');
-        if (spec.map[spec.colIdx][spec.rowIdx].edges.leftWall !== undefined) {
-            console.log('moved left!');
-            spec.rowIdx -= 1;
-            spec.direction = 'left';
-            // get new shortest path
-            spec.maze.setShortestPath(spec);
-        }
-        console.log(spec);
-    }
-    function moveRight() {
-        console.log('trying to move right...');
-        if (spec.map[spec.colIdx][spec.rowIdx].edges.rightWall !== undefined) {
-            console.log('moved right!');
-            spec.rowIdx += 1;
-            spec.direction = 'right';
-            // get new shortest path
-            spec.maze.setShortestPath(spec);
-        }
-        console.log(spec);
+    function movePlayer(direction, elapsedTime) {
+        // TODO: Add function here to move the player in a direction
     }
 
     let api = {
-        get rowIdx() { return spec.rowIdx },
-        get colIdx() { return spec.colIdx },
-        get xCoord() { return spec.rowIdx * spec.cellSize },
-        get yCoord() { return spec.colIdx * spec.cellSize },
         get image() { return image },
-        get cellSize() { return spec.cellSize },
-        get rowColIdx() { return `${spec.rowIdx},${spec.colIdx}` },
-        moveUp: moveUp,
-        moveDown: moveDown,
-        moveLeft: moveLeft,
-        moveRight: moveRight,
+        get coords() { return spec.coords },
+        movePlayer: movePlayer,
     };
 
     return api;

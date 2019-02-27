@@ -26,19 +26,7 @@ Asteroids.main = (function (maze, myGraphics, input, player, renderer) {
         processInput(elapsedTime);
         update(elapsedTime);
         render();
-        if (gameWon) {
-            console.log('GAME WON!');
-            insertScore(totalPoints);
-            displayScore(totalPoints);
-            myGraphics.winMessage(boardDim, boardDim);
-            return;
-        }
-        if (totalPoints <= 0) {
-            console.log('GAME LOST...');
-            myGraphics.gameOverMessage(boardDim, boardDim);
-            return;
-        }
-        renderID = requestAnimationFrame(gameLoop);
+        requestAnimationFrame(gameLoop);
     }
 
     function registerKeyEvents() {
