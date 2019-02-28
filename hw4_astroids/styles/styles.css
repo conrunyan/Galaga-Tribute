@@ -1,59 +1,53 @@
-/* Maze Game container items */
-.maze-game {
-    display: flex;
-    flex-wrap: wrap
-}
-
- /* Maze Board items */
-.maze-board {
-    flex: 0.75;
-}
-
-.menu {
-    flex: .5;
-    margin-top: 15px;
-    text-align: center;
+.asteroids-game {
+    margin: auto;
+    z-index: 0;
+    width: 750px;
     height: 750px;
-    width: 30%;
-    align-content: left;
+    border-style: solid;
+    background-color: grey;
+    border-width: 1px;
 }
 
-#id-highscore {
-     height: 40%;
-     background-color: yellowgreen;
-     border: 2px solid black;
-     border-bottom: 0px;
-     
+ul.menu {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
-#game-stats {
-    align-content: center;
-    border: 2px solid black;
-    background-color: lightgray;
-
+ul.menu li {
+    margin: 2em 0;
 }
 
-.size-options {
-    /* margin: 10px; */
-    /* padding: 10px; */
-    height: 10%;
-    border: 2px solid black;
-    background-color: yellowgreen;
+ul.menu li button {
+    font-family: Arial, sans-serif;
+    font-size: 0.6em;
+    color: #CECEF6;
+    width: 40em;
+    height: 4em;
+    background: rgba(41, 56, 2, 0.753);
+    border: 0.1em solid rgba(31, 49, 25, 0.979);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
 }
 
-#size-option-title {
-    /* padding-top: 5px; */
-    color: black;
+ul.menu li button:hover {
+    background: rgb(160, 51, 8);
 }
 
-
-
-#game-info {
-    border: 2px solid black;
-    background-color: lightgray;
+ul.menu li button:active {
+    color: #CECEF6;
+    background: rgb(0, 0, 0);
 }
 
-#control-info {
-    border: 2px solid black;
-    background-color: yellowgreen;
+.asteroids-game .screen {
+    display: none
 }
+
+.asteroids-game .screen .active {
+    display: block;
+}
+
+/* .screen, :not(.active) {
+    display: none;
+} */

@@ -1,10 +1,8 @@
 Asteroids.graphics = (function () {
     'use strict';
 
-    let canvas = document.getElementById('id-canvas'); // canvas for main game board. 
-    let canvas2 = document.getElementById('id-canvas2'); // canvas for images, on top of main game board
+    let canvas = document.getElementById('canvas'); // canvas for main game board. 
     let context = canvas.getContext('2d');
-    let context2 = canvas2.getContext('2d');
 
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);

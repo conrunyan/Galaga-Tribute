@@ -4,44 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./styles/styles.css" type="text/css" />
-    <title>HW3 - Maze Game</title>
+    <title>HW4 - Asteroids Game</title>
 </head>
 
 <body>
-    <div class="maze-game">
-        <div class="maze-board">
-            <canvas id="id-canvas" width="750" height="750"
-                style="position: absolute; z-index: 0; left: 100px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
-            </canvas>
-            <canvas id="id-canvas2" width="750" height="750"
-                style="position: absolute; z-index: 1; left: 100px; top: 30px; width: 750px; height: 750px; border-style: solid; border-width: 1px">
-            </canvas>
-        </div>
-        <!-- <div class='menu'>
-            <div id='id-highscore'>
-                <h1> - HIGH SCORES - </h1>
-                <div id="id-hscontainer"></div>
-            </div>
-            <div id='game-stats'>
-            </div>
-            <div class='size-options'>
-                <p id="size-option-title">Select a Size</p>
-                <div id='id-startbutton'>
-                    <button id="id-startbutton5x5" type="submit">5x5</button>
-                    <button id="id-startbutton10x10" type="submit">10x10</button>
-                    <button id="id-startbutton15x15" type="submit">15x15</button>
-                    <button id="id-startbutton20x20" type="submit">20x20</button>
-                </div>
-            </div>
+    <div class="asteroids-game">
+        <div class="screen" id="asteroids-board">
             <div id='game-info'></div>
-            <div id='control-info'>
-                <p>Movement: AWSD, IJKL, Arrow Keys</p>
-                <p>Toggle Shortest Path: P</p>
-                <p>Toggle Hint Path: H</p>
-                <p>Toggle Breadcrumbs: B</p>
+            <canvas id="canvas" width="750" height="750"></canvas>
+        </div>
+        <div class="screen, active" id="main-menu">
+            <div id='nav-buttons'>
+                <ul class="menu">
+                    <li><button id="new-game" type="submit">New-Game</button></li>
+                    <li><button id="high-scores" type="submit">High-Scores</button></li>
+                    <li><button id="help" type="submit">Help</button></li>
+                    <li><button id="about" type="submit">About</button></li>
+                </ul>
             </div>
         </div>
-    </div> -->
+        <div class="screen" id="high-scores-screen">
+            <div id='high-scores-div'>
+                <p>high-scores</p>
+            </div>
+        </div>
+        <div class="screen" id="help-screen">
+            <div id='help-div'>
+                <p>help screen</p>
+            </div>
+        </div>
+        <div class="screen" id="about-screen">
+            <div id='about-div'>
+                <p>about screen</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -55,10 +51,15 @@
             graphics: {},
             input: {},
             particles: {},
-            menu: {},
+            screens: {},
             game: {}
         };
     </script>
+    <script src="scripts/screens/gameScreen.js"></script>
+    <script src="scripts/screens/highscoreScreen.js"></script>
+    <script src="scripts/screens/helpScreen.js"></script>
+    <script src="scripts/screens/aboutScreen.js"></script>
+    <script src="scripts/screens/mainMenu.js"></script>
     <script src="scripts/input/input.js"></script>
     <script src="scripts/objects/player/player.js"></script>
     <script src="scripts/render/core.js"></script>

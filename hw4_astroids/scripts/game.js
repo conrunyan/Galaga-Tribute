@@ -1,9 +1,11 @@
-Asteroids.main = (function (myGraphics, input, player, renderer) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
     'use strict';
 
     let boardDim = 750; // measurement in pixels
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
+    // initialize screens
+    screens.MainMenu.initialize();
 
     // Renderers
     let myPlayerRenderer = renderer.Player
@@ -60,4 +62,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer) {
     init();
     requestAnimationFrame(gameLoop);
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens));
