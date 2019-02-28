@@ -1,10 +1,8 @@
-Asteroids.graphics = (function () {
+MyGame.graphics = (function() {
     'use strict';
 
-    let canvas = document.getElementById('id-canvas'); // canvas for main game board. 
-    let canvas2 = document.getElementById('id-canvas2'); // canvas for images, on top of main game board
+    let canvas = document.getElementById('id-canvas');
     let context = canvas.getContext('2d');
-    let context2 = canvas2.getContext('2d');
 
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -34,35 +32,30 @@ Asteroids.graphics = (function () {
         context.restore();
     }
 
-    // spec = {
-    //  coords: {x: y:},
-    //  velocities: {x: y:},
-    //  rotation: {x: y:},
-    //  image: imgSrc,
-    //}
-    function drawPlayer(spec) {
+    function drawText(spec) {
         context.save();
-        context.fillStyle = spec.color;
-        context.strokeStyle = "#FFFFFF";
-        context.lineWidth = 2;
-        context.drawImage(
-            spec.cellBackgroundImg,
-            spec.xCoord,
-            spec.yCoord,
-            spec.size, spec.size);
 
-        // draw breadCrumb, if applicable
+        context.font = spec.font;
+        context.fillStyle = spec.fillStyle;
+        context.strokeStyle = spec.strokeStyle;
+        context.textBaseline = 'top';
 
-        // draw shortest path, if applicable
+        context.translate(spec.position.x, spec.position.y);
+        context.rotate(spec.rotation);
+        context.translate(-spec.position.x, -spec.position.y);
+
+
+        context.fillText(spec.text, spec.position.x, spec.position.y);
+        context.strokeText(spec.text, spec.position.x, spec.position.y);
+
         context.restore();
-
     }
 
     let api = {
         get canvas() { return canvas; },
         clear: clear,
         drawTexture: drawTexture,
-        drawPlayer: drawPlayer,
+        drawText: drawText
     };
 
     return api;

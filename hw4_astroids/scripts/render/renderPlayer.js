@@ -6,11 +6,11 @@ Asteroids.render.Player = (function (graphics) {
     function renderPlayer(player) {
         let scale = 0.75
         let center = {
-            x: player.xCoord + (player.cellSize / 2),
-            y: player.yCoord + (player.cellSize / 2),
+            x: player.coords.x + (player.size / 2),
+            y: player.coords.y + (player.size / 2),
         };
         if (player.image.isReady) {
-            graphics.drawTexture(player.image,center, 0, {width: player.cellSize * scale, height: player.cellSize * scale});
+            graphics.drawTexture(player.image, center, player.rotation, { width: player.size * scale, height: player.size * scale });
         }
     }
 

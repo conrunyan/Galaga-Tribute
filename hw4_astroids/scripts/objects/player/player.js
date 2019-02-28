@@ -8,6 +8,8 @@
 //  imageSrc: ,
 //  maxSpeed: ,
 //  velocities: {x: float, y: float},
+//  rotation: 45 initially,
+//  size: in pixels
 // }
 //
 // CREDITS: Character art from https://opengameart.org/content/jumping-galaxy-asset-cc-by-30
@@ -24,14 +26,33 @@ Asteroids.objects.player.Player = function (spec) {
         this.isReady = true;
     };
 
-    function movePlayer(direction, elapsedTime) {
+    let turnSpeed = 150; // not sure what unit yet
+
+    function playerThrust(elapsedTime) {
         // TODO: Add function here to move the player in a direction
+
+    }
+
+    function turnPlayerLeft(elapsedTime) {
+        console.log('turning player left');
+        spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        console.log(spec.rotation);
+    }
+
+    function turnPlayerRight(elapsedTime) {
+        console.log('turning player right');
+        spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        console.log(spec.rotation);
     }
 
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
-        movePlayer: movePlayer,
+        get size() { return spec.size },
+        get rotation() { return spec.rotation },
+        playerThrust: playerThrust,
+        turnPlayerLeft: turnPlayerLeft,
+        turnPlayerRight: turnPlayerRight,
     };
 
     return api;
