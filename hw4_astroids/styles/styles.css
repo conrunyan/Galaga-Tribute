@@ -1,3 +1,9 @@
+body {
+    background-image: "assets/background_gif.gif";
+    /* background-size: 100%, 100%; */
+    margin: 0;
+}
+
 .asteroids-game {
     margin: auto;
     z-index: 0;
@@ -25,8 +31,8 @@ ul.menu li button {
     color: #CECEF6;
     width: 40em;
     height: 4em;
-    background: rgba(41, 56, 2, 0.753);
-    border: 0.1em solid rgba(31, 49, 25, 0.979);
+    background: rgba(19, 4, 1, 0.774);
+    border: 0.1em solid rgba(236, 44, 11, 0.959);
     border-radius: 0.5em;
     box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
 }
