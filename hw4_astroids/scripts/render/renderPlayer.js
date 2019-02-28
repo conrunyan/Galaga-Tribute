@@ -4,7 +4,7 @@ Asteroids.render.Player = (function (graphics) {
     //drawTexture(image, center, rotation, size)
 
     function renderPlayer(player) {
-        let scale = 0.75
+        let scale = 1
         let center = {
             x: player.coords.x + (player.size / 2),
             y: player.coords.y + (player.size / 2),

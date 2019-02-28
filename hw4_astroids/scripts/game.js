@@ -11,9 +11,11 @@ Asteroids.main = (function (myGraphics, input, player, renderer) {
     let myPlayer = player.Player({
         coords: { x: boardDim / 2, y: boardDim / 2 },
         imageSrc: './assets/1B.png',
-        maxSpeed: 40, // pixels per second
+        maxSpeed: 5, // pixels per second
+        acceleration: 5,
         velocities: { x: 0, y: 0 },
-        rotation: 0,
+        rotation: -Math.PI/2,
+        boardSize: boardDim,
         size: 40,
     });
 
@@ -22,6 +24,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer) {
     }
 
     function update(elapsedTime) {
+        myPlayer.playerMoveLocation(elapsedTime);
     }
 
     function render() {
@@ -46,7 +49,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer) {
 
     function registerKeyEvents() {
         // Register Arrow keys
-        // myKeyboard.register('ArrowDown', myPlayer.moveDown);
+        myKeyboard.register('ArrowUp', myPlayer.playerThrust);
         // myKeyboard.register('ArrowUp', myPlayer.moveUp);
         myKeyboard.register('ArrowLeft', myPlayer.turnPlayerLeft);
         myKeyboard.register('ArrowRight', myPlayer.turnPlayerRight);
