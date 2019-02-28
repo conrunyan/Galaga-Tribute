@@ -22,15 +22,15 @@ ul.menu {
 }
 
 ul.menu li {
-    margin: 2em 0;
+    margin: 7em 0;
 }
 
 ul.menu li button {
     font-family: Arial, sans-serif;
     font-size: 0.6em;
     color: #CECEF6;
-    width: 40em;
-    height: 4em;
+    width: 50em;
+    height: 5em;
     background: rgba(19, 4, 1, 0.774);
     border: 0.1em solid rgba(236, 44, 11, 0.959);
     border-radius: 0.5em;
