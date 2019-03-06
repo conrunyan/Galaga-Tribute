@@ -5,7 +5,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
     let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
     // initialize screens
-    screens.MainMenu.initialize();
+    screens.Controller.initScreens();
+    screens.Controller.showScreen('main-menu');
 
     // Renderers
     let myPlayerRenderer = renderer.Player
@@ -35,6 +36,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
     }
 
     function init() {
+        console.log('SCREENS:', screens)
         registerKeyEvents();
         console.log(myPlayer);
     }

@@ -1,8 +1,5 @@
 Asteroids.screens.Controller = (function name(screens) {
 
-    // init main menu
-    screens.MainMenu.initialize();
-
     function showScreen(id) {
         // Remove the active state from all screens.
         let active = document.getElementsByClassName('active');
@@ -15,9 +12,19 @@ Asteroids.screens.Controller = (function name(screens) {
         document.getElementById(id).classList.add('active');
     }
 
+    // initialize other screens
+    function initScreens() {
+        for (screen in screens) {
+            if (screens.hasOwnProperty(screen) && screen !== 'Controller') {
+                screens[screen].initialize();
+            }
+        }
+    }
+
     let api = {
         showScreen: showScreen,
+        initScreens: initScreens,
     };
-    
+
     return api;
 }(Asteroids.screens));

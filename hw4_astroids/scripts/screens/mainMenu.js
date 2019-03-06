@@ -1,4 +1,4 @@
-Asteroids.screens.MainMenu = (function (screens) {
+Asteroids.screens['main-menu'] = (function (controller) {
     'use strict';
 
     function initialize() {
@@ -8,41 +8,29 @@ Asteroids.screens.MainMenu = (function (screens) {
             'click',
             function() {
                 console.log('asteroids-board');
-                _showScreen('asteroids-board');
+                controller.showScreen('asteroids-board');
             });
 
         document.getElementById('button-high-scores').addEventListener(
             'click',
             function() {
                 console.log('high-scores');
-                _showScreen('high-scores-screen');
+                controller.showScreen('high-scores-screen');
             });
 
         document.getElementById('button-help').addEventListener(
             'click',
             function() {
                 console.log('help');
-                _showScreen('help-screen');
+                controller.showScreen('help-screen');
             });
 
         document.getElementById('button-about').addEventListener(
             'click',
             function() {
                 console.log('about');
-                _showScreen('about-screen');
+                controller.showScreen('about-screen');
             });
-    }
-
-    function _showScreen(id) {
-        // Remove the active state from all screens.
-        let active = document.getElementsByClassName('active');
-        for (let screen = 0; screen < active.length; screen++) {
-            active[screen].classList.remove('active');
-        }
-        // Tell the screen to start actively running
-        screens[id].run();
-        // Then, set the new screen to be active
-        document.getElementById(id).classList.add('active');
     }
 
     function run() {
@@ -54,4 +42,4 @@ Asteroids.screens.MainMenu = (function (screens) {
         initialize: initialize,
         run: run
     };
-}(Asteroids.screens));
+}(Asteroids.screens.Controller));

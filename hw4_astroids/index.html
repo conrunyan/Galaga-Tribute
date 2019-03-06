@@ -8,12 +8,12 @@
 </head>
 
 <body background="assets/background_gif.gif">
-    <div class="asteroids-game">
+    <div id="asteroids-game" class="asteroids-game">
         <div class="screen" id="asteroids-board">
             <div id='game-info'></div>
             <canvas id="canvas" width="750" height="750"></canvas>
         </div>
-        <div class="screen, active" id="main-menu">
+        <div class="screen" id="main-menu">
             <div id='nav-buttons'>
                 <ul class="menu">
                     <li><button id="button-new-game" type="submit">New-Game</button></li>
@@ -26,16 +26,19 @@
         <div class="screen" id="high-scores-screen">
             <div id='high-scores-div'>
                 <p>high-scores</p>
+                <button id="button-score-back-menu" type="submit">Main-Menu</button>
             </div>
         </div>
         <div class="screen" id="help-screen">
             <div id='help-div'>
                 <p>help screen</p>
+                <button id="button-help-back-menu" type="submit">Main-Menu</button>
             </div>
         </div>
         <div class="screen" id="about-screen">
             <div id='about-div'>
                 <p>about screen</p>
+                <button id="button-about-back-menu" type="submit">Main-Menu</button>
             </div>
         </div>
     </div>
@@ -55,6 +58,7 @@
             game: {}
         };
     </script>
+    <script src="scripts/screens/screenController.js"></script>
     <script src="scripts/screens/gameScreen.js"></script>
     <script src="scripts/screens/highscoreScreen.js"></script>
     <script src="scripts/screens/helpScreen.js"></script>

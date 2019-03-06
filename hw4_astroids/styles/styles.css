@@ -46,11 +46,11 @@ ul.menu li button:active {
     background: rgb(0, 0, 0);
 }
 
-.asteroids-game .screen {
+#asteroids-game .screen {
     display: none
 }
 
-.asteroids-game .screen .active {
+#asteroids-game .screen.active {
     display: block;
 }
 
