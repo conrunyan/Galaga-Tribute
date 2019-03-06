@@ -9,7 +9,7 @@
 //      asteroids: [{asteroidObj}, ...],
 //      ufos: [{ufoObj}, ....]
 //  }
-//  backgroundImage: image
+//  imageSrc: image
 // }
 // --------------------------------------------------------------
 Asteroids.game.Board = (function (spec) {
@@ -39,9 +39,12 @@ Asteroids.game.Board = (function (spec) {
 
     let api = {
         get image() { return backgroundImg },
+        get player() { return spec.gamePieces.player },
+        get asteroids() { return spec.gamePieces.asteroids },
+        get ufos() { return spec.gamePieces.ufos },
         addAsteroid: addAsteroid,
         addUFO: addUFO,
     }
 
     return api;
-}(Asteroids.objects.player));
+});

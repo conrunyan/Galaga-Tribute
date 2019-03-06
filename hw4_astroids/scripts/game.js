@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame) {
     'use strict';
 
     let boardDim = 750; // measurement in pixels
@@ -9,7 +9,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
     screens.Controller.showScreen('main-menu');
 
     // Renderers
-    let myPlayerRenderer = renderer.Player
+    // let myPlayerRenderer = renderer.Player
+    let boardRenderer = renderer.Board;
 
     let myPlayer = player.Player({
         coords: { x: boardDim / 2, y: boardDim / 2 },
@@ -22,6 +23,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
         size: 40,
     });
 
+    let gameBoard;
+
     function processInput(elapsedTime) {
         myKeyboard.update(elapsedTime);
     }
@@ -32,10 +35,19 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
 
     function render() {
         myGraphics.clear();
-        myPlayerRenderer.renderPlayer(myPlayer);
+        // myPlayerRenderer.renderPlayer(myPlayer);
+        boardRenderer.renderPieces(gameBoard);
     }
 
     function init() {
+        gameBoard = myGame.Board({
+            gamePieces: {
+                player: myPlayer,
+                asteroids: [],
+                ufos: [],
+            },
+            imageSrc: 'assets/background_gif.gif'
+        })
         console.log('SCREENS:', screens)
         registerKeyEvents();
         console.log(myPlayer);
@@ -64,4 +76,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
     init();
     requestAnimationFrame(gameLoop);
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game));
