@@ -13,7 +13,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens) {
 
     let myPlayer = player.Player({
         coords: { x: boardDim / 2, y: boardDim / 2 },
-        imageSrc: './assets/1B.png',
+        imageSrc: './assets/arrwing.png',
         maxSpeed: 5, // pixels per second
         acceleration: 5,
         velocities: { x: 0, y: 0 },
