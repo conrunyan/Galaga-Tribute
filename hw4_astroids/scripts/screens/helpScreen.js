@@ -1,4 +1,4 @@
-Asteroids.screens.Help = (function (controller) {
+Asteroids.screens['help-screen'] = (function (controller) {
     'use strict';
 
     function run() {

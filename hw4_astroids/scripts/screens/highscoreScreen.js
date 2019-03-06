@@ -1,4 +1,4 @@
-Asteroids.screens.HighScore = (function (controller) {
+Asteroids.screens['high-scores-screen'] = (function (controller) {
     'use strict';
 
     function run() {

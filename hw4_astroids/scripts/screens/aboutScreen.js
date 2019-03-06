@@ -1,4 +1,4 @@
-Asteroids.screens.About = (function (controller) {
+Asteroids.screens['about-screen'] = (function (controller) {
     'use strict';
 
     function run() {
