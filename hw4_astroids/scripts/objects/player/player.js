@@ -2,7 +2,8 @@
 //
 // Creates a Player object, with functions for managing state.
 // One player object will exist at a time. This object can manuever
-// around the game board and interact with the maze (exit, run into walls, etc.)
+// around the game board and shoot asteroids. It also has a hyperspace
+// ability.
 // spec = {
 //  coords: {x: int, y: int} ,
 //  imageSrc: ,
@@ -13,7 +14,7 @@
 //  size: in pixels
 // }
 //
-// CREDITS: Character art from https://opengameart.org/content/jumping-galaxy-asset-cc-by-30
+// CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
 // --------------------------------------------------------------
 Asteroids.objects.player.Player = function (spec) {
     'use strict';
