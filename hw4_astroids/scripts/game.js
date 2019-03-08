@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles) {
     'use strict';
 
     let boardDim = 750; // measurement in pixels
@@ -16,11 +16,14 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         coords: { x: boardDim / 2, y: boardDim / 2 },
         imageSrc: './assets/arrwing.png',
         maxSpeed: 5, // pixels per second
-        acceleration: 5,
+        acceleration: 20,
         velocities: { x: 0, y: 0 },
         rotation: -Math.PI/2,
         boardSize: boardDim,
         size: 40,
+        shot: projectiles,
+        shotImgSource: './Example_ships/11B.png',
+        shotSpeed: 10,
     });
 
     let gameBoard;
@@ -30,7 +33,9 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     }
 
     function update(elapsedTime) {
-        myPlayer.playerMoveLocation(elapsedTime);
+        // myPlayer.playerMoveLocation(elapsedTime);
+        gameBoard.updatePieces(elapsedTime);
+        myPlayer.updateShots(elapsedTime);
     }
 
     function render() {
@@ -67,6 +72,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // Register Arrow keys
         myKeyboard.register('ArrowUp', myPlayer.playerThrust);
         // myKeyboard.register('ArrowUp', myPlayer.moveUp);
+        myKeyboard.register(' ', myPlayer.playerShoot);
         myKeyboard.register('ArrowLeft', myPlayer.turnPlayerLeft);
         myKeyboard.register('ArrowRight', myPlayer.turnPlayerRight);
         // Register scoring events 
@@ -76,4 +82,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     init();
     requestAnimationFrame(gameLoop);
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile));

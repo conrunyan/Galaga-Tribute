@@ -12,6 +12,7 @@
 //  velocities: {x: float, y: float},
 //  rotation: 45 initially,
 //  size: in pixels
+//  shot: objects.projectiles.playerShot
 // }
 //
 // CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
@@ -20,7 +21,7 @@ Asteroids.objects.player.Player = function (spec) {
     'use strict';
 
     // load image
-    let image = new Image(); 
+    let image = new Image();
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
@@ -28,6 +29,7 @@ Asteroids.objects.player.Player = function (spec) {
         this.isReady = true;
     };
 
+    let projectiles = [];
     let turnSpeed = 200; // not sure what unit yet
 
     function playerMoveLocation(elapsedTime) {
@@ -58,8 +60,8 @@ Asteroids.objects.player.Player = function (spec) {
 
     function playerThrust(elapsedTime) {
         console.log('old velocity: ', spec.velocities);
-        let newXVel = (spec.velocities.x + spec.acceleration * 100) * (Math.cos(spec.rotation) / 180);
-        let newYVel = (spec.velocities.y + spec.acceleration * 100) * (Math.sin(spec.rotation) / 180);
+        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation) / 180);
+        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation) / 180);
         // check for max velocity
         console.log('max speed', spec.maxSpeed)
         if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
@@ -82,15 +84,39 @@ Asteroids.objects.player.Player = function (spec) {
         console.log(spec.rotation);
     }
 
+    function playerShoot(elapsedTime) {
+        let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
+        let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
+        let newShot = spec.shot.PlayerShot({
+            coords: { x: spec.coords.x, y: spec.coords.x },
+            imageSrc: spec.shotImageSrc,
+            maxSpeed: spec.shotSpeed,
+            velocities: { x: tmpShotXVel, y: tmpShotYVel },
+            size: 10,
+            lifeTime: 0,
+            maxLifeTime: 3000,
+        });
+        projectiles.push(newShot);
+    }
+
+    function updateShots(elapsedTime) {
+        projectiles.forEach(shot => {
+            shot.moveProjectileFoward(elapsedTime);
+        });
+    }
+
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
         get rotation() { return spec.rotation },
+        get projectiles() { return projectiles },
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,
         turnPlayerRight: turnPlayerRight,
         playerThrust: playerThrust,
+        playerShoot: playerShoot,
+        updateShots: updateShots,
     };
 
     return api;

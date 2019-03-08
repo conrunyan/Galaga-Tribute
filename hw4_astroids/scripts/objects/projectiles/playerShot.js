@@ -10,13 +10,12 @@
 //  maxSpeed: ,
 //  accelleration: ,
 //  velocities: {x: float, y: float},
-//  rotation: 45 initially,
 //  size: in pixels
 // }
 //
 // CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
 // --------------------------------------------------------------
-Asteroids.objects.pfojectile.PlayerShot = function (spec) {
+Asteroids.objects.projectile.PlayerShot = function (spec) {
     'use strict';
 
     // load image
@@ -29,6 +28,9 @@ Asteroids.objects.pfojectile.PlayerShot = function (spec) {
     };
 
     function moveProjectileFoward(elapsedTime) {
+        spec.coords.x += (spec.velocity.x * elapsedTime);
+        spec.coords.y += (spec.velocity.y * elapsedTime);
+        spec.lifeTime += elapsedTime;
     }
 
     let api = {

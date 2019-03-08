@@ -32,9 +32,9 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.ufos.push(newUFO);
     }
 
-    function updatePieces() {
+    function updatePieces(elapsedTime) {
         // update player
-        spec.gamePieces.player.update();
+        spec.gamePieces.player.playerMoveLocation(elapsedTime);
     }
 
     let api = {
@@ -44,6 +44,7 @@ Asteroids.game.Board = (function (spec) {
         get ufos() { return spec.gamePieces.ufos },
         addAsteroid: addAsteroid,
         addUFO: addUFO,
+        updatePieces: updatePieces,
     }
 
     return api;
