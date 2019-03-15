@@ -40,6 +40,8 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.asteroids.forEach(asteroid => {
             asteroid.asteroidMoveLocation(elapsedTime);
         });
+
+        // detect colision
     }
 
     let api = {

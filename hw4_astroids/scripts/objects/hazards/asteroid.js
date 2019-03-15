@@ -13,7 +13,7 @@
 // CREDITS: Character art from 
 // --------------------------------------------------------------
 Asteroids.objects.asteroid.Asteroid = function (spec) {
-    'use strict'; 
+    'use strict';
 
     // load image
     let image = new Image();
@@ -25,6 +25,7 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
     };
 
     let turnSpeed = 0.0125; // not sure what unit yet
+    let didCollide = false;
 
     function asteroidMoveLocation(elapsedTime) {
         // TODO: Add function here to move the player in a direction
@@ -37,6 +38,10 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         console.log('asteroid coords: ', spec.coords);
         // console.log('dX:', dx, 'dY:', dy);
 
+    }
+
+    function setDidCollide(newVal) {
+        didCollide = newVal;
     }
 
     function _getCenter() {
@@ -62,7 +67,9 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         get coords() { return spec.coords },
         get size() { return spec.size },
         get rotation() { return spec.rotation },
-        get center() { return {x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2),}},
+        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
+        get didCollide() { return didCollide },
+        setDidCollide: setDidCollide,
         asteroidMoveLocation: asteroidMoveLocation,
     };
 

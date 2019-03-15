@@ -33,6 +33,7 @@ Asteroids.objects.player.Player = function (spec) {
     let turnSpeed = 200; // not sure what unit yet
     let timeSinceLastShot = 250;
     let shotInterval = 250;
+    let didCollide = false;
 
     function playerMoveLocation(elapsedTime) {
         // TODO: Add function here to move the player in a direction
@@ -143,6 +144,8 @@ Asteroids.objects.player.Player = function (spec) {
         get size() { return spec.size },
         get rotation() { return spec.rotation },
         get projectiles() { return projectiles },
+        get didCollide() { return didCollide },
+        setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,
         turnPlayerRight: turnPlayerRight,

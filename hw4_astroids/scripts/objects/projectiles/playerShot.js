@@ -27,6 +27,8 @@ Asteroids.objects.projectile.PlayerShot = function (spec) {
         this.isReady = true;
     };
 
+    let didCollide = false;
+
     function moveProjectileFoward(elapsedTime) {
         // console.log('PROJ BEFORE: ', spec.coords);
         spec.coords.x += (spec.velocities.x * elapsedTime);
@@ -41,6 +43,8 @@ Asteroids.objects.projectile.PlayerShot = function (spec) {
         get size() { return spec.size },
         get lifeTime() { return spec.lifeTime },
         get maxLifeTime() { return spec.maxLifeTime },
+        get didCollide() { return didCollide },
+        setDidCollide: setDidCollide,
         moveProjectileFoward: moveProjectileFoward,
     };
 
