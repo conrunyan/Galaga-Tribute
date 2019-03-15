@@ -4,7 +4,7 @@ Asteroids.render.Projectile = (function (graphics) {
     //drawTexture(image, center, rotation, size)
 
     function renderProjectile(spec) {
-        let scale = 2
+        let scale = .5
         let center = {
             x: spec.coords.x + (spec.size / 2),
             y: spec.coords.y + (spec.size / 2),

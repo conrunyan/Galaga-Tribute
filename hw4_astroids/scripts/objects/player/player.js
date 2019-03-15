@@ -31,6 +31,8 @@ Asteroids.objects.player.Player = function (spec) {
 
     let projectiles = [];
     let turnSpeed = 200; // not sure what unit yet
+    let timeSinceLastShot = 250;
+    let shotInterval = 250;
 
     function playerMoveLocation(elapsedTime) {
         // TODO: Add function here to move the player in a direction
@@ -59,53 +61,79 @@ Asteroids.objects.player.Player = function (spec) {
     }
 
     function playerThrust(elapsedTime) {
-        console.log('old velocity: ', spec.velocities);
+        // console.log('old velocity: ', spec.velocities);
         let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation) / 180);
         let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation) / 180);
         // check for max velocity
-        console.log('max speed', spec.maxSpeed)
+        // console.log('max speed', spec.maxSpeed)
         if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
-            console.log('accelerating');
+            // console.log('accelerating');
             spec.velocities.x += newXVel;
             spec.velocities.y += newYVel;
         }
-        console.log('new velocity: ', spec.velocities);
+        // console.log('new velocity: ', spec.velocities);
     }
 
     function turnPlayerLeft(elapsedTime) {
-        console.log('turning player left');
+        // console.log('turning player left');
         spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
-        console.log(spec.rotation);
+        // console.log(spec.rotation);
     }
 
     function turnPlayerRight(elapsedTime) {
-        console.log('turning player right');
+        // console.log('turning player right');
         spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
-        console.log(spec.rotation);
+        // console.log(spec.rotation);
     }
 
     function playerShoot(elapsedTime) {
-        let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
-        let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
-        let newShot = spec.shot.PlayerShot({
-            coords: { x: spec.coords.x, y: spec.coords.x },
-            imageSrc: spec.shotImgSource,
-            maxSpeed: spec.shotSpeed,
-            velocities: { x: tmpShotXVel, y: tmpShotYVel },
-            size: 10,
-            lifeTime: 0,
-            maxLifeTime: 3000,
-        });
-        projectiles.push(newShot);
+        if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval) {
+            console.log('creating new shot...');
+            let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
+            let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
+            let newShot = spec.shot.PlayerShot({
+                coords: _getPlayerNose(),
+                imageSrc: spec.shotImgSource,
+                maxSpeed: spec.shotSpeed,
+                velocities: { x: tmpShotXVel, y: tmpShotYVel },
+                size: 10,
+                lifeTime: 0,
+                maxLifeTime: 10000,
+            });
+            projectiles.push(newShot);
+            timeSinceLastShot = 0;
+        }
+        else {
+            timeSinceLastShot += elapsedTime
+        }
+    }
+
+    function _getPlayerCenter() {
+        let center = {
+            x: spec.coords.x + (spec.size / 2),
+            y: spec.coords.y + (spec.size / 2),
+        };
+
+        return center;
+    }
+
+    function _getPlayerNose() {
+        let nose = {
+            x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation)) * spec.size / 2),
+            y: (spec.coords.y + (spec.size / 2)) + ((Math.sin(spec.rotation)) * spec.size / 2),
+        };
+
+        return nose;
     }
 
     function updateShots(elapsedTime) {
-        let shotsToRemove = [];
+        let shotsToKeep = [];
         projectiles.forEach(shot => {
-            console.log(shot)
+            // console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
             // TODO: check if a shot needs to be removed, based on how long it's been alive
         });
+        projectiles = projectiles.filter(shot => shot.lifeTime < shot.maxLifeTime)
         // TODO: remove shots
     }
 

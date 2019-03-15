@@ -23,7 +23,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         size: 40,
         shot: projectiles,
         shotImgSource: './assets/green_laser.png',
-        shotSpeed: 1,
+        shotSpeed: 10,
+        maxProjectiles: 40,
     });
 
     let gameBoard;
