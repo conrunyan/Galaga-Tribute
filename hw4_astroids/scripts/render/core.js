@@ -32,6 +32,26 @@ Asteroids.graphics = (function () {
         context.restore();
     }
 
+    function drawSprite(image, center, rotation, size, subImageLocations) {
+        context.save();
+
+        context.translate(center.x, center.y);
+        context.rotate(rotation);
+        context.translate(-center.x, -center.y);
+
+        context.drawImage(
+            image,
+            subImageLocations.sx,
+            subImageLocations.sy,
+            subImageLocations.sWidth,
+            subImageLocations.sHeigt,
+            center.x - size.width / 2,
+            center.y - size.height / 2,
+            size.width, size.height);
+
+        context.restore();
+    }
+
     // spec = {
     //  coords: {x: y:},
     //  velocities: {x: y:},
@@ -61,6 +81,7 @@ Asteroids.graphics = (function () {
         clear: clear,
         drawTexture: drawTexture,
         drawPlayer: drawPlayer,
+        drawSprite: drawSprite,
     };
 
     return api;

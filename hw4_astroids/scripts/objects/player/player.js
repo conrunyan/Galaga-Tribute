@@ -89,7 +89,7 @@ Asteroids.objects.player.Player = function (spec) {
         let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
         let newShot = spec.shot.PlayerShot({
             coords: { x: spec.coords.x, y: spec.coords.x },
-            imageSrc: spec.shotImageSrc,
+            imageSrc: spec.shotImgSource,
             maxSpeed: spec.shotSpeed,
             velocities: { x: tmpShotXVel, y: tmpShotYVel },
             size: 10,
@@ -102,6 +102,7 @@ Asteroids.objects.player.Player = function (spec) {
     function updateShots(elapsedTime) {
         let shotsToRemove = [];
         projectiles.forEach(shot => {
+            console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
             // TODO: check if a shot needs to be removed, based on how long it's been alive
         });

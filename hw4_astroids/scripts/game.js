@@ -22,7 +22,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         boardSize: boardDim,
         size: 40,
         shot: projectiles,
-        shotImgSource: './Example_ships/11B.png',
+        shotImgSource: './assets/green_laser.png',
         shotSpeed: 1,
     });
 

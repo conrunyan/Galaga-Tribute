@@ -28,11 +28,11 @@ Asteroids.objects.projectile.PlayerShot = function (spec) {
     };
 
     function moveProjectileFoward(elapsedTime) {
-        console.log('PROJ BEFORE: ', spec.coords);
+        // console.log('PROJ BEFORE: ', spec.coords);
         spec.coords.x += (spec.velocities.x * elapsedTime);
         spec.coords.y += (spec.velocities.y * elapsedTime);
         spec.lifeTime += elapsedTime;
-        console.log('PROJ AFTER :', spec.coords);
+        // console.log('PROJ AFTER :', spec.coords);
     }
 
     let api = {
