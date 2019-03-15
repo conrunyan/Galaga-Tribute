@@ -100,9 +100,12 @@ Asteroids.objects.player.Player = function (spec) {
     }
 
     function updateShots(elapsedTime) {
+        let shotsToRemove = [];
         projectiles.forEach(shot => {
             shot.moveProjectileFoward(elapsedTime);
+            // TODO: check if a shot needs to be removed, based on how long it's been alive
         });
+        // TODO: remove shots
     }
 
     let api = {

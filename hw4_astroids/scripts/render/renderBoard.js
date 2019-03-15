@@ -6,7 +6,9 @@ Asteroids.render.Board = (function (graphics, renderer) {
         // render player
         renderer.Player.renderPlayer(gamePieces.player);
         // render player shots
-        
+        gamePieces.player.projectiles.forEach(shot => {
+            renderer.Projectile.renderProjectile(shot);
+        });
         // render astroids
         let asteroids = gamePieces.asteroids;
         for (let asteroid = 0; asteroid < asteroids.length; asteroid++) {

@@ -23,7 +23,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         size: 40,
         shot: projectiles,
         shotImgSource: './Example_ships/11B.png',
-        shotSpeed: 10,
+        shotSpeed: 1,
     });
 
     let gameBoard;
@@ -35,7 +35,6 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     function update(elapsedTime) {
         // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
-        myPlayer.updateShots(elapsedTime);
     }
 
     function render() {

@@ -6,10 +6,12 @@ Asteroids.input.Keyboard = function () {
     };
 
     function keyPress(e) {
+        e.preventDefault();
         that.keys[e.key] = e.key;
     }
 
     function keyRelease(e) {
+        e.preventDefault();
         delete that.keys[e.key];
     }
 

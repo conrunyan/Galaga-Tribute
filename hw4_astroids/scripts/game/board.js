@@ -35,6 +35,7 @@ Asteroids.game.Board = (function (spec) {
     function updatePieces(elapsedTime) {
         // update player
         spec.gamePieces.player.playerMoveLocation(elapsedTime);
+        spec.gamePieces.player.updateShots(elapsedTime);
     }
 
     let api = {
