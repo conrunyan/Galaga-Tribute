@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid) {
     'use strict';
 
     let boardDim = 750; // measurement in pixels
@@ -23,8 +23,17 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         size: 40,
         shot: projectiles,
         shotImgSource: './assets/green_laser.png',
-        shotSpeed: 10,
+        shotSpeed: 30,
         maxProjectiles: 40,
+    });
+
+    let testAsteroid = asteroid.Asteroid({
+        coords: {x: 20, y: 20},
+        imageSrc: './assets/asteroid.png',
+        velocities: { x: 5, y: 5 },
+        rotation: 0,
+        size:60,
+        mass:100,
     });
 
     let gameBoard;
@@ -48,7 +57,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
-                asteroids: [],
+                asteroids: [testAsteroid],
                 ufos: [],
             },
             imageSrc: 'assets/background_gif.gif'
@@ -82,4 +91,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     init();
     requestAnimationFrame(gameLoop);
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid));

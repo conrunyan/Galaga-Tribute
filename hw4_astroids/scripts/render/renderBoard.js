@@ -12,7 +12,7 @@ Asteroids.render.Board = (function (graphics, renderer) {
         // render astroids
         let asteroids = gamePieces.asteroids;
         for (let asteroid = 0; asteroid < asteroids.length; asteroid++) {
-            asteroids[i].render();
+            renderer.Asteroid.renderAsteroid(asteroids[asteroid]);
         }
         // render UFOs
         let ufos = gamePieces.ufos;
