@@ -37,10 +37,16 @@ Asteroids.objects.projectile.PlayerShot = function (spec) {
         // console.log('PROJ AFTER :', spec.coords);
     }
 
+    function setDidCollide(newVal) {
+        didCollide = newVal;
+    }
+
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
+        get radius() { return spec.size },
+        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get lifeTime() { return spec.lifeTime },
         get maxLifeTime() { return spec.maxLifeTime },
         get didCollide() { return didCollide },

@@ -109,6 +109,10 @@ Asteroids.objects.player.Player = function (spec) {
         }
     }
 
+    function setDidCollide(newVal) {
+        didCollide = newVal;
+    }
+
     function _getPlayerCenter() {
         let center = {
             x: spec.coords.x + (spec.size / 2),
@@ -142,9 +146,11 @@ Asteroids.objects.player.Player = function (spec) {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
+        get radius() {return spec.size},
         get rotation() { return spec.rotation },
         get projectiles() { return projectiles },
         get didCollide() { return didCollide },
+        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2),} },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,

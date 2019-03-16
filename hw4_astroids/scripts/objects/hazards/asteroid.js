@@ -35,7 +35,7 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         spec.coords.y += dy;
         spec.rotation += turnSpeed
 
-        console.log('asteroid coords: ', spec.coords);
+        // console.log('asteroid coords: ', spec.coords);
         // console.log('dX:', dx, 'dY:', dy);
 
     }
@@ -53,22 +53,15 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         return center;
     }
 
-    function _getPlayerNose() {
-        let nose = {
-            x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation)) * spec.size / 2),
-            y: (spec.coords.y + (spec.size / 2)) + ((Math.sin(spec.rotation)) * spec.size / 2),
-        };
-
-        return nose;
-    }
-
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
+        get radius() { return spec.size },
         get rotation() { return spec.rotation },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get didCollide() { return didCollide },
+        get velocities() { return spec.velocities },
         setDidCollide: setDidCollide,
         asteroidMoveLocation: asteroidMoveLocation,
     };

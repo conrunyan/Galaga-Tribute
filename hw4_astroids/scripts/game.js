@@ -59,6 +59,10 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
                 player: myPlayer,
                 asteroids: [testAsteroid],
                 ufos: [],
+                constructors: {
+                    asteroids: asteroid,
+                    ufos: '',
+                }
             },
             imageSrc: 'assets/background_gif.gif'
         })
