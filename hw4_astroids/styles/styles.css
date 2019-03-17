@@ -1,5 +1,4 @@
 body {
-    background-image: "assets/background_gif.gif";
     /* background-size: 100%, 100%; */
     margin: 0;
 }
@@ -16,19 +15,24 @@ body {
 .asteroids-game {
     margin: auto;
     z-index: 1;
-    position: fixed;
     right: 0;
     bottom: 0;
     min-width: 100%; 
     min-height: 100%;
     position: fixed;
-right: 0;
-bottom: 0;
-min-width: 100%; 
-min-height: 100%;
     border-style: solid;
     background-color: grey;
     border-width: 1px;
+}
+
+#main-menu-title {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+#main-menu-title.h1 {
+    font-size: 1em;
 }
 
 ul.menu {
@@ -44,7 +48,7 @@ ul.menu li {
 
 ul.menu li button {
     font-family: Arial, sans-serif;
-    font-size: 0.6em;
+    font-size: .75em;
     color: #CECEF6;
     width: 50em;
     height: 5em;
@@ -71,6 +75,15 @@ ul.menu li button:active {
     display: block;
 }
 
-/* .screen, :not(.active) {
-    display: none;
-} */
+.screen:not(#asteroids-board) {
+    background: url('../assets/asteroid_field_background.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    position: fixed;
+}
