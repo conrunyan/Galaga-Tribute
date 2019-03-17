@@ -140,7 +140,8 @@ Asteroids.objects.player.Player = function (spec) {
         });
         // check if a shot needs to be removed, based on how long it's been alive
         // also remove if it's run into something
-        projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) || !shot.didCollide);
+
+        projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) && !shot.didCollide);
     }
 
     let api = {

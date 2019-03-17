@@ -24,6 +24,17 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         this.isReady = true;
     };
 
+    let breaksInto = {
+        'large': 3,
+        'medium': 4,
+    }
+
+    let sizes = {
+        'large': 80,
+        'medium': 50,
+        'small': 25,
+    }
+
     let turnSpeed = 0.0125; // not sure what unit yet
     let didCollide = false;
 
@@ -44,24 +55,17 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         didCollide = newVal;
     }
 
-    function _getCenter() {
-        let center = {
-            x: spec.coords.x + (spec.size / 2),
-            y: spec.coords.y + (spec.size / 2),
-        };
-
-        return center;
-    }
-
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
-        get size() { return spec.size },
-        get radius() { return spec.size / 2 },
+        get size() { return sizes[spec.asteroidType] },
+        get radius() { return sizes[spec.asteroidType] / 2 },
         get rotation() { return spec.rotation },
-        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
+        get center() { return { x: spec.coords.x + (sizes[spec.asteroidType] / 2), y: spec.coords.y + (sizes[spec.asteroidType] / 2), } },
         get didCollide() { return didCollide },
         get velocities() { return spec.velocities },
+        get breaksInto() { return breaksInto[spec.asteroidType] },
+        get asteroidType() { return spec.asteroidType },
         setDidCollide: setDidCollide,
         asteroidMoveLocation: asteroidMoveLocation,
     };

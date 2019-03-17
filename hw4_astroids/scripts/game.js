@@ -23,16 +23,16 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         size: 40,
         shot: projectiles,
         shotImgSource: './assets/green_laser.png',
-        shotSpeed: 30,
+        shotSpeed: 50,
         maxProjectiles: 40,
     });
 
     let testAsteroid = asteroid.Asteroid({
-        coords: {x: 20, y: 20},
+        coords: { x: 150, y: 150},
         imageSrc: './assets/asteroid.png',
         velocities: { x: 5, y: 5 },
         rotation: 0,
-        size:60,
+        asteroidType: 'large',
         mass:100,
     });
 

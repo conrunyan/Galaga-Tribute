@@ -57,7 +57,7 @@ Asteroids.game.Board = (function (spec) {
         // check projectiles with asteroids
         let astToSplit = [];
         spec.gamePieces.player.projectiles.forEach(shot => {
-            console.log('shot', shot);
+            // console.log('shot', shot);
             spec.gamePieces.asteroids.forEach(asteroid => {
                 console.log('shot->asteroid', asteroid.center.x, asteroid.center.y);
                 let shotAstDist = _getDistanceBetweenPoints(shot.center, asteroid.center);
@@ -91,25 +91,40 @@ Asteroids.game.Board = (function (spec) {
     // of half the size moving in random, opposite directions
     function splitAsteroid(astToSplit) {
         console.log('calling split asteroids...');
-        let ast1 = spec.constructors.asteroids.Asteroid({
-            coords: { x: astToSplit.coords.x, y: astToSplit.coords.y },
-            imageSrc: './assets/asteroid.png',
-            velocities: { x: -astToSplit.velocities.x * 1.5, y: astToSplit.velocities.y * 1.5 },
-            rotation: 0,
-            size: astToSplit.size / 2,
-            mass: astToSplit.mass / 2,
-        });
+        let numToCreate = astToSplit.breaksInto;
+        let newAsts = [];
+        let newType;
+        if (astToSplit.asteroidType === 'large') {
+            newType = 'medium';
+        }
+        else if (astToSplit.asteroidType === 'medium') {
+            newType = 'small';
+        }
+        // blew up a small. Nothing smaller than that
+        else {
+            return newAsts;
+        }
 
-        let ast2 = spec.constructors.asteroids.Asteroid({
-            coords: { x: astToSplit.coords.x, y: astToSplit.coords.y },
-            imageSrc: './assets/asteroid.png',
-            velocities: { x: astToSplit.velocities.x * 1.5, y: -astToSplit.velocities.y * 1.5 },
-            rotation: 0,
-            size: astToSplit.size / 2,
-            mass: astToSplit.mass / 2,
-        });
+        let velPosibilities = [
+            { x: -astToSplit.velocities.x * 1.5, y: -astToSplit.velocities.y * 1.5 },
+            { x: -astToSplit.velocities.x * 1.5, y: astToSplit.velocities.y * 1.5 },
+            { x: astToSplit.velocities.x * 1.5, y: astToSplit.velocities.y * 1.5 },
+            { x: astToSplit.velocities.x * 1.5, y: -astToSplit.velocities.y * 1.5 }
+        ]
 
-        return [ast1, ast2];
+        for (let i = 0; i < numToCreate; i++) {
+            let tmpAst = spec.constructors.asteroids.Asteroid({
+                coords: { x: astToSplit.coords.x, y: astToSplit.coords.y },
+                imageSrc: './assets/asteroid.png',
+                velocities: velPosibilities[i],
+                rotation: 0,
+                asteroidType: newType,
+                mass: astToSplit.mass / 1.5,
+            });
+            newAsts.push(tmpAst);
+        }
+
+        return newAsts;
     }
 
     function _getDistanceBetweenPoints(p1, p2) {
