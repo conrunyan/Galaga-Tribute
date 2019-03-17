@@ -10,7 +10,7 @@ Asteroids.render.Asteroid = (function (graphics) {
             y: asteroid.coords.y + (asteroid.size / 2),
         };
         if (asteroid.image.isReady) {
-            graphics.drawTexture(asteroid.image, center, asteroid.rotation, { width: asteroid.size * scale, height: asteroid.size * scale });
+            graphics.drawTexture(asteroid.image, asteroid.center, asteroid.rotation, { width: asteroid.size * scale, height: asteroid.size * scale });
         }
     }
 

@@ -59,16 +59,17 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
                 player: myPlayer,
                 asteroids: [testAsteroid],
                 ufos: [],
-                constructors: {
-                    asteroids: asteroid,
-                    ufos: '',
-                }
+            },
+            constructors: {
+                asteroids: asteroid,
+                ufos: '',
             },
             imageSrc: 'assets/background_gif.gif'
         })
         console.log('SCREENS:', screens)
         registerKeyEvents();
         console.log(myPlayer);
+        requestAnimationFrame(gameLoop);
     }
 
     function gameLoop(time) {
@@ -92,7 +93,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     }
 
     // Start of game
-    init();
-    requestAnimationFrame(gameLoop);
+    // init();
+    // requestAnimationFrame(gameLoop);
 
 }(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid));

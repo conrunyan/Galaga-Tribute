@@ -97,7 +97,7 @@ Asteroids.objects.player.Player = function (spec) {
                 imageSrc: spec.shotImgSource,
                 maxSpeed: spec.shotSpeed,
                 velocities: { x: tmpShotXVel, y: tmpShotYVel },
-                size: 10,
+                size: 5,
                 lifeTime: 0,
                 maxLifeTime: 10000,
             });

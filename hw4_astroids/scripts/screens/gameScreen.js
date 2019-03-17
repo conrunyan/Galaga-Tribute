@@ -1,4 +1,4 @@
-Asteroids.screens['asteroids-board'] = (function () {
+Asteroids.screens['asteroids-board'] = (function (game) {
     'use strict';
 
     function initialize() {
@@ -10,10 +10,12 @@ Asteroids.screens['asteroids-board'] = (function () {
 
     function run() {
         console.log('on the game screen');
+        let myGame = game.Main();
+        myGame.init();
     }
 
     return {
         initialize: initialize,
         run: run
     };
-}());
+}(Asteroids));
