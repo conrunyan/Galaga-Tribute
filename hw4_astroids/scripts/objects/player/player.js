@@ -43,18 +43,18 @@ Asteroids.objects.player.Player = function (spec) {
         spec.coords.y += dy;
 
         // wrap around coords
-        if (spec.coords.x > spec.boardSize) {
+        if (spec.coords.x > spec.boardSize.x) {
             spec.coords.x = 0;
         }
         else if (spec.coords.x < 0) {
-            spec.coords.x = spec.boardSize;
+            spec.coords.x = spec.boardSize.x;
         }
 
-        if (spec.coords.y > spec.boardSize) {
+        if (spec.coords.y > spec.boardSize.y) {
             spec.coords.y = 0;
         }
         else if (spec.coords.y < 0) {
-            spec.coords.y = spec.boardSize;
+            spec.coords.y = spec.boardSize.y;
         }
         // console.log('player coords: ', spec.coords);
         // console.log('dX:', dx, 'dY:', dy);

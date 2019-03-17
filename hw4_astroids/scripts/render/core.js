@@ -2,6 +2,9 @@ Asteroids.graphics = (function () {
     'use strict';
 
     let canvas = document.getElementById('canvas'); // canvas for main game board. 
+    // resize canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     let context = canvas.getContext('2d');
 
     function clear() {

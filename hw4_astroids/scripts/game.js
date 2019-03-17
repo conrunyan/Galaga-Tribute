@@ -1,24 +1,33 @@
 Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid) {
     'use strict';
 
-    let boardDim = 750; // measurement in pixels
+    let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
     // initialize screens
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
 
+    // background image
+    let backgroundImg = new Image();
+    backgroundImg.isReady = false;
+    backgroundImg.src = 'assets/game_background.jpg';
+    backgroundImg.onload = function () {
+        console.log('loaded image...');
+        this.isReady = true;
+    };
+
     // Renderers
     // let myPlayerRenderer = renderer.Player
     let boardRenderer = renderer.Board;
 
     let myPlayer = player.Player({
-        coords: { x: boardDim / 2, y: boardDim / 2 },
+        coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
         imageSrc: './assets/arrwing.png',
         maxSpeed: 5, // pixels per second
         acceleration: 20,
         velocities: { x: 0, y: 0 },
-        rotation: -Math.PI/2,
+        rotation: -Math.PI / 2,
         boardSize: boardDim,
         size: 40,
         shot: projectiles,
@@ -28,12 +37,12 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     });
 
     let testAsteroid = asteroid.Asteroid({
-        coords: { x: 150, y: 150},
+        coords: { x: 150, y: 150 },
         imageSrc: './assets/asteroid.png',
         velocities: { x: 5, y: 5 },
         rotation: 0,
         asteroidType: 'large',
-        mass:100,
+        mass: 100,
     });
 
     let gameBoard;
@@ -49,6 +58,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
 
     function render() {
         myGraphics.clear();
+        // render board background
+        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y});
         // myPlayerRenderer.renderPlayer(myPlayer);
         boardRenderer.renderPieces(gameBoard);
     }
