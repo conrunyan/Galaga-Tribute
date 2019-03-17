@@ -2,8 +2,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     'use strict';
 
     let boardDim = 750; // measurement in pixels
-    let lastTimeStamp = performance.now();
     let myKeyboard = input.Keyboard();
+    let lastTimeStamp;
     // initialize screens
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
@@ -54,6 +54,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     }
 
     function init() {
+        lastTimeStamp = performance.now();
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
@@ -93,7 +94,6 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     }
 
     // Start of game
-    // init();
-    // requestAnimationFrame(gameLoop);
+    init();
 
 }(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid));

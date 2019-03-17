@@ -45,7 +45,7 @@ Asteroids.objects.projectile.PlayerShot = function (spec) {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
-        get radius() { return spec.size },
+        get radius() { return spec.size / 2 },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get lifeTime() { return spec.lifeTime },
         get maxLifeTime() { return spec.maxLifeTime },

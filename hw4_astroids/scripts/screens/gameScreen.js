@@ -10,8 +10,8 @@ Asteroids.screens['asteroids-board'] = (function (game) {
 
     function run() {
         console.log('on the game screen');
-        let myGame = game.Main();
-        myGame.init();
+        // let myGame = game.Main();
+        // myGame.init();
     }
 
     return {

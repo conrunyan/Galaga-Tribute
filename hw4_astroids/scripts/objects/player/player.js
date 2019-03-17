@@ -138,15 +138,16 @@ Asteroids.objects.player.Player = function (spec) {
             shot.moveProjectileFoward(elapsedTime);
             // TODO: check if a shot needs to be removed, based on how long it's been alive
         });
-        projectiles = projectiles.filter(shot => shot.lifeTime < shot.maxLifeTime)
-        // TODO: remove shots
+        // check if a shot needs to be removed, based on how long it's been alive
+        // also remove if it's run into something
+        projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) || !shot.didCollide);
     }
 
     let api = {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
-        get radius() {return spec.size},
+        get radius() { return spec.size / 2 },
         get rotation() { return spec.rotation },
         get projectiles() { return projectiles },
         get didCollide() { return didCollide },

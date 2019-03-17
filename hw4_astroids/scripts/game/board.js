@@ -57,14 +57,14 @@ Asteroids.game.Board = (function (spec) {
         // check projectiles with asteroids
         let astToSplit = [];
         spec.gamePieces.player.projectiles.forEach(shot => {
-            console.log('shot', shot.center.x, shot.center.y);
+            console.log('shot', shot);
             spec.gamePieces.asteroids.forEach(asteroid => {
                 console.log('shot->asteroid', asteroid.center.x, asteroid.center.y);
-                let shotAstDist = _getDistanceBetweenPoints(shot.center, asteroid.coords);
+                let shotAstDist = _getDistanceBetweenPoints(shot.center, asteroid.center);
                 let sumOfRadi = shot.radius + asteroid.radius;
-                console.log('SAD:', shotAstDist, 'SOR:', sumOfRadi);
-                if (shotAstDist < sumOfRadi) {
-                    window.alert('HIT!');
+                // console.log('SAD:', shotAstDist, 'SOR:', sumOfRadi);
+                if (shotAstDist < sumOfRadi && !shot.didCollide) {
+                    // window.alert('HIT!');
                     shot.setDidCollide(true);
                     asteroid.setDidCollide(true);
                     astToSplit.push(asteroid);
@@ -79,12 +79,12 @@ Asteroids.game.Board = (function (spec) {
         astToSplit.forEach(asteroid => {
             if (asteroid.didCollide) {
                 let sptAsts = splitAsteroid(asteroid);
-                newAsteroids.concat(sptAsts);
+                newAsteroids = newAsteroids.concat(sptAsts);
             }
         });
 
-        spec.gamePieces.asteroids.filter(asteroid => !asteroid.didCollide);
-        spec.gamePieces.asteroids.concat(newAsteroids);
+        spec.gamePieces.asteroids = spec.gamePieces.asteroids.filter(asteroid => !asteroid.didCollide);
+        spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
     }
 
     // split asteroid in half, returning a list of two asteroids

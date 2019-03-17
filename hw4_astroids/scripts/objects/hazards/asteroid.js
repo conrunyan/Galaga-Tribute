@@ -57,7 +57,7 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         get image() { return image },
         get coords() { return spec.coords },
         get size() { return spec.size },
-        get radius() { return spec.size },
+        get radius() { return spec.size / 2 },
         get rotation() { return spec.rotation },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get didCollide() { return didCollide },
