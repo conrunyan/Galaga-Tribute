@@ -4,11 +4,28 @@ body {
     margin: 0;
 }
 
+#myVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%; 
+  min-height: 100%;
+  z-index: 0;
+}
+
 .asteroids-game {
     margin: auto;
-    z-index: 0;
-    width: 750px;
-    height: 750px;
+    z-index: 1;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    position: fixed;
+right: 0;
+bottom: 0;
+min-width: 100%; 
+min-height: 100%;
     border-style: solid;
     background-color: grey;
     border-width: 1px;
