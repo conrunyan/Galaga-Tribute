@@ -79,6 +79,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             imageSrc: 'assets/background_gif.gif',
             boardDimmensions: boardDim,
             asteroidSize: 80,
+            asteroidInitMinVel: 5,
             asteroidInitMaxVel: 15,
             maxNumAsteroids: 10,
         })

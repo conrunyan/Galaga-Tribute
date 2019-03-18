@@ -136,8 +136,12 @@ Asteroids.game.Board = (function (spec) {
     }
 
     function generateAsteroids() {
+        console.log('asteroid count: ', spec.gamePieces.asteroids.length);
+        console.log('expeccted count: ', spec.maxNumAsteroids);
         for (let i = 0; i < spec.maxNumAsteroids - spec.gamePieces.asteroids.length; i++) {
             let newAst = _getNewAsteroid();
+            console.log(i);
+            console.log(`new asteroid - Coords: {x:${newAst.coords.x}, y:${newAst.coords.y}} Vel: {x: ${newAst.velocities.x}, y: ${newAst.velocities.y}}`)
             spec.gamePieces.asteroids.push(newAst);
         }
     }
@@ -170,23 +174,23 @@ Asteroids.game.Board = (function (spec) {
         let xVel, yVel;
         // upper left quadrant
         if (coords.y < 0 && coords.x <= spec.boardDimmensions.x / 2) {
-            xVel = _nextRange(1, spec.asteroidInitMaxVel);
-            yVel = _nextRange(1, spec.asteroidInitMaxVel);
+            xVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
+            yVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
         }
         // upper right quadrant
         else if (coords.y < 0 && coords.x > spec.boardDimmensions.x / 2) {
-            xVel = _nextRange(-spec.asteroidInitMaxVel, -1);
-            yVel = _nextRange(1, spec.asteroidInitMaxVel);
+            xVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
+            yVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
         }
         // lower left quadrant
         else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
-            xVel = _nextRange(1, spec.asteroidInitMaxVel);
-            yVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+            xVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
+            yVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
         }
         // lower right quadrant
         else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
-            xVel = _nextRange(-spec.asteroidInitMaxVel, -1);
-            yVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+            xVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
+            yVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
         }
 
         return { x: xVel, y: yVel };
