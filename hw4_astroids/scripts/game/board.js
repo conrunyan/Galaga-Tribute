@@ -11,6 +11,7 @@
 //  }
 //  imageSrc: image
 //  objects (constructors from game)
+//  boardDimmensions: {x: , y:}
 // }
 // --------------------------------------------------------------
 Asteroids.game.Board = (function (spec) {
@@ -24,6 +25,13 @@ Asteroids.game.Board = (function (spec) {
         console.log('loaded image...');
         this.isReady = true;
     };
+
+    let asteroidInitSettings = [
+        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
+        { loc: { x: spec.boardDimmensions.x + 10, y: spec.boardDimmensions.y + 10 }, vel: { x: -5, y: -5 } },
+        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
+        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
+    ];
 
     function addAsteroid(newAstrd) {
         spec.gamePieces.asteroids.push(newAstrd);
@@ -87,7 +95,7 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
     }
 
-    // split asteroid in half, returning a list of two asteroids
+    // split asteroid in chunks, returning a list of asteroids
     // of half the size moving in random, opposite directions
     function splitAsteroid(astToSplit) {
         console.log('calling split asteroids...');
@@ -127,6 +135,68 @@ Asteroids.game.Board = (function (spec) {
         return newAsts;
     }
 
+    function generateAsteroids() {
+        for (let i = 0; i < spec.maxNumAsteroids - spec.gamePieces.asteroids.length; i++) {
+            let newAst = _getNewAsteroid();
+            spec.gamePieces.asteroids.push(newAst);
+        }
+    }
+
+    function _getNewAsteroid() {
+        let newAstCoords = _getNewAsteroidCoords();
+        let newAstVelocity = _getNewAsteroidVel(newAstCoords);
+
+        let newAst = spec.constructors.asteroids.Asteroid({
+            coords: { x: newAstCoords.x, y: newAstCoords.y },
+            imageSrc: './assets/asteroid.png',
+            velocities: { x: newAstVelocity.x, y: newAstVelocity.y },
+            rotation: 0,
+            asteroidType: 'large',
+            mass: 100,
+        });
+
+        return newAst;
+    }
+
+    function _getNewAsteroidCoords() {
+        let newX = _nextRange(-10, spec.boardDimmensions.x + 10);
+        let randYIdx = _nextRange(0, 1);
+        let yRange = [-spec.asteroidSize, spec.boardDimmensions.y + spec.asteroidSize]
+
+        return { x: newX, y: yRange[randYIdx] };
+    }
+
+    function _getNewAsteroidVel(coords) {
+        let xVel, yVel;
+        // upper left quadrant
+        if (coords.y < 0 && coords.x <= spec.boardDimmensions.x / 2) {
+            xVel = _nextRange(1, spec.asteroidInitMaxVel);
+            yVel = _nextRange(1, spec.asteroidInitMaxVel);
+        }
+        // upper right quadrant
+        else if (coords.y < 0 && coords.x > spec.boardDimmensions.x / 2) {
+            xVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+            yVel = _nextRange(1, spec.asteroidInitMaxVel);
+        }
+        // lower left quadrant
+        else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
+            xVel = _nextRange(1, spec.asteroidInitMaxVel);
+            yVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+        }
+        // lower right quadrant
+        else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
+            xVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+            yVel = _nextRange(-spec.asteroidInitMaxVel, -1);
+        }
+
+        return { x: xVel, y: yVel };
+    }
+
+    function _nextRange(min, max) {
+        let range = max - min;
+        return Math.floor((Math.random() * range) + min);
+    }
+
     function _getDistanceBetweenPoints(p1, p2) {
         let x_2 = Math.pow(p2.x - p1.x, 2)
         let y_2 = Math.pow(p2.y - p1.y, 2)
@@ -142,6 +212,7 @@ Asteroids.game.Board = (function (spec) {
         addAsteroid: addAsteroid,
         addUFO: addUFO,
         updatePieces: updatePieces,
+        generateAsteroids: generateAsteroids,
     }
 
     return api;

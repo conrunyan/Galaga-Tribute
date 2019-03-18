@@ -25,11 +25,11 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
         imageSrc: './assets/arrwing.png',
         maxSpeed: 5, // pixels per second
-        acceleration: 20,
+        acceleration: 40,
         velocities: { x: 0, y: 0 },
         rotation: -Math.PI / 2,
         boardSize: boardDim,
-        size: 40,
+        size: 55,
         shot: projectiles,
         shotImgSource: './assets/green_laser.png',
         shotSpeed: 50,
@@ -69,15 +69,22 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
-                asteroids: [testAsteroid],
+                asteroids: [],
                 ufos: [],
             },
             constructors: {
                 asteroids: asteroid,
                 ufos: '',
             },
-            imageSrc: 'assets/background_gif.gif'
+            imageSrc: 'assets/background_gif.gif',
+            boardDimmensions: boardDim,
+            asteroidSize: 80,
+            asteroidInitMaxVel: 15,
+            maxNumAsteroids: 10,
         })
+        console.log('Configuring board...');
+        gameBoard.generateAsteroids();
+        console.log('game-board', gameBoard);
         console.log('SCREENS:', screens)
         registerKeyEvents();
         console.log(myPlayer);
