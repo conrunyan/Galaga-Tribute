@@ -26,13 +26,6 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
 
-    let asteroidInitSettings = [
-        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
-        { loc: { x: spec.boardDimmensions.x + 10, y: spec.boardDimmensions.y + 10 }, vel: { x: -5, y: -5 } },
-        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
-        { loc: { x: -10, y: -10 }, vel: { x: 5, y: 5 } },
-    ];
-
     function addAsteroid(newAstrd) {
         spec.gamePieces.asteroids.push(newAstrd);
     }
