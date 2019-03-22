@@ -27,7 +27,9 @@ Asteroids.game.Board = (function (spec) {
     };
     let totalElapsedTime = 0;
     let ufoInterval = 2000;
+    let ufoIntervalLarge = 3000;
     let timeUntilSmallUFO = ufoInterval;
+    let timeUntilLargeUFO = ufoIntervalLarge;
 
     function addAsteroid(newAstrd) {
         spec.gamePieces.asteroids.push(newAstrd);
@@ -151,16 +153,25 @@ Asteroids.game.Board = (function (spec) {
             timeUntilSmallUFO -= elapsedTime;
         }
 
+        if (!hasLarge && timeUntilLargeUFO <= 0) {
+            console.log('adding new UFO', timeUntilSmallUFO);
+            _addLargeUFO();
+        }
+        else {
+            timeUntilLargeUFO -= elapsedTime;
+        }
     }
 
     function removeUFOs() {
         let initSize = spec.gamePieces.ufos.length;
+        // remove UFOs that collided or are out of time
         spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode && !ufo.didCollide);
         let postSize = spec.gamePieces.ufos.length;
-
+        // 
         // reset UFO timer
         if (initSize !== postSize) {
             timeUntilSmallUFO = ufoInterval;
+            timeUntilLargeUFO = ufoIntervalLarge;
         }
     }
 
@@ -181,7 +192,19 @@ Asteroids.game.Board = (function (spec) {
     }
 
     function _addLargeUFO() {
-
+        let largeUFO = spec.constructors.ufos.UFOLarge({
+            coords: { x: spec.boardDimmensions.x / 2, y: spec.boardDimmensions.y},
+            imageSrc: './assets/alienshiptex.png',
+            rotation: -Math.PI / 2,
+            boardSize: spec.boardDimmensions,
+            size: 55,
+            shotImgSource: './assets/green_laser.png',
+            shot: spec.constructors.shot,
+            ufoType: 'large',
+            maxProjectiles: 40,
+        });
+        console.log(spec.gamePieces.ufos)
+        spec.gamePieces.ufos.push(largeUFO);
     }
 
 

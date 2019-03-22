@@ -1,7 +1,7 @@
 // --------------------------------------------------------------
 //
-// Creates a ufoSmall object, with functions for managing state.
-// One ufoSmall object will exist at a time. This object can manuever
+// Creates a ufoLarge object, with functions for managing state.
+// One ufoLarge object will exist at a time. This object can manuever
 // around the game board and shoot asteroids. It also has a hyperspace
 // ability.
 // spec = {
@@ -12,14 +12,14 @@
 //  velocities: {x: float, y: float},
 //  rotation: 45 initially,
 //  size: in pixels
-//  shot: objects.projectiles.ufoSmallShot
+//  shot: objects.projectiles.ufoLargeShot
 //  boardSize: needs to know where it can't go
 // }
 //
 // UFOS: https://opengameart.org/content/green-alien-spaceship
 //       https://opengameart.org/content/faction4-spacestation
 // --------------------------------------------------------------
-Asteroids.objects.ufo.UFOSmall = function (spec) {
+Asteroids.objects.ufo.UFOLarge = function (spec) {
     'use strict';
 
     // load image
@@ -36,30 +36,34 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     let timeSpentOnPath = 0;
     let shotInterval = 2000;
     let didCollide = false;
-    let movementSpeed = 0.1;
+    let movementSpeed = 0.05;
     let shotSpeed = .15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
+    let shotOffset = 300;
 
-    function ufoSmallMove(elapsedTime) {
-        // TODO: Add function here to move the ufoSmall in a direction
+    function ufoLargeMove(elapsedTime) {
+        // TODO: Add function here to move the ufoLarge in a direction
         // move in preset path around the board
         // move for three seconds
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move right
         if (timeSpentOnPath < timeForEachMovement + 500) {
-            _moveRight(elapsedTime);
+            _moveUp(elapsedTime);
         }
         // move up
         else if (timeSpentOnPath < timeForEachMovement * 2) {
-            _moveUp(elapsedTime);
+            _moveUpRight(elapsedTime);
         }
         else if (timeSpentOnPath < timeForEachMovement * 3) {
-            _moveDownLeft(elapsedTime);
+            _moveUpLeft(elapsedTime);
         }
         else if (timeSpentOnPath < timeForEachMovement * 3.5) {
-            _moveRight(elapsedTime);
+            _moveDown(elapsedTime);
+        }
+        else if (timeSpentOnPath < timeForEachMovement * 4) {
+            _moveLeft(elapsedTime);
         }
         // reset path
         else {
@@ -98,17 +102,17 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y -= (movementSpeed * elapsedTime);
     }
 
-    function ufoSmallShootPlayer(elapsedTime, playerCoords) {
-        let oLine = playerCoords.y - spec.coords.y;
-        let aLine = playerCoords.x - spec.coords.x;
+    function ufoLargeShootPlayer(elapsedTime, playerCoords) {
+        let oLine = (playerCoords.y + shotOffset) - spec.coords.y;
+        let aLine = (playerCoords.x + shotOffset) - spec.coords.x;
         let angle = Math.atan(oLine, aLine);
         let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
         let tmpShotXVel = (shotSpeed * aLine) / dist;
         let tmpShotYVel = (shotSpeed * oLine) / dist;
-        ufoSmallShoot(elapsedTime, {x: tmpShotXVel, y: tmpShotYVel});
+        ufoLargeShoot(elapsedTime, { x: tmpShotXVel, y: tmpShotYVel });
     }
 
-    function ufoSmallShoot(elapsedTime, newVelocity) {
+    function ufoLargeShoot(elapsedTime, newVelocity) {
         if (timeSinceLastShot >= shotInterval) {
             // console.log('creating new shot...');
             let newShot = spec.shot.PlayerShot({
@@ -160,10 +164,10 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         get didCollide() { return didCollide },
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
-        get shouldExplode() { return lifeTime <= 0},
+        get shouldExplode() { return lifeTime <= 0 },
         setDidCollide: setDidCollide,
-        ufoMove: ufoSmallMove,
-        ufoShoot: ufoSmallShootPlayer,
+        ufoMove: ufoLargeMove,
+        ufoShoot: ufoLargeShootPlayer,
         updateShots: updateShots,
     };
 
