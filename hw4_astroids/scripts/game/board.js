@@ -26,8 +26,8 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 2000;
-    let ufoIntervalLarge = 3000;
+    let ufoInterval = 120000;
+    let ufoIntervalLarge = 60000;
     let timeUntilSmallUFO = ufoInterval;
     let timeUntilLargeUFO = ufoIntervalLarge;
 
@@ -115,6 +115,8 @@ Asteroids.game.Board = (function (spec) {
 
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.filter(asteroid => !asteroid.didCollide);
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
+
+        // check for player collision. subtract lives, if needed or end the game if out of lives
 
         // fill board with asteroids
         cleanAsteroids();
