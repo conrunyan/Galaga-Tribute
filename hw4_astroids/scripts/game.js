@@ -1,9 +1,10 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
+    let totalElapsedTime = 0;
     // initialize screens
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
@@ -36,15 +37,6 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         maxProjectiles: 40,
     });
 
-    let testAsteroid = asteroid.Asteroid({
-        coords: { x: 150, y: 150 },
-        imageSrc: './assets/asteroid.png',
-        velocities: { x: 5, y: 5 },
-        rotation: 0,
-        asteroidType: 'large',
-        mass: 100,
-    });
-
     let gameBoard;
 
     function processInput(elapsedTime) {
@@ -54,6 +46,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     function update(elapsedTime) {
         // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
+        gameBoard.updateClock(totalElapsedTime);
+        totalElapsedTime += elapsedTime;
     }
 
     function render() {
@@ -74,7 +68,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             },
             constructors: {
                 asteroids: asteroid,
-                ufos: '',
+                ufos: ufos,
             },
             imageSrc: 'assets/background_gif.gif',
             boardDimmensions: boardDim,
@@ -115,4 +109,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Start of game
     init();
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo));

@@ -25,6 +25,9 @@ Asteroids.game.Board = (function (spec) {
         // console.log('loaded image...');
         this.isReady = true;
     };
+    let totalElapsedTime = 0;
+    let ufoInterval = 30000;
+    let timeUntilSmallUFO = ufoInterval;
 
     function addAsteroid(newAstrd) {
         spec.gamePieces.asteroids.push(newAstrd);
@@ -42,6 +45,10 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.asteroids.forEach(asteroid => {
             asteroid.asteroidMoveLocation(elapsedTime);
         });
+        // update ufo
+        spec.gamePieces.ufos.forEach(ufo => {
+            ufo.ufoMove(elapsedTime);
+        })
 
         // detect colision
         // check player with asteroids
@@ -89,8 +96,77 @@ Asteroids.game.Board = (function (spec) {
         // fill board with asteroids
         cleanAsteroids();
         fillAsteroids();
-        // console.log('asteroids', spec.gamePieces.asteroids);
+        
+        
+        // add or remove ufos if needed
+        addUFOs(elapsedTime);
+        removeUFOs();
     }
+
+    function updateClock(totalTime) {
+        totalElapsedTime = totalTime;
+    }
+
+/////////////////////////////////
+//        UFO   FUNCTIONS      //
+/////////////////////////////////
+
+    function addUFOs(elapsedTime) {
+        let hasSmall = false;
+        let hasLarge = false;
+        spec.gamePieces.ufos.forEach(ufo => {
+            if (ufo.ufoType === 'small') {
+                hasSmall = true;
+            }
+            else if (ufo.ufoType === 'large') {
+                hasLarge = true;
+            }
+        })
+        if (!hasSmall && timeUntilSmallUFO <= 0) {
+            console.log('adding new UFO', timeUntilSmallUFO);
+            _addSmallUFO();
+        }
+        else {
+            timeUntilSmallUFO -= elapsedTime;
+        }
+
+    }
+
+    function removeUFOs() {
+        let initSize = spec.gamePieces.ufos.length;
+        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode);
+        let postSize = spec.gamePieces.ufos.length;
+
+        // reset UFO timer
+        if (initSize !== postSize) {
+            timeUntilSmallUFO = ufoInterval;
+        }
+    }
+
+    function _addSmallUFO() {
+        let smallUFO = spec.constructors.ufos.UFOSmall({
+            coords: { x: 0, y: spec.boardDimmensions.y / 2 },
+            imageSrc: './assets/Spacestation-by-MillionthVector.png',
+            rotation: -Math.PI / 2,
+            boardSize: spec.boardDimmensions,
+            size: 35,
+            shotImgSource: './assets/green_laser.png',
+            shotSpeed: 50,
+            ufoType: 'small',
+            maxProjectiles: 40,
+        });
+        console.log(spec.gamePieces.ufos)
+        spec.gamePieces.ufos.push(smallUFO);
+    }
+
+    function _addLargeUFO() {
+
+    }
+
+
+/////////////////////////////////
+//     ASTEROID FUNCTIONS      //
+/////////////////////////////////
 
     // removes any asteroids that are off the screen
     function cleanAsteroids() {
@@ -245,6 +321,7 @@ Asteroids.game.Board = (function (spec) {
         addUFO: addUFO,
         updatePieces: updatePieces,
         generateAsteroids: generateAsteroids,
+        updateClock: updateClock,
     }
 
     return api;

@@ -16,9 +16,10 @@
 //  boardSize: needs to know where it can't go
 // }
 //
-// CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
+// UFOS: https://opengameart.org/content/green-alien-spaceship
+//       https://opengameart.org/content/faction4-spacestation
 // --------------------------------------------------------------
-Asteroids.objects.ufo.ufoSmall = function (spec) {
+Asteroids.objects.ufo.UFOSmall = function (spec) {
     'use strict';
 
     // load image
@@ -35,32 +36,36 @@ Asteroids.objects.ufo.ufoSmall = function (spec) {
     let timeSpentOnPath = 0;
     let shotInterval = 250;
     let didCollide = false;
-    let movementSpeed = 2;
+    let movementSpeed = 0.1;
     let timeForEachMovement = 3000;
+    let lifeTime = 60000;
 
     function ufoSmallMove(elapsedTime) {
         // TODO: Add function here to move the ufoSmall in a direction
         // move in preset path around the board
         // move for three seconds
+        // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move right
         if (timeSpentOnPath < timeForEachMovement + 500) {
-            _moveRight();
+            _moveRight(elapsedTime);
         }
         // move up
         else if (timeSpentOnPath < timeForEachMovement * 2) {
-            _moveUp();
+            _moveUp(elapsedTime);
         }
         else if (timeSpentOnPath < timeForEachMovement * 3) {
-            _moveDownLeft();
+            _moveDownLeft(elapsedTime);
         }
         else if (timeSpentOnPath < timeForEachMovement * 3.5) {
-            _moveRight();
+            _moveRight(elapsedTime);
         }
         // reset path
         else {
             timeSpentOnPath = 0;
         }
+
+        lifeTime -= elapsedTime;
     }
 
     function _moveUp(elapsedTime) {
@@ -172,10 +177,12 @@ Asteroids.objects.ufo.ufoSmall = function (spec) {
         get rotation() { return spec.rotation },
         get projectiles() { return projectiles },
         get didCollide() { return didCollide },
+        get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
+        get shouldExplode() { return lifeTime <= 0},
         setDidCollide: setDidCollide,
-        ufoSmallMove: ufoSmallMove,
-        ufoSmallShoot: ufoSmallShoot,
+        ufoMove: ufoSmallMove,
+        ufoShoot: ufoSmallShoot,
         updateShots: updateShots,
     };
 
