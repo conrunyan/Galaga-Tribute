@@ -3,7 +3,7 @@
 // This function performs the one-time game initialization.
 //
 //------------------------------------------------------------------
-function initialize() {
+Asteroids.game.sounds.initialize = () {
     'use strict';
 
     function loadSound(source, label, idButton) {
@@ -33,13 +33,9 @@ function initialize() {
     }
 
     function loadAudio() {
-        MyGame.sounds = {}
+        Asteroids.sounds = {}
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
-        MyGame.sounds['audio/sound-1'] = loadSound('audio/sound-1.mp3', 'Sound 1', 'id-play1');
-        // Reference: https://freesound.org//data/previews/109/109662_945474-lq.mp3
-        MyGame.sounds['audio/sound-2'] = loadSound('audio/sound-2.mp3', 'Sound 2', 'id-play2');
-        // Reference: https://www.bensound.com/royalty-free-music/track/extreme-action
-        MyGame.sounds['audio/bensound-extremeaction'] = loadSound('audio/bensound-extremeaction.mp3', 'Music', 'id-play3');
+        Asteroids.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
     }
 
     console.log('initializing...');
@@ -53,7 +49,7 @@ function initialize() {
 //
 //------------------------------------------------------------------
 function pauseSound(whichSound, label, idButton, idStatus) {
-    MyGame.sounds[whichSound].pause();
+    Asteroids.sounds[whichSound].pause();
 
     let elementStatus = document.getElementById(idStatus);
     elementStatus.innerHTML = 'paused';
@@ -68,20 +64,8 @@ function pauseSound(whichSound, label, idButton, idStatus) {
 // Plays the specified audio
 //
 //------------------------------------------------------------------
-function playSound(whichSound, label, idButton, idStatus) {
-    let elementStatus = document.getElementById(idStatus);
-    let elementButton = document.getElementById(idButton);
-
-    elementStatus.innerHTML = 'playing';
-    MyGame.sounds[whichSound].addEventListener('ended', function () {
-        elementStatus.innerHTML = 'ended';
-        elementButton.innerHTML = `${label} - Play!`;
-        elementButton.onclick = function () { playSound(whichSound, label, idButton, idStatus); };
-    });
-
-    elementButton.onclick = function () { pauseSound(whichSound, label, idButton, idStatus); };
-
-    MyGame.sounds[whichSound].play();
+function playSound(whichSound) {
+    Asteroids.sounds[whichSound].play();
 }
 
 //------------------------------------------------------------------
@@ -90,5 +74,5 @@ function playSound(whichSound, label, idButton, idStatus) {
 //
 //------------------------------------------------------------------
 function changeVolume(value) {
-    MyGame.sounds['audio/bensound-extremeaction'].volume = value / 100;
+    Asteroids.sounds['audio/bensound-extremeaction'].volume = value / 100;
 }

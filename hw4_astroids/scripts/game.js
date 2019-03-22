@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
@@ -35,6 +35,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         shotImgSource: './assets/green_laser.png',
         shotSpeed: 50,
         maxProjectiles: 40,
+        sounds: sounds,
     });
 
     let gameBoard;
@@ -110,4 +111,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Start of game
     init();
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds));
