@@ -153,7 +153,6 @@ Asteroids.game.Board = (function (spec) {
             boardSize: spec.boardDimmensions,
             size: 35,
             shotImgSource: './assets/green_laser.png',
-            shotSpeed: 0.001,
             shot: spec.constructors.shot,
             ufoType: 'small',
             maxProjectiles: 40,

@@ -37,6 +37,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     let shotInterval = 1000;
     let didCollide = false;
     let movementSpeed = 0.1;
+    let shotSpeed = .15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
 
@@ -113,8 +114,12 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     }
 
     function ufoSmallShootPlayer(elapsedTime, playerCoords) {
-        let tmpShotXVel = spec.shotSpeed * (playerCoords.x + 50 - spec.coords.x);
-        let tmpShotYVel = spec.shotSpeed * (playerCoords.y + 50 - spec.coords.y);
+        let oLine = playerCoords.y - spec.coords.y;
+        let aLine = playerCoords.x - spec.coords.x;
+        let angle = Math.atan(oLine, aLine);
+        let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
+        let tmpShotXVel = (shotSpeed * aLine) / dist;
+        let tmpShotYVel = (shotSpeed * oLine) / dist;
         ufoSmallShoot(elapsedTime, {x: tmpShotXVel, y: tmpShotYVel});
     }
 
@@ -124,7 +129,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
             let newShot = spec.shot.PlayerShot({
                 coords: { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), },
                 imageSrc: spec.shotImgSource,
-                maxSpeed: spec.shotSpeed,
+                maxSpeed: shotSpeed,
                 velocities: { x: newVelocity.x, y: newVelocity.y },
                 size: 5,
                 lifeTime: 0,
@@ -142,22 +147,11 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         didCollide = newVal;
     }
 
-    function _getufoSmallCenter() {
-        let center = {
-            x: spec.coords.x + (spec.size / 2),
-            y: spec.coords.y + (spec.size / 2),
-        };
-
-        return center;
-    }
-
-    function _getufoSmallNose() {
-        let nose = {
-            x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation)) * spec.size / 2),
-            y: (spec.coords.y + (spec.size / 2)) + ((Math.sin(spec.rotation)) * spec.size / 2),
-        };
-
-        return nose;
+    function _getDistanceBetweenPoints(p1, p2) {
+        let x_2 = Math.pow(p2.x - p1.x, 2)
+        let y_2 = Math.pow(p2.y - p1.y, 2)
+        let result = Math.sqrt(x_2 + y_2)
+        return result
     }
 
     function updateShots(elapsedTime) {
