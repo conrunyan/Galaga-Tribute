@@ -167,12 +167,25 @@ Asteroids.game.Board = (function (spec) {
         // remove UFOs that collided or are out of time
         spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode && !ufo.didCollide);
         let postSize = spec.gamePieces.ufos.length;
-        // 
+        // remove UFOs that have gone off the screen
+        _cleanUFOsFromScreen();
         // reset UFO timer
         if (initSize !== postSize) {
             timeUntilSmallUFO = ufoInterval;
             timeUntilLargeUFO = ufoIntervalLarge;
         }
+    }
+
+    function _cleanUFOsFromScreen() {
+        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
+            if (ufo.coords.y < 0 - ufo.size && ufo.ufoType === 'large') {
+                return false;
+            }
+            else if (ufo.coords.x > spec.boardDimmensions.x + ufo.size && ufo.ufoType === 'small') {
+                return false;
+            }
+            return true;
+        });
     }
 
     function _addSmallUFO() {
