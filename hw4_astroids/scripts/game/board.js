@@ -81,8 +81,27 @@ Asteroids.game.Board = (function (spec) {
             });
         });
         // check player with ufos
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
+            let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
+            if (playerUfoDist < sumOfRadi) {
+                spec.gamePieces.player.setDidCollide(true);
+                ufo.setDidCollide(true);
+            }
+        });
         // check projectiles with ufos
-
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            spec.gamePieces.player.projectiles.forEach(shot => {
+                let ufoShot = _getDistanceBetweenPoints(shot.center, ufo.center);
+                let sumOfRadi = ufo.radius + shot.radius;
+                if (ufoShot < sumOfRadi) {
+                    ufo.setDidCollide(true);
+                }
+            })
+            
+        });
         // split asteroids in two that have colided, then remove the original
         let newAsteroids = [];
         astToSplit.forEach(asteroid => {
@@ -136,7 +155,7 @@ Asteroids.game.Board = (function (spec) {
 
     function removeUFOs() {
         let initSize = spec.gamePieces.ufos.length;
-        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode);
+        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode && !ufo.didCollide);
         let postSize = spec.gamePieces.ufos.length;
 
         // reset UFO timer

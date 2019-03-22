@@ -32,9 +32,9 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     };
 
     let projectiles = [];
-    let timeSinceLastShot = 1000;
+    let timeSinceLastShot = 2000;
     let timeSpentOnPath = 0;
-    let shotInterval = 1000;
+    let shotInterval = 2000;
     let didCollide = false;
     let movementSpeed = 0.1;
     let shotSpeed = .15;

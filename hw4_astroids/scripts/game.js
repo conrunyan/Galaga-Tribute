@@ -30,7 +30,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         velocities: { x: 0, y: 0 },
         rotation: -Math.PI / 2,
         boardSize: boardDim,
-        size: 55,
+        size: 30,
         shot: projectiles,
         shotImgSource: './assets/green_laser.png',
         shotSpeed: 50,
