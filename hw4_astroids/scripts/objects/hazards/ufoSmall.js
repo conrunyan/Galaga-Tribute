@@ -32,9 +32,9 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     };
 
     let projectiles = [];
-    let timeSinceLastShot = 250;
+    let timeSinceLastShot = 1000;
     let timeSpentOnPath = 0;
-    let shotInterval = 250;
+    let shotInterval = 1000;
     let didCollide = false;
     let movementSpeed = 0.1;
     let timeForEachMovement = 3000;
@@ -112,16 +112,20 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         // console.log('new velocity: ', spec.velocities);
     }
 
-    function ufoSmallShoot(elapsedTime) {
-        if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval) {
+    function ufoSmallShootPlayer(elapsedTime, playerCoords) {
+        let tmpShotXVel = spec.shotSpeed * (playerCoords.x + 50 - spec.coords.x);
+        let tmpShotYVel = spec.shotSpeed * (playerCoords.y + 50 - spec.coords.y);
+        ufoSmallShoot(elapsedTime, {x: tmpShotXVel, y: tmpShotYVel});
+    }
+
+    function ufoSmallShoot(elapsedTime, newVelocity) {
+        if (timeSinceLastShot >= shotInterval) {
             // console.log('creating new shot...');
-            let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
-            let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
-            let newShot = spec.shot.ufoSmallShot({
-                coords: _getufoSmallNose(),
+            let newShot = spec.shot.PlayerShot({
+                coords: { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), },
                 imageSrc: spec.shotImgSource,
                 maxSpeed: spec.shotSpeed,
-                velocities: { x: tmpShotXVel, y: tmpShotYVel },
+                velocities: { x: newVelocity.x, y: newVelocity.y },
                 size: 5,
                 lifeTime: 0,
                 maxLifeTime: 10000,
@@ -161,11 +165,9 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         projectiles.forEach(shot => {
             // console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
-            // TODO: check if a shot needs to be removed, based on how long it's been alive
         });
         // check if a shot needs to be removed, based on how long it's been alive
         // also remove if it's run into something
-
         projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) && !shot.didCollide);
     }
 
@@ -182,7 +184,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         get shouldExplode() { return lifeTime <= 0},
         setDidCollide: setDidCollide,
         ufoMove: ufoSmallMove,
-        ufoShoot: ufoSmallShoot,
+        ufoShoot: ufoSmallShootPlayer,
         updateShots: updateShots,
     };
 

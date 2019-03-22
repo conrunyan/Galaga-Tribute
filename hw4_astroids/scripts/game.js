@@ -69,6 +69,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             constructors: {
                 asteroids: asteroid,
                 ufos: ufos,
+                shot: projectiles,
             },
             imageSrc: 'assets/background_gif.gif',
             boardDimmensions: boardDim,

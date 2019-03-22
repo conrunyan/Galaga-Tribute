@@ -26,7 +26,7 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 30000;
+    let ufoInterval = 2000;
     let timeUntilSmallUFO = ufoInterval;
 
     function addAsteroid(newAstrd) {
@@ -48,7 +48,9 @@ Asteroids.game.Board = (function (spec) {
         // update ufo
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime);
-        })
+            ufo.ufoShoot(elapsedTime, spec.gamePieces.player.coords);
+            ufo.updateShots(elapsedTime);
+        });
 
         // detect colision
         // check player with asteroids
@@ -151,7 +153,8 @@ Asteroids.game.Board = (function (spec) {
             boardSize: spec.boardDimmensions,
             size: 35,
             shotImgSource: './assets/green_laser.png',
-            shotSpeed: 50,
+            shotSpeed: 0.001,
+            shot: spec.constructors.shot,
             ufoType: 'small',
             maxProjectiles: 40,
         });
