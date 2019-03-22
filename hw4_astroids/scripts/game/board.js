@@ -87,7 +87,21 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
 
         // fill board with asteroids
+        cleanAsteroids();
         fillAsteroids();
+        // console.log('asteroids', spec.gamePieces.asteroids);
+    }
+
+    // removes any asteroids that are off the screen
+    function cleanAsteroids() {
+        spec.gamePieces.asteroids = spec.gamePieces.asteroids.filter(asteroid => {
+            if (_shouldRemoveAsteroid(asteroid.coords, asteroid.size)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
     }
 
     // fills the gamepieces with large asteroids to the max number
@@ -187,17 +201,27 @@ Asteroids.game.Board = (function (spec) {
             yVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
         }
         // lower left quadrant
-        else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
+        else if (coords.y > spec.boardDimmensions.y && coords.x < spec.boardDimmensions.x / 2) {
             xVel = _nextRange(spec.asteroidInitMinVel, spec.asteroidInitMaxVel);
             yVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
         }
         // lower right quadrant
-        else if (coords.y > spec.boardDimmensions && coords.x < spec.boardDimmensions.x / 2) {
+        else if (coords.y > spec.boardDimmensions.y && coords.x < spec.boardDimmensions.x / 2) {
             xVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
             yVel = _nextRange(-spec.asteroidInitMaxVel, -spec.asteroidInitMinVel);
         }
 
         return { x: xVel, y: yVel };
+    }
+
+    function _shouldRemoveAsteroid(coords, size) {
+        if (coords.x < 0 - size
+            || coords.y < 0 - size
+            || coords.y > spec.boardDimmensions.y + size
+            || coords.x > spec.boardDimmensions.x + size) {
+            return true;
+        }
+        return false;
     }
 
     function _nextRange(min, max) {
