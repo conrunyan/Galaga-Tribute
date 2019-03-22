@@ -79,12 +79,12 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             imageSrc: 'assets/background_gif.gif',
             boardDimmensions: boardDim,
             asteroidSize: 80,
-            asteroidInitMinVel: 5,
-            asteroidInitMaxVel: 15,
+            asteroidInitMinVel: 15,
+            asteroidInitMaxVel: 35,
             maxNumAsteroids: 10,
         })
         console.log('Configuring board...');
-        gameBoard.generateAsteroids();
+        gameBoard.generateAsteroids(10);
         console.log('game-board', gameBoard);
         console.log('SCREENS:', screens)
         registerKeyEvents();

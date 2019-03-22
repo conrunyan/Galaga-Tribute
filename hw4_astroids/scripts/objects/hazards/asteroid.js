@@ -20,7 +20,7 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        console.log('loaded image...');
+        // console.log('loaded image...');
         this.isReady = true;
     };
 

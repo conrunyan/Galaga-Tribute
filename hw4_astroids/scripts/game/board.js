@@ -22,7 +22,7 @@ Asteroids.game.Board = (function (spec) {
     backgroundImg.isReady = false;
     backgroundImg.src = spec.imageSrc;
     backgroundImg.onload = function () {
-        console.log('loaded image...');
+        // console.log('loaded image...');
         this.isReady = true;
     };
 
@@ -60,7 +60,6 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.player.projectiles.forEach(shot => {
             // console.log('shot', shot);
             spec.gamePieces.asteroids.forEach(asteroid => {
-                console.log('shot->asteroid', asteroid.center.x, asteroid.center.y);
                 let shotAstDist = _getDistanceBetweenPoints(shot.center, asteroid.center);
                 let sumOfRadi = shot.radius + asteroid.radius;
                 // console.log('SAD:', shotAstDist, 'SOR:', sumOfRadi);
@@ -86,12 +85,26 @@ Asteroids.game.Board = (function (spec) {
 
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.filter(asteroid => !asteroid.didCollide);
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
+
+        // fill board with asteroids
+        fillAsteroids();
+    }
+
+    // fills the gamepieces with large asteroids to the max number
+    function fillAsteroids() {
+        let numLargeToMake = spec.maxNumAsteroids;
+        spec.gamePieces.asteroids.forEach(asteroid => {
+            if (asteroid.asteroidType === 'large') {
+                numLargeToMake -= 1;
+            }
+        })
+        generateAsteroids(numLargeToMake);
     }
 
     // split asteroid in chunks, returning a list of asteroids
     // of half the size moving in random, opposite directions
     function splitAsteroid(astToSplit) {
-        console.log('calling split asteroids...');
+        // console.log('calling split asteroids...');
         let numToCreate = astToSplit.breaksInto;
         let newAsts = [];
         let newType;
@@ -128,13 +141,11 @@ Asteroids.game.Board = (function (spec) {
         return newAsts;
     }
 
-    function generateAsteroids() {
-        console.log('asteroid count: ', spec.gamePieces.asteroids.length);
-        console.log('expeccted count: ', spec.maxNumAsteroids);
-        for (let i = 0; i < spec.maxNumAsteroids - spec.gamePieces.asteroids.length; i++) {
+    function generateAsteroids(numToGenerate) {
+        for (let i = 0; i < numToGenerate; i++) {
             let newAst = _getNewAsteroid();
-            console.log(i);
-            console.log(`new asteroid - Coords: {x:${newAst.coords.x}, y:${newAst.coords.y}} Vel: {x: ${newAst.velocities.x}, y: ${newAst.velocities.y}}`)
+            //console.log(i);
+            //console.log(`new asteroid - Coords: {x:${newAst.coords.x}, y:${newAst.coords.y}} Vel: {x: ${newAst.velocities.x}, y: ${newAst.velocities.y}}`)
             spec.gamePieces.asteroids.push(newAst);
         }
     }

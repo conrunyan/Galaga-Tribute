@@ -25,7 +25,7 @@ Asteroids.objects.player.Player = function (spec) {
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        console.log('loaded image...');
+        // console.log('loaded image...');
         this.isReady = true;
     };
 
@@ -89,7 +89,7 @@ Asteroids.objects.player.Player = function (spec) {
 
     function playerShoot(elapsedTime) {
         if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval) {
-            console.log('creating new shot...');
+            // console.log('creating new shot...');
             let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
             let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
             let newShot = spec.shot.PlayerShot({
