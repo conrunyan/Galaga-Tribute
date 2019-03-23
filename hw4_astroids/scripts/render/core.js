@@ -38,6 +38,17 @@ Asteroids.graphics = (function () {
         context.restore();
     }
 
+    function drawText(text, coords, color, size) {
+        context.save();
+
+        context.fillStyle = color;
+        context.font = `${size}pt Comic Sans MS`;
+        context.textAlight = 'left';
+        context.fillText(text, coords.x, coords.y);
+
+        context.restore();
+    }
+
     function drawSprite(image, center, rotation, size, subImageLocations) {
         context.save();
 
@@ -88,6 +99,7 @@ Asteroids.graphics = (function () {
         drawTexture: drawTexture,
         drawPlayer: drawPlayer,
         drawSprite: drawSprite,
+        drawText: drawText,
     };
 
     return api;

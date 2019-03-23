@@ -219,7 +219,6 @@ Asteroids.game.Board = (function (spec) {
             ufoType: 'small',
             maxProjectiles: 40,
         });
-        console.log(spec.gamePieces.ufos)
         spec.gamePieces.ufos.push(smallUFO);
     }
 
@@ -235,7 +234,6 @@ Asteroids.game.Board = (function (spec) {
             ufoType: 'large',
             maxProjectiles: 40,
         });
-        console.log(spec.gamePieces.ufos)
         spec.gamePieces.ufos.push(largeUFO);
     }
 

@@ -21,6 +21,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Renderers & Particle System
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
+    let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({systems: []});
 
     let myPlayer = player.Player({
@@ -60,9 +61,9 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         myGraphics.clear();
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y});
-        // myPlayerRenderer.renderPlayer(myPlayer);
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
+        gameStatRenderer.renderStats(myPlayer, gameBoard);
     }
 
     function init() {
