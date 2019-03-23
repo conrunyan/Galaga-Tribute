@@ -3,9 +3,25 @@
 // This function performs the one-time game initialization.
 //
 //------------------------------------------------------------------
-Asteroids.game.sounds.initialize = () {
+Asteroids.sounds.Player = function() {
     'use strict';
 
+    console.log('initializing...');
+    initialize();
+
+    function playSound(whichSound) {
+        Asteroids.sounds[whichSound].load();
+        Asteroids.sounds[whichSound].play();
+    }
+
+    let api = {
+        playSound: playSound
+    }
+
+    return api;
+}();
+
+function initialize() {
     function loadSound(source, label, idButton) {
         let sound = new Audio();
         sound.addEventListener('canplay', function () {
@@ -33,12 +49,9 @@ Asteroids.game.sounds.initialize = () {
     }
 
     function loadAudio() {
-        Asteroids.sounds = {}
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
         Asteroids.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
     }
-
-    console.log('initializing...');
 
     loadAudio();
 }

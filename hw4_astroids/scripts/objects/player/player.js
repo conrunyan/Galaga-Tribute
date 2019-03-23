@@ -31,8 +31,8 @@ Asteroids.objects.player.Player = function (spec) {
 
     let projectiles = [];
     let turnSpeed = 200; // not sure what unit yet
-    let timeSinceLastShot = 250;
-    let shotInterval = 250;
+    let timeSinceLastShot = 300;
+    let shotInterval = 300;
     let didCollide = false;
     let lives = 3;
     let score = 0;
@@ -106,7 +106,7 @@ Asteroids.objects.player.Player = function (spec) {
             projectiles.push(newShot);
             timeSinceLastShot = 0;
             // trigger sound of shot
-            // spec.sounds.playSound('audio/player-laser-shot');
+            spec.sounds.playSound('audio/player-laser-shot');
         }
         else {
             timeSinceLastShot += elapsedTime
