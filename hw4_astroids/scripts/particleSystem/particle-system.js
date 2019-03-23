@@ -2,11 +2,19 @@ Asteroids.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
 
+    let image = new Image();
+    let isReady = false;
+
+    image.onload = () => {
+        isReady = true;
+    };
+    image.src = spec.imageSrc;
+
     function create() {
         let size = Random.nextGaussian(spec.size.mean, spec.size.stdev);
         let p = {
             center: { x: spec.center.x, y: spec.center.y },
-            size: { x: size, y: size },
+            size: { width: size, height: size },
             direction: Random.nextCircleVector(),
             speed: Random.nextGaussian(spec.speed.mean, spec.speed.stdev), // pixels per second
             rotation: 0,
@@ -46,8 +54,10 @@ Asteroids.particles.ParticleSystem = function (spec, Random) {
     }
 
     let api = {
+        get particles() { return particles; },
+        get image() { return image; },
+        get isReady() { return isReady },
         update: update,
-        get particles() { return particles; }
     };
 
     return api;

@@ -105,7 +105,7 @@ Asteroids.objects.player.Player = function (spec) {
             projectiles.push(newShot);
             timeSinceLastShot = 0;
             // trigger sound of shot
-            spec.sounds.playSound('audio/player-laser-shot');
+            // spec.sounds.playSound('audio/player-laser-shot');
         }
         else {
             timeSinceLastShot += elapsedTime

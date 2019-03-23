@@ -21,7 +21,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Renderers & Particle System
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
-    let particleSystem = partSys.ParticleSystem(myRandom);
+    let particleSystemController = partSys.ParticleSystemController();
 
     let myPlayer = player.Player({
         coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
@@ -49,7 +49,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
         gameBoard.updateClock(totalElapsedTime);
-        particleSystem.update(elapsedTime);
+        particleSystemController.update(elapsedTime);
         totalElapsedTime += elapsedTime;
     }
 
@@ -59,6 +59,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y});
         // myPlayerRenderer.renderPlayer(myPlayer);
         boardRenderer.renderPieces(gameBoard);
+        particleSystemRenderer.render(particleSystemController.systems);
     }
 
     function init() {
@@ -80,21 +81,25 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             asteroidInitMinVel: 15,
             asteroidInitMaxVel: 35,
             maxNumAsteroids: 10,
-            particleSystem: particleSystem,
-        })
+            particleSystem: particleSystemController,
+        });
+
         console.log('Configuring board...');
         gameBoard.generateAsteroids(10);
         console.log('game-board', gameBoard);
-        console.log('SCREENS:', screens)
+        console.log('SCREENS:', screens);
         registerKeyEvents();
         console.log(myPlayer);
+
         console.log('adding particle system');
-        particleSystem.addNewSystem({
+        let newPS = partSys.ParticleSystem({
             center: { x: 300, y: 300 },
             size: { mean: 15, stdev: 5 },
             speed: { mean: 65, stdev: 35 },
-            lifetime: { mean: 4, stdev: 1 }
-        });
+            lifetime: { mean: 4, stdev: 1 },
+            imageSrc: './assets/green_laser.png',
+        }, myRandom)
+        particleSystemController.addNewSystem(newPS);
         requestAnimationFrame(gameLoop);
     }
 

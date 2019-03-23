@@ -3,14 +3,16 @@ Asteroids.particles.ParticleSystemController = function () {
     let systems = {};
 
     function addNewSystem(spec) {
-        systems[spec] = {};
+        console.log('pre-systems', systems);
+        systems[spec] = spec;
+        console.log('post-systems', systems);
     }
 
 
 
     function update(elapsedTime) {
         Object.getOwnPropertyNames(systems).forEach(system => {
-            system.update(elapsedTime);
+            systems[system].update(elapsedTime);
         });
 
         // TODO: Determine when a system needs to be removed

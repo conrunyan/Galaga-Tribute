@@ -1,22 +1,19 @@
-Asteroids.render.ParticleSystem = function (systems, graphics, imageSrc) {
-    let image = new Image();
-    let isReady = false;
+Asteroids.render.ParticleSystem = (function (graphics) {
+    'use strict';
 
-    image.onload = () => {
-        isReady = true;
-    };
-    image.src = imageSrc;
-
-    function render() {
-        // Object.getOwnPropertyNames(systems) {
-
-        // }
-        if (isReady) {
-            Object.getOwnPropertyNames(system.particles).forEach(function (value) {
-                let particle = system.particles[value];
-                graphics.drawTexture(image, particle.center, particle.rotation, particle.size);
-            });
-        }
+    function render(systems) {
+        // system controller
+        // console.log('rendering particle');
+        Object.getOwnPropertyNames(systems).forEach(system => {
+            // individual system
+            // console.log('system', system);
+            if (systems[system].isReady) {
+                Object.getOwnPropertyNames(systems[system].particles).forEach(function (value) {
+                    let particle = systems[system].particles[value];
+                    graphics.drawTexture(systems[system].image, particle.center, particle.rotation, particle.size);
+                });
+            }
+        });
     }
 
     let api = {
@@ -24,4 +21,4 @@ Asteroids.render.ParticleSystem = function (systems, graphics, imageSrc) {
     };
 
     return api;
-};
+}(Asteroids.graphics));
