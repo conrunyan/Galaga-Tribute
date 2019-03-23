@@ -113,6 +113,12 @@ Asteroids.objects.player.Player = function (spec) {
         }
     }
 
+    function respawn(safeCoords) {
+        removeLife();
+        didCollide = false;
+        spec.coords = safeCoords;
+    }
+
     function removeLife() {
         lives -= 1;
     }
@@ -181,6 +187,7 @@ Asteroids.objects.player.Player = function (spec) {
         removeLife: removeLife,
         addLife: addLife,
         increaseScore: increaseScore,
+        respawn: respawn,
     };
 
     return api;

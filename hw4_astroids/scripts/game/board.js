@@ -28,6 +28,9 @@ Asteroids.game.Board = (function (spec) {
     let totalElapsedTime = 0;
     let ufoInterval = 5000;
     let ufoIntervalLarge = 30000;
+    let playerDeathInterval = 2000;
+    let timeSincePlayerDeath = 0;
+    let playerDead = false;
     let timeUntilSmallUFO = ufoInterval;
     let timeUntilLargeUFO = ufoIntervalLarge;
 
@@ -63,7 +66,7 @@ Asteroids.game.Board = (function (spec) {
             let playerAstDist = _getDistanceBetweenPoints(asteroid.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + asteroid.radius;
             if (playerAstDist < sumOfRadi) {
-                spec.gamePieces.player.setDidCollide(true);
+                playerDied();
                 asteroid.setDidCollide(true);
                 astToSplit.push(asteroid);
             }
@@ -89,10 +92,23 @@ Asteroids.game.Board = (function (spec) {
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
             if (playerUfoDist < sumOfRadi) {
-                spec.gamePieces.player.setDidCollide(true);
+                playerDied();
                 ufo.setDidCollide(true);
             }
         });
+        // check player with ufo shots
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            ufo.projectiles.forEach(shot => {
+                let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
+                let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
+                if (ufoPlayerShot < sumOfRadi) {
+                    playerDied();
+                    shot.setDidCollide(true);
+                }
+            })
+        });
+
         // check projectiles with ufos
         spec.gamePieces.ufos.forEach(ufo => {
             // console.log('ufo', ufo);
@@ -135,10 +151,36 @@ Asteroids.game.Board = (function (spec) {
         totalElapsedTime = totalTime;
     }
 
+    function explosion(ast, image, time, size) {
+        let newPS = spec.constructors.particleSystem.ParticleSystem({
+            center: { x: ast.center.x, y: ast.center.y },
+            size: size,
+            speed: { mean: 65, stdev: 35 },
+            lifetime: { mean: 4, stdev: 1 },
+            totalLife: time,
+            density: 5,
+            imageSrc: image,
+        }, spec.Random)
+        spec.particleController.addNewSystem(newPS);
+    }
+
     /////////////////////////////////
     //        PLAYER FUNCTIONS     //
     /////////////////////////////////
 
+    function playerDied(elapsedTime) {
+        spec.gamePieces.player.setDidCollide(true);
+        playerDead = true;
+        explosion(spec.gamePieces.player, './assets/firework_yellow.png', 0.75, { mean: 5, stdev: 1 });
+        if (timeSincePlayerDeath >= playerDeathInterval) {
+            spec.gamePieces.player.respawn();
+            timeSincePlayerDeath = 0;
+            playerDead = false;
+        }
+        else if (playerDead) {
+            timeSincePlayerDeath += elapsedTime;
+        }
+    }
 
     /////////////////////////////////
     //        UFO   FUNCTIONS      //
@@ -180,7 +222,7 @@ Asteroids.game.Board = (function (spec) {
                 return true;
             }
             else {
-                explosion(ufo, './assets/firework_red1.png')
+                explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
                 return false;
             }
         }
@@ -269,7 +311,7 @@ Asteroids.game.Board = (function (spec) {
     // of half the size moving in random, opposite directions
     function splitAsteroid(astToSplit) {
         // console.log('calling split asteroids...');
-        explosion(astToSplit, './assets/firework_red2.png');
+        explosion(astToSplit, './assets/firework_red2.png', 0.75, { mean: 15, stdev: 5 });
         let numToCreate = astToSplit.breaksInto;
         let newAsts = [];
         let newType;
@@ -304,19 +346,6 @@ Asteroids.game.Board = (function (spec) {
         }
 
         return newAsts;
-    }
-
-    function explosion(ast, image) {
-        let newPS = spec.constructors.particleSystem.ParticleSystem({
-            center: { x: ast.center.x, y: ast.center.y },
-            size: { mean: 15, stdev: 5 },
-            speed: { mean: 65, stdev: 35 },
-            lifetime: { mean: 4, stdev: 1 },
-            totalLife: .75,
-            density: 5,
-            imageSrc: image,
-        }, spec.Random)
-        spec.particleController.addNewSystem(newPS);
     }
 
     function generateAsteroids(numToGenerate) {
