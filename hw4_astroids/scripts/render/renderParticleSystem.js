@@ -3,10 +3,6 @@ Asteroids.render.ParticleSystem = (function (graphics) {
 
     function render(systems) {
         // system controller
-        // console.log('rendering particle');
-        if (systems.length > 0) {
-            console.log('rendering particles...');
-        }
         systems.forEach(system => {
             // individual system
             // console.log('system', system);

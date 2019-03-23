@@ -35,6 +35,7 @@ Asteroids.objects.player.Player = function (spec) {
     let shotInterval = 250;
     let didCollide = false;
     let lives = 3;
+    let score = 0;
 
     function playerMoveLocation(elapsedTime) {
         // TODO: Add function here to move the player in a direction
@@ -120,6 +121,10 @@ Asteroids.objects.player.Player = function (spec) {
         lives += 1;
     }
 
+    function increaseScore(newScore) {
+        score += newScore;
+    }
+
     function setDidCollide(newVal) {
         didCollide = newVal;
     }
@@ -165,6 +170,7 @@ Asteroids.objects.player.Player = function (spec) {
         get didCollide() { return didCollide },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2),} },
         get lives() { return lives },
+        get score() { return score },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,
@@ -174,6 +180,7 @@ Asteroids.objects.player.Player = function (spec) {
         updateShots: updateShots,
         removeLife: removeLife,
         addLife: addLife,
+        increaseScore: increaseScore,
     };
 
     return api;

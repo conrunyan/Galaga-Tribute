@@ -41,6 +41,7 @@ Asteroids.objects.ufo.UFOLarge = function (spec) {
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
     let shotOffset = 300;
+    let points = 500;
 
     function ufoLargeMove(elapsedTime) {
         // TODO: Add function here to move the ufoLarge in a direction
@@ -165,6 +166,7 @@ Asteroids.objects.ufo.UFOLarge = function (spec) {
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get shouldExplode() { return lifeTime <= 0 },
+        get points() { return points },
         setDidCollide: setDidCollide,
         ufoMove: ufoLargeMove,
         ufoShoot: ufoLargeShootPlayer,

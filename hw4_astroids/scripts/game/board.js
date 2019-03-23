@@ -26,8 +26,8 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 120000;
-    let ufoIntervalLarge = 5000;
+    let ufoInterval = 5000;
+    let ufoIntervalLarge = 30000;
     let timeUntilSmallUFO = ufoInterval;
     let timeUntilLargeUFO = ufoIntervalLarge;
 
@@ -57,6 +57,7 @@ Asteroids.game.Board = (function (spec) {
         // detect colision
         // check player with asteroids
         // if distance between two centers is less than the sum of two radi
+        let astToSplit = [];
         spec.gamePieces.asteroids.forEach(asteroid => {
             // console.log('asteroid', asteroid);
             let playerAstDist = _getDistanceBetweenPoints(asteroid.center, spec.gamePieces.player.center);
@@ -64,10 +65,10 @@ Asteroids.game.Board = (function (spec) {
             if (playerAstDist < sumOfRadi) {
                 spec.gamePieces.player.setDidCollide(true);
                 asteroid.setDidCollide(true);
+                astToSplit.push(asteroid);
             }
         });
         // check projectiles with asteroids
-        let astToSplit = [];
         spec.gamePieces.player.projectiles.forEach(shot => {
             // console.log('shot', shot);
             spec.gamePieces.asteroids.forEach(asteroid => {
@@ -75,10 +76,10 @@ Asteroids.game.Board = (function (spec) {
                 let sumOfRadi = shot.radius + asteroid.radius;
                 // console.log('SAD:', shotAstDist, 'SOR:', sumOfRadi);
                 if (shotAstDist < sumOfRadi && !shot.didCollide) {
-                    // window.alert('HIT!');
                     shot.setDidCollide(true);
                     asteroid.setDidCollide(true);
                     astToSplit.push(asteroid);
+                    spec.gamePieces.player.increaseScore(asteroid.points);
                 }
             });
         });
@@ -101,6 +102,7 @@ Asteroids.game.Board = (function (spec) {
                 if (ufoShot < sumOfRadi) {
                     ufo.setDidCollide(true);
                     shot.setDidCollide(true);
+                    spec.gamePieces.player.increaseScore(ufo.points);
                 }
             })
 
@@ -134,6 +136,11 @@ Asteroids.game.Board = (function (spec) {
     }
 
     /////////////////////////////////
+    //        PLAYER FUNCTIONS     //
+    /////////////////////////////////
+
+
+    /////////////////////////////////
     //        UFO   FUNCTIONS      //
     /////////////////////////////////
 
@@ -149,7 +156,7 @@ Asteroids.game.Board = (function (spec) {
             }
         })
         if (!hasSmall && timeUntilSmallUFO <= 0) {
-            console.log('adding new UFO', timeUntilSmallUFO);
+            // console.log('adding new UFO', timeUntilSmallUFO);
             _addSmallUFO();
         }
         else {
@@ -157,7 +164,7 @@ Asteroids.game.Board = (function (spec) {
         }
 
         if (!hasLarge && timeUntilLargeUFO <= 0) {
-            console.log('adding new UFO', timeUntilSmallUFO);
+            // console.log('adding new UFO', timeUntilSmallUFO);
             _addLargeUFO();
         }
         else {
@@ -312,7 +319,6 @@ Asteroids.game.Board = (function (spec) {
             imageSrc: image,
         }, spec.Random)
         spec.particleController.addNewSystem(newPS);
-        console.log("ADDED NEW SYSTEM", spec.particleController.systems);
     }
 
     function generateAsteroids(numToGenerate) {

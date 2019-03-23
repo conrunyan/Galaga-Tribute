@@ -35,6 +35,12 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         'small': 25,
     }
 
+    let points = {
+        'large': 30,
+        'medium': 70,
+        'small': 120,
+    }
+
     let turnSpeed = 0.0125; // not sure what unit yet
     let didCollide = false;
 
@@ -66,6 +72,7 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
         get velocities() { return spec.velocities },
         get breaksInto() { return breaksInto[spec.asteroidType] },
         get asteroidType() { return spec.asteroidType },
+        get points() { return points[spec.asteroidType] },
         setDidCollide: setDidCollide,
         asteroidMoveLocation: asteroidMoveLocation,
     };

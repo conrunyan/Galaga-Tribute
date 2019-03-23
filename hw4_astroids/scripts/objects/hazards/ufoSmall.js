@@ -40,6 +40,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
     let shotSpeed = .15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
+    let points = 1000;
 
     function ufoSmallMove(elapsedTime) {
         // TODO: Add function here to move the ufoSmall in a direction
@@ -161,6 +162,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get shouldExplode() { return lifeTime <= 0},
+        get points() { return points },
         setDidCollide: setDidCollide,
         ufoMove: ufoSmallMove,
         ufoShoot: ufoSmallShootPlayer,

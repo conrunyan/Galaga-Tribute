@@ -1,11 +1,7 @@
 Asteroids.particles.ParticleSystemController = function (spec) {
-    let nextName = 1;
-    // let systems = [];
 
     function addNewSystem(newSystem) {
-        console.log('pre-systems', spec.systems);
         spec.systems.push(newSystem);
-        console.log('post-systems', spec.systems);
     }
 
 
