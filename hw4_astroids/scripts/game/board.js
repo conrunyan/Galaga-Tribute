@@ -27,7 +27,7 @@ Asteroids.game.Board = (function (spec) {
     };
     let totalElapsedTime = 0;
     let ufoInterval = 120000;
-    let ufoIntervalLarge = 60000;
+    let ufoIntervalLarge = 5000;
     let timeUntilSmallUFO = ufoInterval;
     let timeUntilLargeUFO = ufoIntervalLarge;
 
@@ -100,9 +100,10 @@ Asteroids.game.Board = (function (spec) {
                 let sumOfRadi = ufo.radius + shot.radius;
                 if (ufoShot < sumOfRadi) {
                     ufo.setDidCollide(true);
+                    shot.setDidCollide(true);
                 }
             })
-            
+
         });
         // split asteroids in two that have colided, then remove the original
         let newAsteroids = [];
@@ -121,8 +122,8 @@ Asteroids.game.Board = (function (spec) {
         // fill board with asteroids
         cleanAsteroids();
         fillAsteroids();
-        
-        
+
+
         // add or remove ufos if needed
         addUFOs(elapsedTime);
         removeUFOs();
@@ -132,9 +133,9 @@ Asteroids.game.Board = (function (spec) {
         totalElapsedTime = totalTime;
     }
 
-/////////////////////////////////
-//        UFO   FUNCTIONS      //
-/////////////////////////////////
+    /////////////////////////////////
+    //        UFO   FUNCTIONS      //
+    /////////////////////////////////
 
     function addUFOs(elapsedTime) {
         let hasSmall = false;
@@ -167,7 +168,16 @@ Asteroids.game.Board = (function (spec) {
     function removeUFOs() {
         let initSize = spec.gamePieces.ufos.length;
         // remove UFOs that collided or are out of time
-        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => !ufo.shouldExplode && !ufo.didCollide);
+        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
+            if (!ufo.shouldExplode && !ufo.didCollide) {
+                return true;
+            }
+            else {
+                explosion(ufo, './assets/firework_red1.png')
+                return false;
+            }
+        }
+        );
         let postSize = spec.gamePieces.ufos.length;
         // remove UFOs that have gone off the screen
         _cleanUFOsFromScreen();
@@ -208,7 +218,7 @@ Asteroids.game.Board = (function (spec) {
 
     function _addLargeUFO() {
         let largeUFO = spec.constructors.ufos.UFOLarge({
-            coords: { x: spec.boardDimmensions.x / 2, y: spec.boardDimmensions.y},
+            coords: { x: spec.boardDimmensions.x / 2, y: spec.boardDimmensions.y },
             imageSrc: './assets/alienshiptex.png',
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
@@ -223,9 +233,9 @@ Asteroids.game.Board = (function (spec) {
     }
 
 
-/////////////////////////////////
-//     ASTEROID FUNCTIONS      //
-/////////////////////////////////
+    /////////////////////////////////
+    //     ASTEROID FUNCTIONS      //
+    /////////////////////////////////
 
     // removes any asteroids that are off the screen
     function cleanAsteroids() {

@@ -52,6 +52,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         gameBoard.updateClock(totalElapsedTime);
         particleSystemController.update(elapsedTime);
         totalElapsedTime += elapsedTime;
+
+        // check for game loss condition
     }
 
     function render() {
@@ -105,6 +107,10 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // }, myRandom)
         // particleSystemController.addNewSystem(newPS);
         requestAnimationFrame(gameLoop);
+
+        // if (myPlayer.didCollide) {
+        //     window.alert('Collision');
+        // }
     }
 
     function gameLoop(time) {
