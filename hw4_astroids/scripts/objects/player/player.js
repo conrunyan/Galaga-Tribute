@@ -114,9 +114,10 @@ Asteroids.objects.player.Player = function (spec) {
     }
 
     function respawn(safeCoords) {
-        removeLife();
+        lives -= 1;
         didCollide = false;
         spec.coords = safeCoords;
+        spec.velocities = {x: 0, y: 0}
     }
 
     function removeLife() {

@@ -65,7 +65,7 @@ Asteroids.game.Board = (function (spec) {
             // console.log('asteroid', asteroid);
             let playerAstDist = _getDistanceBetweenPoints(asteroid.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + asteroid.radius;
-            if (playerAstDist < sumOfRadi) {
+            if (playerAstDist < sumOfRadi && !playerDead) {
                 playerDied();
                 asteroid.setDidCollide(true);
                 astToSplit.push(asteroid);
@@ -91,7 +91,7 @@ Asteroids.game.Board = (function (spec) {
             // console.log('ufo', ufo);
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
-            if (playerUfoDist < sumOfRadi) {
+            if (playerUfoDist < sumOfRadi && !playerDead) {
                 playerDied();
                 ufo.setDidCollide(true);
             }
@@ -102,7 +102,7 @@ Asteroids.game.Board = (function (spec) {
             ufo.projectiles.forEach(shot => {
                 let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
                 let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
-                if (ufoPlayerShot < sumOfRadi) {
+                if (ufoPlayerShot < sumOfRadi && !playerDead) {
                     playerDied();
                     shot.setDidCollide(true);
                 }
@@ -136,11 +136,11 @@ Asteroids.game.Board = (function (spec) {
         spec.gamePieces.asteroids = spec.gamePieces.asteroids.concat(newAsteroids);
 
         // check for player collision. subtract lives, if needed or end the game if out of lives
+        updatePlayerSpawn(elapsedTime);
 
         // fill board with asteroids
         cleanAsteroids();
         fillAsteroids();
-
 
         // add or remove ufos if needed
         addUFOs(elapsedTime);
@@ -168,12 +168,17 @@ Asteroids.game.Board = (function (spec) {
     //        PLAYER FUNCTIONS     //
     /////////////////////////////////
 
-    function playerDied(elapsedTime) {
-        spec.gamePieces.player.setDidCollide(true);
-        playerDead = true;
-        explosion(spec.gamePieces.player, './assets/firework_yellow.png', 0.75, { mean: 5, stdev: 1 });
-        if (timeSincePlayerDeath >= playerDeathInterval) {
-            spec.gamePieces.player.respawn();
+    function playerDied() {
+        if (!playerDead) {
+            spec.gamePieces.player.setDidCollide(true);
+            playerDead = true;
+            explosion(spec.gamePieces.player, './assets/firework_yellow.png', 0.75, { mean: 5, stdev: 1 });
+        }
+    }
+
+    function updatePlayerSpawn(elapsedTime) {
+        if (playerDead && timeSincePlayerDeath >= playerDeathInterval) {
+            spec.gamePieces.player.respawn({ x: 300, y: 300 });
             timeSincePlayerDeath = 0;
             playerDead = false;
         }
