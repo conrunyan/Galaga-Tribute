@@ -1,30 +1,26 @@
-Asteroids.particles.ParticleSystemController = function () {
+Asteroids.particles.ParticleSystemController = function (spec) {
     let nextName = 1;
-    let systems = {};
+    // let systems = [];
 
-    function addNewSystem(spec) {
-        console.log('pre-systems', systems);
-        systems[spec] = spec;
-        console.log('post-systems', systems);
+    function addNewSystem(newSystem) {
+        console.log('pre-systems', spec.systems);
+        spec.systems.push(newSystem);
+        console.log('post-systems', spec.systems);
     }
 
 
 
     function update(elapsedTime) {
-        Object.getOwnPropertyNames(systems).forEach(system => {
-            systems[system].update(elapsedTime);
-        });
+        spec.systems.forEach(system => {
+            system.update(elapsedTime);
+        })
 
-        // TODO: Determine when a system needs to be removed
-        Object.getOwnPropertyNames(systems).forEach(system => {
-            if (systems[system].timeLeft <= 0) {
-                delete systems[system]
-            }
-        });
+        // Determine when a system needs to be removed
+        spec.systems = spec.systems.filter(system => system.timeLeft >= 0);
     }
 
     let api = {
-        get systems() { return systems; },
+        get systems() { return spec.systems; },
         update: update,
         addNewSystem: addNewSystem,
     };

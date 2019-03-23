@@ -1,3 +1,5 @@
+// Fire works: https://opengameart.org/content/fireworks
+
 Asteroids.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
@@ -31,7 +33,7 @@ Asteroids.particles.ParticleSystem = function (spec, Random) {
 
         elapsedTime = elapsedTime / 1000;
 
-        for (let particle = 0; particle < 2; particle++) {
+        for (let particle = 0; particle < spec.density; particle++) {
             particles[nextName++] = create();
         }
 

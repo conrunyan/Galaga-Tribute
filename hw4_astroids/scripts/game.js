@@ -21,7 +21,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Renderers & Particle System
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
-    let particleSystemController = partSys.ParticleSystemController();
+    let particleSystemController = partSys.ParticleSystemController({systems: []});
 
     let myPlayer = player.Player({
         coords: { x: boardDim.x / 2, y: boardDim.y / 2 },

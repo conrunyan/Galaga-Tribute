@@ -4,13 +4,16 @@ Asteroids.render.ParticleSystem = (function (graphics) {
     function render(systems) {
         // system controller
         // console.log('rendering particle');
-        Object.getOwnPropertyNames(systems).forEach(system => {
+        if (systems.length > 0) {
+            console.log('rendering particles...');
+        }
+        systems.forEach(system => {
             // individual system
             // console.log('system', system);
-            if (systems[system].isReady) {
-                Object.getOwnPropertyNames(systems[system].particles).forEach(function (value) {
-                    let particle = systems[system].particles[value];
-                    graphics.drawTexture(systems[system].image, particle.center, particle.rotation, particle.size);
+            if (system.isReady) {
+                Object.getOwnPropertyNames(system.particles).forEach(value => {
+                    let particle = system.particles[value];
+                    graphics.drawTexture(system.image, particle.center, particle.rotation, particle.size);
                 });
             }
         });
