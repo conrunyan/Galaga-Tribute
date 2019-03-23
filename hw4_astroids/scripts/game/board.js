@@ -254,6 +254,7 @@ Asteroids.game.Board = (function (spec) {
     // of half the size moving in random, opposite directions
     function splitAsteroid(astToSplit) {
         // console.log('calling split asteroids...');
+        asteroidExplosion(astToSplit);
         let numToCreate = astToSplit.breaksInto;
         let newAsts = [];
         let newType;
@@ -288,6 +289,18 @@ Asteroids.game.Board = (function (spec) {
         }
 
         return newAsts;
+    }
+
+    function asteroidExplosion(ast) {
+        let newPS = spec.constructors.particleSystem.ParticleSystem({
+            center: { x: ast.center.x, y: ast.center.y },
+            size: { mean: 10, stdev: 3 },
+            speed: { mean: 65, stdev: 35 },
+            lifetime: { mean: 4, stdev: 1 },
+            totalLife: 2,
+            imageSrc: './assets/green_laser.png',
+        }, spec.Random)
+        spec.particleController.addNewSystem(newPS);
     }
 
     function generateAsteroids(numToGenerate) {

@@ -37,6 +37,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         shotSpeed: 50,
         maxProjectiles: 40,
         sounds: sounds,
+        particleController: particleSystemController,
     });
 
     let gameBoard;
@@ -74,6 +75,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
                 asteroids: asteroid,
                 ufos: ufos,
                 shot: projectiles,
+                particleSystem: partSys
             },
             imageSrc: 'assets/background_gif.gif',
             boardDimmensions: boardDim,
@@ -81,7 +83,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             asteroidInitMinVel: 15,
             asteroidInitMaxVel: 35,
             maxNumAsteroids: 10,
-            particleSystem: particleSystemController,
+            particleController: particleSystemController,
+            Random: myRandom,
         });
 
         console.log('Configuring board...');
@@ -92,15 +95,15 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         console.log(myPlayer);
 
         console.log('adding particle system');
-        let newPS = partSys.ParticleSystem({
-            center: { x: 300, y: 300 },
-            size: { mean: 15, stdev: 5 },
-            speed: { mean: 65, stdev: 35 },
-            lifetime: { mean: 4, stdev: 1 },
-            totalLife: 2,
-            imageSrc: './assets/green_laser.png',
-        }, myRandom)
-        particleSystemController.addNewSystem(newPS);
+        // let newPS = partSys.ParticleSystem({
+        //     center: { x: 300, y: 300 },
+        //     size: { mean: 15, stdev: 5 },
+        //     speed: { mean: 65, stdev: 35 },
+        //     lifetime: { mean: 4, stdev: 1 },
+        //     totalLife: 2,
+        //     imageSrc: './assets/green_laser.png',
+        // }, myRandom)
+        // particleSystemController.addNewSystem(newPS);
         requestAnimationFrame(gameLoop);
     }
 
