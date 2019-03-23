@@ -97,6 +97,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             size: { mean: 15, stdev: 5 },
             speed: { mean: 65, stdev: 35 },
             lifetime: { mean: 4, stdev: 1 },
+            totalLife: 2,
             imageSrc: './assets/green_laser.png',
         }, myRandom)
         particleSystemController.addNewSystem(newPS);

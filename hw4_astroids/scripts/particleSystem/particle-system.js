@@ -1,6 +1,7 @@
 Asteroids.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
+    let timeAliveSoFar = 0;
 
     let image = new Image();
     let isReady = false;
@@ -51,12 +52,15 @@ Asteroids.particles.ParticleSystem = function (spec, Random) {
         for (let particle = 0; particle < removeMe.length; particle++) {
             delete particles[removeMe[particle]];
         }
+
+        timeAliveSoFar += elapsedTime;
     }
 
     let api = {
         get particles() { return particles; },
         get image() { return image; },
         get isReady() { return isReady },
+        get timeLeft() { return spec.totalLife - timeAliveSoFar },
         update: update,
     };
 

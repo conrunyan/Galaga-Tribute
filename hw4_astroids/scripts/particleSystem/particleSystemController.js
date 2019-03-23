@@ -16,6 +16,11 @@ Asteroids.particles.ParticleSystemController = function () {
         });
 
         // TODO: Determine when a system needs to be removed
+        Object.getOwnPropertyNames(systems).forEach(system => {
+            if (systems[system].timeLeft <= 0) {
+                delete systems[system]
+            }
+        });
     }
 
     let api = {
