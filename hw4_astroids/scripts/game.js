@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds, partSys, myRandom) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
@@ -18,9 +18,10 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         this.isReady = true;
     };
 
-    // Renderers
-    // let myPlayerRenderer = renderer.Player
+    // Renderers & Particle System
     let boardRenderer = renderer.Board;
+    let particleSystemRenderer = renderer.ParticleSystem;
+    let particleSystem = partSys.ParticleSystem(myRandom);
 
     let myPlayer = player.Player({
         coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
@@ -48,6 +49,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
         gameBoard.updateClock(totalElapsedTime);
+        particleSystem.update(elapsedTime);
         totalElapsedTime += elapsedTime;
     }
 
@@ -78,6 +80,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             asteroidInitMinVel: 15,
             asteroidInitMaxVel: 35,
             maxNumAsteroids: 10,
+            particleSystem: particleSystem,
         })
         console.log('Configuring board...');
         gameBoard.generateAsteroids(10);
@@ -85,6 +88,13 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         console.log('SCREENS:', screens)
         registerKeyEvents();
         console.log(myPlayer);
+        console.log('adding particle system');
+        particleSystem.addNewSystem({
+            center: { x: 300, y: 300 },
+            size: { mean: 15, stdev: 5 },
+            speed: { mean: 65, stdev: 35 },
+            lifetime: { mean: 4, stdev: 1 }
+        });
         requestAnimationFrame(gameLoop);
     }
 
@@ -111,4 +121,4 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     // Start of game
     init();
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds));
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds, Asteroids.particles, Asteroids.utils.Random));

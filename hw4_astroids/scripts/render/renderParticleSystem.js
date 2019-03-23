@@ -1,4 +1,4 @@
-Asteroids.render.ParticleSystem = function (system, graphics, imageSrc) {
+Asteroids.render.ParticleSystem = function (systems, graphics, imageSrc) {
     let image = new Image();
     let isReady = false;
 
@@ -8,6 +8,9 @@ Asteroids.render.ParticleSystem = function (system, graphics, imageSrc) {
     image.src = imageSrc;
 
     function render() {
+        // Object.getOwnPropertyNames(systems) {
+
+        // }
         if (isReady) {
             Object.getOwnPropertyNames(system.particles).forEach(function (value) {
                 let particle = system.particles[value];

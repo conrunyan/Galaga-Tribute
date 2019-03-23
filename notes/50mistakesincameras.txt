@@ -1,0 +1,41 @@
+Game Camera Mistakes:
+    - 3 styles:
+        - Fixed angle third person
+        - Dynamic third person
+        - First person
+
+    Issues:
+        1 - Using a dynamic camera whena nother approach would work
+            - recommends fixed angle and first person
+        2 - designing levels and camera behaviors that don't match
+        3 - Using global coordinates to persist the gamera state
+            - base it on avatar placement
+            - use Euler angles
+        4 - Using camera distance likely to break line-of-sight
+        5 - ALlowing obstacles to break line-of-sight from side
+        6 - Pushing away from an obstacle while player is tring to swing towards it
+        7 - Letting player push the camera inside an obstacle
+        8 - Letting independent forces compete to push the camera
+        9 - Keeping narrow columns from breaking line-of-sight
+        10 - Letting camera intersect narrow columns
+        11 - Interpreting a hill as a wall to be avoided
+        12 - Swinging sideways when occluders come from behind
+        13 - Letting camera's near clipping plane interesect the avatar
+        14 - Use the same camera distance for all angles
+        15 - using same fov for worm's eye view
+        16 - shiting pitch, dtsnace, and fov independently
+        17 - not cutting when the avatar passes through opaque areas
+        18 - letting cuts remap direction control
+        19 - breaking player's sense of direction
+        20 - viloating the 180 degree rules
+            - Don't rotate camera so much that character swaps
+        21 - focusing only on the avatar
+        22 - leaving camera movement soley to the player
+        23 - leaving camera yaw alone as player is running
+        24 - making it hard to judge distances
+        25 - looking straight ahead as the avatar approaches a cliff
+        26 - keeping camera level when the avatar is running on a slope
+        27 - misusing the rule of thirds
+        28 - using same logic for ground and air motion
+        29 - relying entirely on procedural camera behaviors
+        30 - letting players make themselves lost and confused

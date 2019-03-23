@@ -1,4 +1,4 @@
-Asteroids.particles.ParticleSystem = function (spec) {
+Asteroids.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
 
