@@ -28,9 +28,6 @@ function initialize() {
             console.log(`${source} is ready to play`);
         });
         sound.addEventListener('play', function () {
-            let elementButton = document.getElementById(idButton);
-            elementButton.innerHTML = label + ' - Pause!'
-            console.log(`${source} started playing`);
         });
         sound.addEventListener('pause', function () {
             console.log(`${source} paused`);
@@ -42,7 +39,7 @@ function initialize() {
             console.log(`${source} progress in loading`);
         });
         sound.addEventListener('timeupdate', function () {
-            console.log(`${source} time update: ${this.currentTime}`);
+            // console.log(`${source} time update: ${this.currentTime}`);
         });
         sound.src = source;
         return sound;

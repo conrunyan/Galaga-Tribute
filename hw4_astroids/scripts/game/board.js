@@ -178,7 +178,8 @@ Asteroids.game.Board = function (spec) {
 
     function updatePlayerSpawn(elapsedTime) {
         if (playerDead && timeSincePlayerDeath >= playerDeathInterval) {
-            spec.gamePieces.player.respawn({ x: 300, y: 300 });
+            let newCoords = _getSafePlayerCoords();
+            spec.gamePieces.player.respawn(newCoords);
             timeSincePlayerDeath = 0;
             playerDead = false;
         }
@@ -245,8 +246,8 @@ Asteroids.game.Board = function (spec) {
                 largeUFOAttacking = true;
             }
         });
-        console.log('Small UFO', smallUFOAttacking);
-        console.log('Large UFO', largeUFOAttacking);
+        // console.log('Small UFO', smallUFOAttacking);
+        // console.log('Large UFO', largeUFOAttacking);
         // reset ufo time if needed
         timeUntilSmallUFO = smallUFOAttacking ? 0 : timeUntilSmallUFO;
         timeUntilLargeUFO = largeUFOAttacking ? 0 : timeUntilLargeUFO;
@@ -444,8 +445,33 @@ Asteroids.game.Board = function (spec) {
         return result
     }
 
+    // returns coords in a "safe" area
     function _getSafePlayerCoords() {
-        
+        let searchSegments = 12;
+        let newPlayerCoords = {x: 0, y: 0};
+        // search horizontal
+        let xSize = spec.boardDimmensions.x;
+        let ySize = spec.boardDimmensions.y;
+        for (let xSegment = 2; xSegment < searchSegments; xSegment++) {
+            let currentXCoord = xSize / xSegment
+            for (let ySegment = 2; ySegment < searchSegments; ySegment++) {
+                let currentYCoord = ySize / ySegment;
+                let searchArea = { 
+                    center: {x: currentXCoord, y: currentYCoord},
+                    radius: 200,
+                }
+                // search all asteroids, and determine if they're in the search radius.
+                // If not, put the ship there
+                spec.gamePieces.asteroids.forEach(asteroid => {
+                    let asteroidSearchDist = _getDistanceBetweenPoints(searchArea.center, asteroid.center);
+                    let sumOfRadi = searchArea.radius + asteroid.radius;
+                    if (!(asteroidSearchDist < sumOfRadi)) {
+                        return searchArea.center;
+                    }
+                })
+            }
+        }
+        return newPlayerCoords;
     }
 
     let api = {
