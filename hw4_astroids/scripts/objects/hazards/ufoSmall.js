@@ -99,14 +99,16 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y -= (movementSpeed * elapsedTime);
     }
 
-    function ufoSmallShootPlayer(elapsedTime, playerCoords) {
-        let oLine = playerCoords.y - spec.coords.y;
-        let aLine = playerCoords.x - spec.coords.x;
-        let angle = Math.atan(oLine, aLine);
-        let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
-        let tmpShotXVel = (shotSpeed * aLine) / dist;
-        let tmpShotYVel = (shotSpeed * oLine) / dist;
-        ufoSmallShoot(elapsedTime, {x: tmpShotXVel, y: tmpShotYVel});
+    function ufoSmallShootPlayer(elapsedTime, playerCoords, playerDead) {
+        if (!playerDead) {
+            let oLine = playerCoords.y - spec.coords.y;
+            let aLine = playerCoords.x - spec.coords.x;
+            let angle = Math.atan(oLine, aLine);
+            let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
+            let tmpShotXVel = (shotSpeed * aLine) / dist;
+            let tmpShotYVel = (shotSpeed * oLine) / dist;
+            ufoSmallShoot(elapsedTime, { x: tmpShotXVel, y: tmpShotYVel });
+        }
     }
 
     function ufoSmallShoot(elapsedTime, newVelocity) {
@@ -161,7 +163,7 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
         get didCollide() { return didCollide },
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
-        get shouldExplode() { return lifeTime <= 0},
+        get shouldExplode() { return lifeTime <= 0 },
         get points() { return points },
         setDidCollide: setDidCollide,
         ufoMove: ufoSmallMove,

@@ -1,4 +1,4 @@
-Asteroids.screens['asteroids-board'] = (function (controller) {
+Asteroids.screens['asteroids-board'] = (function (controller, sounds) {
     'use strict';
 
     function initialize() {
@@ -11,6 +11,8 @@ Asteroids.screens['asteroids-board'] = (function (controller) {
     function run() {
         console.log('on the game screen');
         // let myGame = game.Main();
+        let menuSound = document.getElementById('menu-theme');
+        sounds.playSound('audio/game-music')
         controller.gameInitFunc();
     }
 
@@ -18,4 +20,4 @@ Asteroids.screens['asteroids-board'] = (function (controller) {
         initialize: initialize,
         run: run,
     };
-}(Asteroids.screens.Controller));
+}(Asteroids.screens.Controller, Asteroids.sounds.Player));

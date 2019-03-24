@@ -26,7 +26,7 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 5000;
+    let ufoInterval = 60000;
     let ufoIntervalLarge = 30000;
     let playerDeathInterval = 2000;
     let timeSincePlayerDeath = 0;
@@ -53,7 +53,7 @@ Asteroids.game.Board = (function (spec) {
         // update ufo
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime);
-            ufo.ufoShoot(elapsedTime, spec.gamePieces.player.coords);
+            ufo.ufoShoot(elapsedTime, spec.gamePieces.player.coords, playerDead);
             ufo.updateShots(elapsedTime);
         });
 

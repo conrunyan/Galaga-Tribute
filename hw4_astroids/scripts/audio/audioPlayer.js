@@ -51,6 +51,8 @@ function initialize() {
     function loadAudio() {
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
         Asteroids.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
+        Asteroids.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
+        Asteroids.sounds['audio/game-music'] = loadSound('assets/sounds/11 Meteo.mp3', 'Sound 3', 'id-play1');
     }
 
     loadAudio();
