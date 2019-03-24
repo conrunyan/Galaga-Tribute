@@ -26,7 +26,7 @@ Asteroids.game.Board = function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 20000;
+    let ufoInterval = 45000;
     let ufoIntervalLarge = 30000;
     let playerDeathInterval = 2000;
     let timeSincePlayerDeath = 0;
@@ -256,8 +256,8 @@ Asteroids.game.Board = function (spec) {
         // console.log('Small UFO', smallUFOAttacking);
         // console.log('Large UFO', largeUFOAttacking);
         // reset ufo time if needed
-        timeUntilSmallUFO = smallUFOAttacking ? 0 : timeUntilSmallUFO;
-        timeUntilLargeUFO = largeUFOAttacking ? 0 : timeUntilLargeUFO;
+        timeUntilSmallUFO = smallUFOAttacking ? ufoInterval : timeUntilSmallUFO;
+        timeUntilLargeUFO = largeUFOAttacking ? ufoIntervalLarge : timeUntilLargeUFO;
     }
 
     function _cleanUFOsFromScreen() {
