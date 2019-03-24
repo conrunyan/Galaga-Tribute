@@ -25,6 +25,14 @@ Asteroids.utils.Random = (function () {
         };
     }
 
+    function nextConeVector(centerAngle, range) {
+        let angle = nextRange(centerAngle - range, centerAngle + range) * 2 * Math.PI;
+        return {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        };
+    }
+
     //
     // This is used to give a small performance optimization in generating gaussian random numbers.
     let usePrevious = false;
@@ -66,6 +74,7 @@ Asteroids.utils.Random = (function () {
         nextDouble: nextDouble,
         nextRange: nextRange,
         nextCircleVector: nextCircleVector,
+        nextConeVector: nextConeVector,
         nextGaussian: nextGaussian
     };
 

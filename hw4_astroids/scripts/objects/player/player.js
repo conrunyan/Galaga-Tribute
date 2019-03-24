@@ -37,9 +37,25 @@ Asteroids.objects.player.Player = function (spec) {
     let lives = 3;
     let score = 0;
     let level = 1;
+    let lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
     function playerMoveLocation(elapsedTime) {
-        // TODO: Add function here to move the player in a direction
+        // check velocity and see if it's changed. If so, display engine particles
+        if (lastVelocity.x !== spec.velocities.x && lastVelocity.y !== spec.velocities.y) {
+            let shipCenter = { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), };
+            let newPS = spec.partSys.ParticleSystemThruster({
+                center: { x: shipCenter.x, y: shipCenter.y },
+                size: { mean: 15, stdev: 5 },
+                speed: { mean: 65, stdev: 35 },
+                lifetime: { mean: .5, stdev: .25 },
+                totalLife: elapsedTime / 1000,
+                imageSrc: './assets/green_laser.png',
+                startAngle: spec.rotation - 180,
+                range: 15,
+                density: 2,
+            }, spec.myRandom)
+            spec.particleController.addNewSystem(newPS);
+        }
         let dx = spec.velocities.x * elapsedTime / 1000;
         let dy = spec.velocities.y * elapsedTime / 1000;
         spec.coords.x += dx;
@@ -61,6 +77,8 @@ Asteroids.objects.player.Player = function (spec) {
         }
         // console.log('player coords: ', spec.coords);
         // console.log('dX:', dx, 'dY:', dy);
+
+        lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
     }
 
@@ -118,14 +136,14 @@ Asteroids.objects.player.Player = function (spec) {
         lives -= 1;
         didCollide = false;
         spec.coords = safeCoords;
-        spec.velocities = {x: 0, y: 0}
+        spec.velocities = { x: 0, y: 0 }
     }
 
     function removeLife() {
         lives -= 1;
     }
 
-    function  addLife() {
+    function addLife() {
         lives += 1;
     }
 
@@ -194,7 +212,7 @@ Asteroids.objects.player.Player = function (spec) {
         get rotation() { return spec.rotation },
         get projectiles() { return projectiles },
         get didCollide() { return didCollide },
-        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2),} },
+        get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get lives() { return lives },
         get score() { return score },
         get level() { return _determineLevel() },

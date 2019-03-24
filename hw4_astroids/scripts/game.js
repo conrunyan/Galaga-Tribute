@@ -40,6 +40,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         maxProjectiles: 40,
         sounds: sounds,
         particleController: particleSystemController,
+        partSys: partSys,
+        myRandom: myRandom,
     });
 
     let gameBoard;
@@ -98,16 +100,6 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         registerKeyEvents();
         console.log(myPlayer);
 
-        console.log('adding particle system');
-        // let newPS = partSys.ParticleSystem({
-        //     center: { x: 300, y: 300 },
-        //     size: { mean: 15, stdev: 5 },
-        //     speed: { mean: 65, stdev: 35 },
-        //     lifetime: { mean: 4, stdev: 1 },
-        //     totalLife: 2,
-        //     imageSrc: './assets/green_laser.png',
-        // }, myRandom)
-        // particleSystemController.addNewSystem(newPS);
         requestAnimationFrame(gameLoop);
 
         // if (myPlayer.didCollide) {
@@ -122,6 +114,11 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         processInput(elapsedTime);
         update(elapsedTime);
         render();
+        // check game ending condition (player out of lives)
+        if (myPlayer.lives <= 0) {
+            // save highscores
+            return;
+        }
         requestAnimationFrame(gameLoop);
     }
 
