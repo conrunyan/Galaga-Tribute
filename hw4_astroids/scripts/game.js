@@ -5,6 +5,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
     let totalElapsedTime = 0;
+    let MAX_SCORES_KEPT = 10;
+    let scores = [];
     // initialize screens
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
@@ -25,25 +27,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({systems: []});
 
-    let myPlayer = player.Player({
-        coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
-        imageSrc: './assets/1B.png',
-        maxSpeed: 5, // pixels per second
-        acceleration: 40,
-        velocities: { x: 0, y: 0 },
-        rotation: -Math.PI / 2,
-        boardSize: boardDim,
-        size: 30,
-        shot: projectiles,
-        shotImgSource: './assets/green_laser.png',
-        shotSpeed: 50,
-        maxProjectiles: 40,
-        sounds: sounds,
-        particleController: particleSystemController,
-        partSys: partSys,
-        myRandom: myRandom,
-    });
-
+    let myPlayer;
     let gameBoard;
 
     function processInput(elapsedTime) {
@@ -71,6 +55,24 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
 
     function init() {
         lastTimeStamp = performance.now();
+        myPlayer = player.Player({
+            coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
+            imageSrc: './assets/1B.png',
+            maxSpeed: 5, // pixels per second
+            acceleration: 40,
+            velocities: { x: 0, y: 0 },
+            rotation: -Math.PI / 2,
+            boardSize: boardDim,
+            size: 30,
+            shot: projectiles,
+            shotImgSource: './assets/green_laser.png',
+            shotSpeed: 50,
+            maxProjectiles: 40,
+            sounds: sounds,
+            particleController: particleSystemController,
+            partSys: partSys,
+            myRandom: myRandom,
+        });
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
@@ -117,6 +119,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // check game ending condition (player out of lives)
         if (myPlayer.lives <= 0) {
             // save highscores
+            saveHighScore();
+            screens.Controller.showScreen('high-scores-screen');
             return;
         }
         requestAnimationFrame(gameLoop);
@@ -132,7 +136,33 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // Register scoring events 
     }
 
-    // Start of game
-    // init();
+    function saveHighScore() {
+        insertScore(myPlayer.score);
+        displayScore(myPlayer.score);
+    }
+
+    function insertScore(latestScore) {
+        let idxToPlace = scores.length;
+        // check where score goes in the score list
+        for (let i = 0; i < scores.length; i++) {
+            if (latestScore >= scores[i].score) {
+                idxToPlace = i;
+                break;
+            }
+        }
+        // insert new score where it belongs, with a max of MAX_SCORES_KEPT
+        scores.splice(idxToPlace, 0, { score: latestScore});
+        scores = scores.slice(0, MAX_SCORES_KEPT);
+        console.log(scores);
+    }
+
+    function displayScore(latestScore) {
+        let myHighscoreDiv = document.getElementById('high-scores-list');
+        myHighscoreDiv.innerHTML = '';
+        for (let i = 0; i < scores.length; i++) {
+            let hsHTML = `<li id="high-scores-hsEntry">Score #${i + 1} - ${scores[i].score} - Level: ${myPlayer.level}</li>`;
+            myHighscoreDiv.innerHTML += hsHTML;
+        }
+    }
 
 }(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds.Player, Asteroids.particles, Asteroids.utils.Random));
