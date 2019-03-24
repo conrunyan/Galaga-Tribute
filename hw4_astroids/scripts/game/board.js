@@ -448,27 +448,50 @@ Asteroids.game.Board = function (spec) {
     // returns coords in a "safe" area
     function _getSafePlayerCoords() {
         let searchSegments = 12;
-        let newPlayerCoords = {x: 0, y: 0};
+        let newPlayerCoords = {x: 40, y: 40};
+        let safeZoneFound = false;
         // search horizontal
-        let xSize = spec.boardDimmensions.x;
-        let ySize = spec.boardDimmensions.y;
-        for (let xSegment = 2; xSegment < searchSegments; xSegment++) {
-            let currentXCoord = xSize / xSegment
-            for (let ySegment = 2; ySegment < searchSegments; ySegment++) {
-                let currentYCoord = ySize / ySegment;
+        let xSize = spec.boardDimmensions.x - 30;
+        let ySize = spec.boardDimmensions.y - 30;
+        for (let xSegment = 1; xSegment < searchSegments; xSegment++) {
+            let currentXCoord = xSize * (xSegment / 10);
+            // search verticle
+            for (let ySegment = 1; ySegment < searchSegments; ySegment++) {
+                let currentYCoord = ySize * (ySegment / 10);
                 let searchArea = { 
                     center: {x: currentXCoord, y: currentYCoord},
-                    radius: 200,
+                    radius: 150,
                 }
                 // search all asteroids, and determine if they're in the search radius.
                 // If not, put the ship there
+                let safeZoneFound = true;
+                newPlayerCoords = searchArea.center;
                 spec.gamePieces.asteroids.forEach(asteroid => {
                     let asteroidSearchDist = _getDistanceBetweenPoints(searchArea.center, asteroid.center);
                     let sumOfRadi = searchArea.radius + asteroid.radius;
-                    if (!(asteroidSearchDist < sumOfRadi)) {
-                        return searchArea.center;
+                    if (asteroidSearchDist < sumOfRadi) {
+                        safeZoneFound = false;
                     }
-                })
+                });
+                // check all ufos and their projectiles
+                spec.gamePieces.ufos.forEach(ufo => {
+                    let ufoSearchDist = _getDistanceBetweenPoints(searchArea.center, ufo.center);
+                    let sumOfRadi = searchArea.radius + ufo.radius;
+                    if (ufoSearchDist < sumOfRadi) {
+                        safeZoneFound = false;
+                    }
+                    ufo.projectiles.forEach(shot => {
+                        let shotSearchDistance = _getDistanceBetweenPoints(searchArea.center, shot.center);
+                        let sumOfRadi = searchArea.radius + shot.radius;
+                        if (shotSearchDistance < sumOfRadi) {
+                            safeZoneFound = false;
+                        }
+                    });
+                });
+
+                if (safeZoneFound) {
+                    return newPlayerCoords;
+                };
             }
         }
         return newPlayerCoords;
