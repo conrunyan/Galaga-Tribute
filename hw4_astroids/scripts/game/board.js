@@ -14,7 +14,7 @@
 //  boardDimmensions: {x: , y:}
 // }
 // --------------------------------------------------------------
-Asteroids.game.Board = (function (spec) {
+Asteroids.game.Board = function (spec) {
     'use strict';
 
     // load image
@@ -445,7 +445,7 @@ Asteroids.game.Board = (function (spec) {
     }
 
     function _getSafePlayerCoords() {
-        let 
+        
     }
 
     let api = {
@@ -461,4 +461,4 @@ Asteroids.game.Board = (function (spec) {
     }
 
     return api;
-});
+};

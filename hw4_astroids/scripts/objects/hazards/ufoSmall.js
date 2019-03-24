@@ -101,8 +101,8 @@ Asteroids.objects.ufo.UFOSmall = function (spec) {
 
     function ufoSmallShootPlayer(elapsedTime, playerCoords, playerDead) {
         if (!playerDead) {
-            let oLine = playerCoords.y - spec.coords.y;
-            let aLine = playerCoords.x - spec.coords.x;
+            let oLine = (playerCoords.y - spec.coords.y) + Math.random() * 100;
+            let aLine = (playerCoords.x - spec.coords.x) + Math.random() * 100;
             let angle = Math.atan(oLine, aLine);
             let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
             let tmpShotXVel = (shotSpeed * aLine) / dist;
