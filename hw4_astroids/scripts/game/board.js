@@ -26,7 +26,7 @@ Asteroids.game.Board = (function (spec) {
         this.isReady = true;
     };
     let totalElapsedTime = 0;
-    let ufoInterval = 60000;
+    let ufoInterval = 20000;
     let ufoIntervalLarge = 30000;
     let playerDeathInterval = 2000;
     let timeSincePlayerDeath = 0;
@@ -220,7 +220,8 @@ Asteroids.game.Board = (function (spec) {
     }
 
     function removeUFOs() {
-        let initSize = spec.gamePieces.ufos.length;
+        let smallUFOAttacking = false;
+        let largeUFOAttacking = false;
         // remove UFOs that collided or are out of time
         spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
             if (!ufo.shouldExplode && !ufo.didCollide) {
@@ -236,10 +237,19 @@ Asteroids.game.Board = (function (spec) {
         // remove UFOs that have gone off the screen
         _cleanUFOsFromScreen();
         // reset UFO timer
-        if (initSize !== postSize) {
-            timeUntilSmallUFO = ufoInterval;
-            timeUntilLargeUFO = ufoIntervalLarge;
-        }
+        spec.gamePieces.ufos.forEach(ufo => {
+            if (ufo.ufoType === 'small') {
+                smallUFOAttacking = true;
+            }
+            else if (ufo.ufoType === 'large') {
+                largeUFOAttacking = true;
+            }
+        });
+        console.log('Small UFO', smallUFOAttacking);
+        console.log('Large UFO', largeUFOAttacking);
+        // reset ufo time if needed
+        timeUntilSmallUFO = smallUFOAttacking ? 0 : timeUntilSmallUFO;
+        timeUntilLargeUFO = largeUFOAttacking ? 0 : timeUntilLargeUFO;
     }
 
     function _cleanUFOsFromScreen() {
@@ -432,6 +442,10 @@ Asteroids.game.Board = (function (spec) {
         let y_2 = Math.pow(p2.y - p1.y, 2)
         let result = Math.sqrt(x_2 + y_2)
         return result
+    }
+
+    function _getSafePlayerCoords() {
+        let 
     }
 
     let api = {
