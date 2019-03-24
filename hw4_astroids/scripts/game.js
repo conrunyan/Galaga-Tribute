@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds, partSys, myRandom) {
+Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds, partSys, myRandom, myStorage) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
@@ -6,7 +6,8 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let lastTimeStamp;
     let totalElapsedTime = 0;
     let MAX_SCORES_KEPT = 10;
-    let scores = [];
+    let scores = []
+
     // initialize screens
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
@@ -25,7 +26,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
     let gameStatRenderer = renderer.Status;
-    let particleSystemController = partSys.ParticleSystemController({systems: []});
+    let particleSystemController = partSys.ParticleSystemController({ systems: [] });
 
     let myPlayer;
     let gameBoard;
@@ -47,7 +48,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     function render() {
         myGraphics.clear();
         // render board background
-        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y});
+        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);
@@ -138,7 +139,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
 
     function saveHighScore() {
         insertScore(myPlayer.score);
-        displayScore(myPlayer.score);
+        displayScores();
     }
 
     function insertScore(latestScore) {
@@ -151,18 +152,30 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             }
         }
         // insert new score where it belongs, with a max of MAX_SCORES_KEPT
-        scores.splice(idxToPlace, 0, { score: latestScore});
+        scores.splice(idxToPlace, 0, { score: latestScore, level: myPlayer.level });
         scores = scores.slice(0, MAX_SCORES_KEPT);
         console.log(scores);
+        myStorage.saveStorage(scores);
     }
 
-    function displayScore(latestScore) {
+    function displayScores() {
         let myHighscoreDiv = document.getElementById('high-scores-list');
         myHighscoreDiv.innerHTML = '';
         for (let i = 0; i < scores.length; i++) {
-            let hsHTML = `<li id="high-scores-hsEntry">Score #${i + 1} - ${scores[i].score} - Level: ${myPlayer.level}</li>`;
+            let hsHTML = `<li id="high-scores-hsEntry">Score #${i + 1} - ${scores[i].score} - Level: ${scores[i].level}</li>`;
             myHighscoreDiv.innerHTML += hsHTML;
         }
     }
 
-}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds.Player, Asteroids.particles, Asteroids.utils.Random));
+    loadScores();
+
+    function loadScores() {
+        // load previous scores
+        let previousScores = localStorage.getItem('Asteroids.highScores');
+        if (previousScores !== null) {
+            scores = JSON.parse(previousScores);
+        }
+        displayScores();
+    }
+
+}(Asteroids.graphics, Asteroids.input, Asteroids.objects.player, Asteroids.render, Asteroids.screens, Asteroids.game, Asteroids.objects.projectile, Asteroids.objects.asteroid, Asteroids.objects.ufo, Asteroids.sounds.Player, Asteroids.particles, Asteroids.utils.Random, Asteroids.utils.Storage));
