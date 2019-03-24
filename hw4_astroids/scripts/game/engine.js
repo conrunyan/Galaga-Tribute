@@ -1,4 +1,4 @@
-Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds, partSys, myRandom) {
+Asteroids.main.Game = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, asteroid, ufos, sounds, partSys, myRandom) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
@@ -6,9 +6,6 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let lastTimeStamp;
     let totalElapsedTime = 0;
     // initialize screens
-    screens.Controller.initScreens();
-    screens.Controller.showScreen('main-menu');
-    screens.Controller.giveInitFunc(init);
 
     // background image
     let backgroundImg = new Image();
@@ -23,7 +20,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
     let gameStatRenderer = renderer.Status;
-    let particleSystemController = partSys.ParticleSystemController({systems: []});
+    let particleSystemController = partSys.ParticleSystemController({ systems: [] });
 
     let myPlayer = player.Player({
         coords: { x: boardDim.x / 2, y: boardDim.y / 2 },
@@ -61,7 +58,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
     function render() {
         myGraphics.clear();
         // render board background
-        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y});
+        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);

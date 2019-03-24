@@ -1,5 +1,7 @@
 Asteroids.screens.Controller = (function name(screens) {
 
+    let gameInitFunc = null;
+
     function showScreen(id) {
         // Remove the active state from all screens.
         let active = document.getElementsByClassName('active');
@@ -21,9 +23,15 @@ Asteroids.screens.Controller = (function name(screens) {
         }
     }
 
+    function giveInitFunc(initFunc) {
+        gameInitFunc = initFunc;
+    }
+
     let api = {
         showScreen: showScreen,
         initScreens: initScreens,
+        giveInitFunc: giveInitFunc,
+        get gameInitFunc() { return gameInitFunc },
     };
 
     return api;
