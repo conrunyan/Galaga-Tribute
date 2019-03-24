@@ -86,7 +86,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
             asteroidSize: 80,
             asteroidInitMinVel: 15,
             asteroidInitMaxVel: 35,
-            maxNumAsteroids: 10,
+            maxNumAsteroids: 5,
             particleController: particleSystemController,
             Random: myRandom,
         });

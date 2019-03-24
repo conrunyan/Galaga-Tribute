@@ -34,6 +34,13 @@ Asteroids.game.Board = function (spec) {
     let timeUntilSmallUFO = ufoInterval;
     let timeUntilLargeUFO = ufoIntervalLarge;
 
+    let asteroidCount = {
+        '1': spec.maxNumAsteroids,
+        '2': spec.maxNumAsteroids + 2,
+        '3': spec.maxNumAsteroids + 5,
+        '4': spec.maxNumAsteroids + 9,
+    }
+
     function addAsteroid(newAstrd) {
         spec.gamePieces.asteroids.push(newAstrd);
     }
@@ -365,6 +372,8 @@ Asteroids.game.Board = function (spec) {
     }
 
     function generateAsteroids(numToGenerate) {
+        // check for next level
+        
         for (let i = 0; i < numToGenerate; i++) {
             let newAst = _getNewAsteroid();
             //console.log(i);

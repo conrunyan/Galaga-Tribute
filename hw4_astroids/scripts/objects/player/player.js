@@ -36,6 +36,7 @@ Asteroids.objects.player.Player = function (spec) {
     let didCollide = false;
     let lives = 3;
     let score = 0;
+    let level = 1;
 
     function playerMoveLocation(elapsedTime) {
         // TODO: Add function here to move the player in a direction
@@ -154,6 +155,24 @@ Asteroids.objects.player.Player = function (spec) {
         return nose;
     }
 
+    function _determineLevel() {
+        let level = '';
+        if (score < 5000) {
+            level = 1;
+        }
+        else if (score >= 5000 && score < 25000) {
+            level = '2';
+        }
+        else if (score >= 25000 && score < 45000) {
+            level = '3';
+        }
+        else {
+            level = '4';
+        }
+
+        return level
+    }
+
     function updateShots(elapsedTime) {
         let shotsToKeep = [];
         projectiles.forEach(shot => {
@@ -178,6 +197,7 @@ Asteroids.objects.player.Player = function (spec) {
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2),} },
         get lives() { return lives },
         get score() { return score },
+        get level() { return _determineLevel() },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,

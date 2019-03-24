@@ -36,9 +36,9 @@ Asteroids.objects.asteroid.Asteroid = function (spec) {
     }
 
     let points = {
-        'large': 30,
-        'medium': 70,
-        'small': 120,
+        'large': 50,
+        'medium': 150,
+        'small': 200,
     }
 
     let turnSpeed = 0.0125; // not sure what unit yet
