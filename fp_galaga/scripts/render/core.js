@@ -1,4 +1,4 @@
-Asteroids.graphics = (function () {
+Galaga.graphics = (function () {
     'use strict';
 
     let canvas = document.getElementById('canvas'); // canvas for main game board. 

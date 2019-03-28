@@ -12,7 +12,7 @@ body {
   z-index: 0;
 }
 
-.asteroids-game {
+.galaga-game {
     margin: auto;
     z-index: 1;
     right: 0;
@@ -67,16 +67,16 @@ ul.menu li button:active {
     background: rgb(0, 0, 0);
 }
 
-#asteroids-game .screen {
+#galaga-game .screen {
     display: none
 }
 
-#asteroids-game .screen.active {
+#galaga-game .screen.active {
     display: block;
 }
 
-.screen:not(#asteroids-board) {
-    background: url('../assets/asteroid_field_background.png') no-repeat center center fixed;
+.screen:not(#galaga-board) {
+    background: url('../assets/gameBackground.png') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

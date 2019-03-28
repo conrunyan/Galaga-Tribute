@@ -1,7 +1,7 @@
 Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, sounds, partSys, myRandom, myStorage) {
     'use strict';
 
-    let boardDim = { x: window.innerWidth / 2, y: window.innerHeight / 2 }; // measurement in pixels
+    let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
     let totalElapsedTime = 0;
@@ -14,15 +14,16 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     screens.Controller.giveInitFunc(init);
 
     // background image
-    // let backgroundImg = new Image();
-    // backgroundImg.isReady = false;
-    // backgroundImg.src = 'assets/game_background.jpg';
-    // backgroundImg.onload = function () {
-    //     console.log('loaded image...');
-    //     this.isReady = true;
-    // };
+    let backgroundImg = new Image();
+    backgroundImg.isReady = false;
+    backgroundImg.src = 'assets/gameBackground.jpg';
+    backgroundImg.onload = function () {
+        console.log('loaded image...');
+        this.isReady = true;
+    };
 
     // Renderers & Particle System
+    let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
     // let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({ systems: [] });
@@ -56,15 +57,15 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
             coords: { x: boardDim.x / 2, y: boardDim.y - 30 },
-            imageSrc: './assets/1B.png',
-            maxSpeed: 5, // pixels per second
+            imageSrc: './assets/playerShip.png',
+            maxSpeed: 0.33, // pixels per second
             acceleration: 40,
             velocities: { x: 0, y: 0 },
-            rotation: -Math.PI / 2,
+            rotation: 0,
             boardSize: boardDim,
             size: 30,
             shot: projectiles,
-            shotImgSource: './assets/green_laser.png',
+            shotImgSource: './assets/playerShip.png',
             shotSpeed: 50,
             maxProjectiles: 40,
             sounds: sounds,
@@ -79,8 +80,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
                 aliens: [],
             },
             constructors: {
-                galaga: galagaboss,
-                ufos: ufos,
+                galaga: '',
+                ufos: '',
                 shot: projectiles,
                 particleSystem: partSys
             },
@@ -115,8 +116,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function registerKeyEvents() {
         // Register Arrow keys
         myKeyboard.register(' ', myPlayer.playerShoot);
-        myKeyboard.register('ArrowLeft', myPlayer.turnPlayerLeft);
-        myKeyboard.register('ArrowRight', myPlayer.turnPlayerRight);
+        myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft);
+        myKeyboard.register('ArrowRight', myPlayer.movePlayerRight);
     }
 
     function saveHighScore() {

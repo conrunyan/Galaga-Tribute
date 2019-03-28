@@ -200,7 +200,6 @@ Galaga.game.Board = function (spec) {
         get image() { return backgroundImg },
         get player() { return spec.gamePieces.player },
         get ufos() { return spec.gamePieces.ufos },
-        addUFO: addUFO,
         updatePieces: updatePieces,
         updateClock: updateClock,
     }

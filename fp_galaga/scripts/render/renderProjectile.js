@@ -1,4 +1,4 @@
-Asteroids.render.Projectile = (function (graphics) {
+Galaga.render.Projectile = (function (graphics) {
     'use strict';
 
     //drawTexture(image, center, rotation, size)
@@ -26,4 +26,4 @@ Asteroids.render.Projectile = (function (graphics) {
 
     return api;
 
-}(Asteroids.graphics));
+}(Galaga.graphics));

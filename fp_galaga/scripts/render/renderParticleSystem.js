@@ -1,4 +1,4 @@
-Asteroids.render.ParticleSystem = (function (graphics) {
+Galaga.render.ParticleSystem = (function (graphics) {
     'use strict';
 
     function render(systems) {
@@ -20,4 +20,4 @@ Asteroids.render.ParticleSystem = (function (graphics) {
     };
 
     return api;
-}(Asteroids.graphics));
+}(Galaga.graphics));

@@ -5,7 +5,7 @@
 // Singleton so that there is only one of these throughout the program.
 //
 // ------------------------------------------------------------------
-Asteroids.utils.Random = (function () {
+Galaga.utils.Random = (function () {
     'use strict';
 
     function nextDouble() {

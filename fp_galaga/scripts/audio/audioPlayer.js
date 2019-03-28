@@ -3,15 +3,15 @@
 // This function performs the one-time game initialization.
 //
 //------------------------------------------------------------------
-Asteroids.sounds.Player = function() {
+Galaga.sounds.Player = function() {
     'use strict';
 
     console.log('initializing...');
     initialize();
 
     function playSound(whichSound) {
-        Asteroids.sounds[whichSound].load();
-        Asteroids.sounds[whichSound].play();
+        Galaga.sounds[whichSound].load();
+        Galaga.sounds[whichSound].play();
     }
 
     let api = {
@@ -47,9 +47,9 @@ function initialize() {
 
     function loadAudio() {
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
-        Asteroids.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
-        Asteroids.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
-        Asteroids.sounds['audio/game-music'] = loadSound('assets/sounds/11 Meteo.mp3', 'Sound 3', 'id-play1');
+        Galaga.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
+        Galaga.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
+        Galaga.sounds['audio/game-music'] = loadSound('assets/sounds/11 Meteo.mp3', 'Sound 3', 'id-play1');
     }
 
     loadAudio();
@@ -61,7 +61,7 @@ function initialize() {
 //
 //------------------------------------------------------------------
 function pauseSound(whichSound, label, idButton, idStatus) {
-    Asteroids.sounds[whichSound].pause();
+    Galaga.sounds[whichSound].pause();
 
     let elementStatus = document.getElementById(idStatus);
     elementStatus.innerHTML = 'paused';
@@ -77,7 +77,7 @@ function pauseSound(whichSound, label, idButton, idStatus) {
 //
 //------------------------------------------------------------------
 function playSound(whichSound) {
-    Asteroids.sounds[whichSound].play();
+    Galaga.sounds[whichSound].play();
 }
 
 //------------------------------------------------------------------
@@ -86,5 +86,5 @@ function playSound(whichSound) {
 //
 //------------------------------------------------------------------
 function changeVolume(value) {
-    Asteroids.sounds['audio/bensound-extremeaction'].volume = value / 100;
+    Galaga.sounds['audio/bensound-extremeaction'].volume = value / 100;
 }

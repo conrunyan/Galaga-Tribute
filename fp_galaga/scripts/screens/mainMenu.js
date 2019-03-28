@@ -1,4 +1,4 @@
-Asteroids.screens['main-menu'] = (function (controller) {
+Galaga.screens['main-menu'] = (function (controller) {
     'use strict';
 
     function initialize() {
@@ -7,8 +7,8 @@ Asteroids.screens['main-menu'] = (function (controller) {
         document.getElementById('button-new-game').addEventListener(
             'click',
             function() {
-                console.log('asteroids-board');
-                controller.showScreen('asteroids-board');
+                console.log('galaga-board');
+                controller.showScreen('galaga-board');
             });
 
         document.getElementById('button-high-scores').addEventListener(
@@ -42,4 +42,4 @@ Asteroids.screens['main-menu'] = (function (controller) {
         initialize: initialize,
         run: run
     };
-}(Asteroids.screens.Controller));
+}(Galaga.screens.Controller));

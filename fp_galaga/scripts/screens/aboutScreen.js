@@ -1,4 +1,4 @@
-Asteroids.screens['about-screen'] = (function (controller) {
+Galaga.screens['about-screen'] = (function (controller) {
     'use strict';
 
     function initialize() {
@@ -15,4 +15,4 @@ Asteroids.screens['about-screen'] = (function (controller) {
         initialize: initialize,
         run: run
     };
-}(Asteroids.screens.Controller));
+}(Galaga.screens.Controller));

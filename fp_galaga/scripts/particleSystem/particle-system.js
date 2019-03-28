@@ -1,6 +1,6 @@
 // Fire works: https://opengameart.org/content/fireworks
 
-Asteroids.particles.ParticleSystem = function (spec, Random) {
+Galaga.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
     let timeAliveSoFar = 0;

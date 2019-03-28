@@ -1,4 +1,4 @@
-Asteroids.particles.ParticleSystemController = function (spec) {
+Galaga.particles.ParticleSystemController = function (spec) {
 
     function addNewSystem(newSystem) {
         spec.systems.push(newSystem);

@@ -1,4 +1,4 @@
-Asteroids.screens.Controller = (function name(screens) {
+Galaga.screens.Controller = (function name(screens) {
 
     let gameInitFunc = null;
 
@@ -35,4 +35,4 @@ Asteroids.screens.Controller = (function name(screens) {
     };
 
     return api;
-}(Asteroids.screens));
+}(Galaga.screens));

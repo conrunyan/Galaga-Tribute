@@ -1,4 +1,4 @@
-Asteroids.screens['high-scores-screen'] = (function (controller, game) {
+Galaga.screens['high-scores-screen'] = (function (controller, game) {
     'use strict';
 
     function initialize() {
@@ -15,4 +15,4 @@ Asteroids.screens['high-scores-screen'] = (function (controller, game) {
         initialize: initialize,
         run: run
     };
-}(Asteroids.screens.Controller, Asteroids.game));
+}(Galaga.screens.Controller, Galaga.game));

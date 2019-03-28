@@ -1,4 +1,4 @@
-Asteroids.render.Player = (function (graphics) {
+Galaga.render.Player = (function (graphics) {
     'use strict';
 
     //drawTexture(image, center, rotation, size)
@@ -20,4 +20,4 @@ Asteroids.render.Player = (function (graphics) {
 
     return api;
 
-}(Asteroids.graphics));
+}(Galaga.graphics));

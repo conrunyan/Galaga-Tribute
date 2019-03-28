@@ -1,4 +1,4 @@
-Asteroids.utils.Storage = function () {
+Galaga.utils.Storage = function () {
     'use strict';
     // let previousScores = localStorage.getItem('MyGame.highScores');
 
@@ -7,7 +7,7 @@ Asteroids.utils.Storage = function () {
     // }
 
     function saveStorage(highScores) {
-        localStorage['Asteroids.highScores'] = JSON.stringify(highScores);
+        localStorage['Galaga.highScores'] = JSON.stringify(highScores);
     }
 
 

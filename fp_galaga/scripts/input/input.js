@@ -1,4 +1,4 @@
-Asteroids.input.Keyboard = function () {
+Galaga.input.Keyboard = function () {
     let that = {
         keys: {},
         handlers: {},
