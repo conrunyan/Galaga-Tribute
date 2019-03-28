@@ -27,8 +27,8 @@ Galaga.objects.player.Player = function (spec) {
     };
 
     let projectiles = [];
-    let timeSinceLastShot = 300;
-    let shotInterval = 300;
+    let timeSinceLastShot = 150;
+    let shotInterval = 150;
     let didCollide = false;
     let lives = 3;
     let score = 0;
