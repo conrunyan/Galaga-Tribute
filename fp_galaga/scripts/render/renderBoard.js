@@ -10,13 +10,13 @@ Galaga.render.Board = (function (graphics, renderer) {
             renderer.Projectile.renderProjectile(shot);
         });
         // // render UFOs
-        // let ufos = gamePieces.ufos;
-        // for (let ufo = 0; ufo < ufos.length; ufo++) {
-        //     renderer.Player.renderPlayer(ufos[ufo]);
-        //     ufos[ufo].projectiles.forEach(shot => {
-        //         renderer.Projectile.renderProjectile(shot);
-        //     })
-        // }
+        let ufos = gamePieces.ufos;
+        for (let ufo = 0; ufo < ufos.length; ufo++) {
+            renderer.Player.renderPlayer(ufos[ufo]);
+            ufos[ufo].projectiles.forEach(shot => {
+                renderer.Projectile.renderProjectile(shot);
+            })
+        }
     }
 
     let api = {

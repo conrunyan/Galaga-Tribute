@@ -1,4 +1,4 @@
-Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, sounds, partSys, myRandom, myStorage) {
+Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, sounds, partSys, myRandom, myStorage, ufo) {
     'use strict';
 
     let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
@@ -77,11 +77,11 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             gamePieces: {
                 player: myPlayer,
                 galaga: [],
-                aliens: [],
+                ufos: [],
             },
             constructors: {
                 galaga: '',
-                ufos: '',
+                ufos: ufo,
                 shot: projectiles,
                 particleSystem: partSys
             },
@@ -94,6 +94,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         registerKeyEvents();
         console.log(myPlayer);
         requestAnimationFrame(gameLoop);
+        console.log('adding ufo')
+        gameBoard.addUFO();
     }
 
     function gameLoop(time) {
@@ -161,4 +163,4 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         displayScores();
     }
 
-}(Galaga.graphics, Galaga.input, Galaga.objects.player, Galaga.render, Galaga.screens, Galaga.game, Galaga.objects.projectile, Galaga.sounds.Player, Galaga.particles, Galaga.utils.Random, Galaga.utils.Storage));
+}(Galaga.graphics, Galaga.input, Galaga.objects.player, Galaga.render, Galaga.screens, Galaga.game, Galaga.objects.projectile, Galaga.sounds.Player, Galaga.particles, Galaga.utils.Random, Galaga.utils.Storage, Galaga.objects.ufo));

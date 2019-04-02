@@ -35,36 +35,20 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let timeSpentOnPath = 0;
     let shotInterval = 2000;
     let didCollide = false;
-    let movementSpeed = 0.1;
+    let movementSpeed = 0.0002;
     let shotSpeed = .15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
     let points = 1000;
 
-    function ufoSmallMove(elapsedTime) {
+    function ufoMove(elapsedTime) {
         // TODO: Add function here to move the ufoSmall in a direction
         // move in preset path around the board
         // move for three seconds
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
-        // move right
-        if (timeSpentOnPath < timeForEachMovement + 500) {
-            _moveRight(elapsedTime);
-        }
-        // move up
-        else if (timeSpentOnPath < timeForEachMovement * 2) {
-            _moveUp(elapsedTime);
-        }
-        else if (timeSpentOnPath < timeForEachMovement * 3) {
-            _moveDownLeft(elapsedTime);
-        }
-        else if (timeSpentOnPath < timeForEachMovement * 3.5) {
-            _moveRight(elapsedTime);
-        }
-        // reset path
-        else {
-            timeSpentOnPath = 0;
-        }
+        // move 
+        getNextCoords(elapsedTime)
 
         lifeTime -= elapsedTime;
     }
@@ -96,6 +80,26 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function _moveUpRight(elapsedTime) {
         spec.coords.x += (movementSpeed * elapsedTime);
         spec.coords.y -= (movementSpeed * elapsedTime);
+    }
+
+    function getNextCoords(elapsedTime) {
+        let r = spec.size * Math.cos(3 * spec.theta);
+        let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+        let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+        
+        spec.coords.x = nextX;
+        spec.coords.y = nextY;
+
+        spec.theta += movementSpeed * elapsedTime;
+
+    }
+
+    // function found on https://stackoverflow.com/questions/32219051/how-to-convert-cartesian-coordinates-to-polar-coordinates-in-js
+    function cartesian2Polar(x, y) {
+        distance = Math.sqrt(x * x + y * y)
+        radians = Math.atan2(y, x) //This takes y first
+        polarCoor = { distance: distance, radians: radians }
+        return polarCoor
     }
 
     function ufoSmallShootPlayer(elapsedTime, playerCoords, playerDead) {
@@ -165,7 +169,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get shouldExplode() { return lifeTime <= 0 },
         get points() { return points },
         setDidCollide: setDidCollide,
-        ufoMove: ufoSmallMove,
+        ufoMove: ufoMove,
         ufoShoot: ufoSmallShootPlayer,
         updateShots: updateShots,
     };
