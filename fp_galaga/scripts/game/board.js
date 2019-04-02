@@ -177,7 +177,7 @@ Galaga.game.Board = function (spec) {
             shot: spec.constructors.shot,
             ufoType: 'small',
             maxProjectiles: 40,
-            theta: 0,
+            theta: Math.PI / 5,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }
