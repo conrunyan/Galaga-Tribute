@@ -36,6 +36,15 @@ Galaga.game.Board = function (spec) {
             ufo.ufoMove(elapsedTime);
         });
 
+        // add a new ufo each half second
+        if (spec.boardClock >= 250) {
+            addUFO();
+            spec.boardClock = 0;
+        }
+        else {
+            spec.boardClock += elapsedTime;
+        }
+
         // // detect colision
         // // check player with ufos
         // spec.gamePieces.ufos.forEach(ufo => {
@@ -169,11 +178,11 @@ Galaga.game.Board = function (spec) {
     function _addSmallUFO() {
         let smallUFO = spec.constructors.ufos.UFOSmall({
             coords: { x: 300, y: spec.boardDimmensions.y / 2 },
-            imageSrc: './assets/playerShip.png',
+            imageSrc: './assets/green-yellow-alien.png',
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
             size: 35,
-            shotImgSource: './assets/playerShip.png',
+            shotImgSource: './assets/green-yellow-alien.png',
             shot: spec.constructors.shot,
             ufoType: 'small',
             maxProjectiles: 40,

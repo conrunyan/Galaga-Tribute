@@ -88,6 +88,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             boardDimmensions: boardDim,
             particleController: particleSystemController,
             Random: myRandom,
+            boardClock: 0,
         });
 
         console.log('SCREENS:', screens);

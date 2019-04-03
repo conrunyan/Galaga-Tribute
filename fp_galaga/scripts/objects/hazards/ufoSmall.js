@@ -84,8 +84,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
     function getNextCoords(elapsedTime) {
         let r = spec.size * Math.cos(3 * spec.theta);
-        let nextX = (r * Math.cos(spec.theta) * 3) + 300; //(elapsedTime * movementSpeed);
-        let nextY = (r * Math.sin(spec.theta) * 3) + 300; //(elapsedTime * movementSpeed);
+        let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+        let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
         
         spec.coords.x = nextX;
         spec.coords.y = nextY;
