@@ -132,7 +132,7 @@ ul.menu li button:active {
 }
 
 .screen:not(#galaga-board) {
-    background: url('../assets/gameBackground.png') no-repeat center center fixed;
+    background: url('../assets/menu-background.jpeg') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

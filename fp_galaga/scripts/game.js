@@ -16,7 +16,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     // background image
     let backgroundImg = new Image();
     backgroundImg.isReady = false;
-    backgroundImg.src = 'assets/gameBackground.jpg';
+    backgroundImg.src = 'assets/gameBackground.png';
     backgroundImg.onload = function () {
         console.log('loaded image...');
         this.isReady = true;
@@ -48,7 +48,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function render() {
         myGraphics.clear();
         // render board background
-        // myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
+        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
         // particleSystemRenderer.render(particleSystemController.systems);
     }
