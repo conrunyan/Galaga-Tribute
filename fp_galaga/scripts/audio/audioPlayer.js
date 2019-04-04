@@ -3,7 +3,7 @@
 // This function performs the one-time game initialization.
 //
 //------------------------------------------------------------------
-Galaga.sounds.Player = function() {
+Galaga.sounds.Player = function () {
     'use strict';
 
     console.log('initializing...');
@@ -50,6 +50,7 @@ function initialize() {
         Galaga.sounds['audio/player-laser-shot'] = loadSound('assets/sounds/arwing hyper laser one shot.mp3', 'Sound 1', 'id-play1');
         Galaga.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
         Galaga.sounds['audio/game-music'] = loadSound('assets/sounds/11 Meteo.mp3', 'Sound 3', 'id-play1');
+        Galaga.sounds['audio/menu-mouse-over'] = loadSound('assets/mouse-over.wav');
     }
 
     loadAudio();

@@ -8,6 +8,7 @@
 </head>
 
 <!-- <body background="assets/background_gif.gif"> -->
+
 <body>
     <!-- The video -->
     <!-- <video autoplay muted loop id="myVideo">
@@ -20,20 +21,20 @@
         </div>
         <div class="screen" id="main-menu">
             <div id="main-menu-title">
-                <h1>Star Fox-esque galaga</h1>
+                <h1 class="main-menu-text-heading">Game Name</h1>
             </div>
             <div id='nav-buttons'>
                 <ul class="menu">
-                    <li><button id="button-new-game" type="submit">New-Game</button></li>
-                    <li><button id="button-high-scores" type="submit">High-Scores</button></li>
-                    <li><button id="button-help" type="submit">Help</button></li>
-                    <li><button id="button-about" type="submit">Credits</button></li>
+                    <li><button id="button-new-game" type="submit">NEW-GAME</button></li>
+                    <li><button id="button-high-scores" type="submit">HIGH-SCORES</button></li>
+                    <li><button id="button-help" type="submit">HELP</button></li>
+                    <li><button id="button-about" type="submit">CREDITS</button></li>
                 </ul>
             </div>
         </div>
         <div class="screen" id="high-scores-screen">
             <div id='high-scores-div'>
-                <p>high-scores</p>
+                <h1 class="menu-text-heading">HIGH-SCORES</h1>
                 <button id="button-score-back-menu" type="submit">Main-Menu</button>
                 <ul id="high-scores-list">
 
@@ -42,28 +43,23 @@
         </div>
         <div class="screen" id="help-screen">
             <div id='help-div'>
-                <p>help screen</p>
-                <button id="button-help-back-menu" type="submit">Main-Menu</button>
-                <p>UFOs spawn in intervals of: SMALL - 45 seconds -- LARGE: 30 seconds</p>
-                <p>Player Levels:</p>
-                <p>Level One: 0-4999 Points</p>
-                <p>Level Two: 5000-24999 Points</p>
-                <p>Level Three: 25000-43999 Points</p>
-                <p>Level Four: 45000+ Points</p>
-                <p>More galaga spaw as the levels increase, so watch out!</p>
+                <h1 class="menu-text-heading">HELP SCREEN</h1>
+                <button class="sub-menu-button" id="button-help-back-menu" type="submit">Main-Menu</button>
+                <p class="menu-text">UFOs spawn in intervals of: SMALL - 45 seconds -- LARGE: 30 seconds</p>
+                <p class="menu-text">Player Levels:</p>
+                <p class="menu-text">Level One: 0-4999 Points</p>
+                <p class="menu-text">Level Two: 5000-24999 Points</p>
+                <p class="menu-text">Level Three: 25000-43999 Points</p>
+                <p class="menu-text">Level Four: 45000+ Points</p>
+                <p class="menu-text">More galaga spaw as the levels increase, so watch out!</p>
             </div>
         </div>
         <div class="screen" id="about-screen">
             <div id='about-div'>
-                <p>about screen</p>
+                <h1 class="menu-text-heading">ABOUT SCREEN</h1>
                 <button id="button-about-back-menu" type="submit">Main-Menu</button>
-                <p>Starfox-esque galaga - Developed by: Connor Runyan</p>
-                <p>For: CS5410 - Game Development</p>
-                <ul>
-                    <li>Starfox Music and Reference - Property of Nintendo</li>
-                    <li>Music and Images:</li>
-                    <ul></ul>
-                </ul>
+                <p class="menu-text">Starfox-esque galaga - Developed by: Connor Runyan</p>
+                <p class="menu-text">For: CS5410 - Game Development</p>
             </div>
         </div>
     </div>
