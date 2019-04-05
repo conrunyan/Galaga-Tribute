@@ -33,7 +33,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     // Renderers & Particle System
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
-    // let gameStatRenderer = renderer.Status;
+    let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({ systems: [] });
 
     let myPlayer;
@@ -59,6 +59,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         myGraphics.drawMoon(surface);
         boardRenderer.renderPieces(gameBoard);
+        gameStatRenderer.renderStats(myPlayer);
         // particleSystemRenderer.render(particleSystemController.systems);
     }
 

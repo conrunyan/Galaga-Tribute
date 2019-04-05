@@ -101,8 +101,9 @@ Galaga.objects.player.Player = function (spec) {
 
     function playerThrust(elapsedTime) {
         // console.log('old velocity: ', spec.velocities);
-        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI/2)) / 180);
-        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI/2)) / 180);
+        decreaseFuel(elapsedTime);
+        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI / 2)) / 180);
+        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI / 2)) / 180);
         // check for max velocity
         // console.log('max speed', spec.maxSpeed)
         if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
@@ -209,7 +210,15 @@ Galaga.objects.player.Player = function (spec) {
         // let speedX = spec.velocities.x;
         let speedY = spec.velocities.y;
         // let speed = Math.sqrt((speedX * speedX) * (speedY * speedY));
-        return Math.abs(speedY)/ 10;
+        return (Math.abs(speedY) / 10).toPrecision(3);
+    }
+
+    function _determineAngle() {
+        let angle = (spec.rotation * 180) / Math.PI;
+        if (angle < 0) {
+            angle = 360 + angle
+        }
+        return angle.toFixed(2);
     }
 
     function _determineLevel() {
@@ -228,6 +237,24 @@ Galaga.objects.player.Player = function (spec) {
         }
 
         return level
+    }
+
+    function getDisplaySpeedColor() {
+        if (_determineSpeed() < 2) {
+            return 'green';
+        }
+        return 'white';
+    }
+    function getDisplayAngleColor() {
+        let angle = _determineAngle();
+        if (angle < 2) {
+            return 'green';
+        }
+        return 'white';
+    }
+
+    function decreaseFuel(elapsedTime) {
+        spec.fuel -= elapsedTime;
     }
 
     function printStats() {
@@ -261,9 +288,12 @@ Galaga.objects.player.Player = function (spec) {
         get lives() { return lives },
         get score() { return score },
         get level() { return _determineLevel() },
-        get displayRot() { return (spec.rotation * 180) / Math.PI },
+        get displayRot() { return _determineAngle() },
         get displaySpeed() { return _determineSpeed() },
-        get displayFuel() { return spec.fuel },
+        get displayFuel() { return (spec.fuel / 1000).toFixed(2) },
+        get displayFuelColor() { return 'green' },
+        get displaySpeedColor() { return getDisplaySpeedColor() },
+        get displayAngleColor() { return getDisplayAngleColor() },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,
@@ -275,6 +305,7 @@ Galaga.objects.player.Player = function (spec) {
         increaseScore: increaseScore,
         respawn: respawn,
         printStats: printStats,
+        decreaseFuel: decreaseFuel,
     };
 
     return api;

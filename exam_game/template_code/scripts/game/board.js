@@ -45,7 +45,7 @@ Galaga.game.Board = function (spec) {
         //     console.log(spec.gamePieces.player.coords)
         //     console.log('SAFE SPOT!');
         // }
-        spec.gamePieces.player.printStats();
+        // spec.gamePieces.player.printStats();
         let collResults = didCollide(spec.gamePieces.player);
         if (collResults.collision) {
             console.log(spec.gamePieces.player.center)
