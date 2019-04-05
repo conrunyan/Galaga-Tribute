@@ -60,7 +60,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             imageSrc: './assets/lander-2.png',
             maxSpeed: 5, // pixels per second
             acceleration: 40,
-            velocities: { x: 0, y: 0 },
+            velocities: { x: 0, y: 20 },
             rotation: -Math.PI / 3,
             boardSize: boardDim,
             size: 30,
@@ -72,6 +72,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             particleController: particleSystemController,
             partSys: partSys,
             myRandom: myRandom,
+            isThrusting: false,
         });
         gameBoard = myGame.Board({
             gamePieces: {

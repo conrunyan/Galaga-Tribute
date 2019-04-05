@@ -37,6 +37,7 @@ Galaga.objects.player.Player = function (spec) {
     let lives = 3;
     let score = 0;
     let level = 1;
+    const GRAVITY = 0.25
     let lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
     function playerMoveLocation(elapsedTime) {
@@ -62,22 +63,28 @@ Galaga.objects.player.Player = function (spec) {
         spec.coords.x += dx;
         spec.coords.y += dy;
 
-        // wrap around coords
-        if (spec.coords.x > spec.boardSize.x) {
-            spec.coords.x = 0;
-        }
-        else if (spec.coords.x < 0) {
-            spec.coords.x = spec.boardSize.x;
-        }
+        // if player isn't thrusting, accel down
+        spec.velocities.y += GRAVITY;
+        // if (!spec.isThrusting) {
+        //     spec.velocities.y -= GRAVITY;
+        // }
 
-        if (spec.coords.y > spec.boardSize.y) {
-            spec.coords.y = 0;
-        }
-        else if (spec.coords.y < 0) {
-            spec.coords.y = spec.boardSize.y;
-        }
-        // console.log('player coords: ', spec.coords);
-        // console.log('dX:', dx, 'dY:', dy);
+        // // wrap around coords
+        // if (spec.coords.x > spec.boardSize.x) {
+        //     spec.coords.x = 0;
+        // }
+        // else if (spec.coords.x < 0) {
+        //     spec.coords.x = spec.boardSize.x;
+        // }
+
+        // if (spec.coords.y > spec.boardSize.y) {
+        //     spec.coords.y = 0;
+        // }
+        // else if (spec.coords.y < 0) {
+        //     spec.coords.y = spec.boardSize.y;
+        // }
+        // // console.log('player coords: ', spec.coords);
+        // // console.log('dX:', dx, 'dY:', dy);
 
         lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
@@ -94,6 +101,18 @@ Galaga.objects.player.Player = function (spec) {
             spec.velocities.x += newXVel;
             spec.velocities.y += newYVel;
         }
+        // let newPS = spec.partSys.ParticleSystemThruster({
+            //     center: { x: shipCenter.x, y: shipCenter.y },
+            //     size: { mean: 15, stdev: 5 },
+            //     speed: { mean: 65, stdev: 35 },
+            //     lifetime: { mean: .5, stdev: .25 },
+            //     totalLife: elapsedTime / 1000,
+            //     imageSrc: './assets/green_laser.png',
+            //     startAngle: spec.rotation - 180,
+            //     range: 15,
+            //     density: 2,
+            // }, spec.myRandom)
+            // spec.particleController.addNewSystem(newPS);
         // console.log('new velocity: ', spec.velocities);
     }
 
