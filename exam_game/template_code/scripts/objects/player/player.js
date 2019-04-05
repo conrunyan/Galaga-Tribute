@@ -46,21 +46,9 @@ Galaga.objects.player.Player = function (spec) {
     function playerMoveLocation(elapsedTime) {
         // console.log('calling player move');
         // check velocity and see if it's changed. If so, display engine particles
-        if (lastVelocity.x !== spec.velocities.x && lastVelocity.y !== spec.velocities.y) {
-            let shipCenter = { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), };
-            // let newPS = spec.partSys.ParticleSystemThruster({
-            //     center: { x: shipCenter.x, y: shipCenter.y },
-            //     size: { mean: 15, stdev: 5 },
-            //     speed: { mean: 65, stdev: 35 },
-            //     lifetime: { mean: .5, stdev: .25 },
-            //     totalLife: elapsedTime / 1000,
-            //     imageSrc: './assets/green_laser.png',
-            //     startAngle: spec.rotation - 180,
-            //     range: 15,
-            //     density: 2,
-            // }, spec.myRandom)
-            // spec.particleController.addNewSystem(newPS);
-        }
+        // if (lastVelocity.x !== spec.velocities.x && lastVelocity.y !== spec.velocities.y) {
+        //     let shipCenter = { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), };
+        // }
         let dx = spec.velocities.x * elapsedTime / 1000;
         let dy = spec.velocities.y * elapsedTime / 1000;
         spec.coords.x += dx;
@@ -92,7 +80,7 @@ Galaga.objects.player.Player = function (spec) {
 
     function playerThrust(elapsedTime) {
         // console.log('old velocity: ', spec.velocities);
-        if (canMove) {
+        if (canMove && spec.fuel > 0) {
             decreaseFuel(elapsedTime);
             let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI / 2)) / 180);
             let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI / 2)) / 180);
@@ -106,12 +94,12 @@ Galaga.objects.player.Player = function (spec) {
             let center = _getPlayerCenter();
             let newPS = spec.partSys.ParticleSystemThruster({
                 center: _getPlayerNose(),
-                size: { mean: 15, stdev: 5 },
+                size: { mean: 5, stdev: .25 },
                 speed: { mean: 65, stdev: 35 },
                 lifetime: { mean: 2, stdev: .25 },
-                totalLife: elapsedTime / 1000,
+                totalLife: elapsedTime / 50,
                 imageSrc: './assets/smoke-2.png',
-                startAngle: spec.rotation - 180,
+                startAngle: spec.rotation + (Math.PI / 2) ,
                 range: 15,
                 density: 2,
                 isReady: true,

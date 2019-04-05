@@ -69,13 +69,12 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function init() {
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
-            // coords: { x: boardDim.x * .25, y: boardDim.y * .1 },
-            coords: { x: boardDim.x * .6, y: boardDim.y * .7 },
+            coords: { x: boardDim.x * .25, y: boardDim.y * .1 },
             imageSrc: './assets/lander-2.png',
             maxSpeed: 5, // pixels per second
             acceleration: 7.5,
             velocities: { x: 0, y: 10 },
-            rotation: 0,
+            rotation: Math.PI / 3,
             boardSize: boardDim,
             size: 30,
             shot: projectiles,

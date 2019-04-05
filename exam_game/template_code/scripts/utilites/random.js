@@ -26,7 +26,7 @@ Galaga.utils.Random = (function () {
     }
 
     function nextConeVector(centerAngle, range) {
-        let angle = nextRange(centerAngle - range, centerAngle + range) * 2 * Math.PI;
+        let angle = (nextRange(centerAngle - range, centerAngle + range) / 180) * Math.PI;//* 2 * Math.PI;
         return {
             x: Math.cos(angle),
             y: Math.sin(angle)
