@@ -57,7 +57,7 @@ Galaga.game.Board = function (spec) {
             else {
                 console.log('HIT SURFACE!');
                 spec.gamePieces.player.stopPlayerMovement('died');
-                explosion(spec.gamePieces.player, './assets/fire.png', 2, { mean: 3, stdev: 1});
+                explosion(spec.gamePieces.player, './assets/fire.png', 2, { mean: 10, stdev: 1});
             }
         }
     }

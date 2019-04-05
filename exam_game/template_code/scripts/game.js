@@ -5,6 +5,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
     let totalElapsedTime = 0;
+    let waited = 0;
     let MAX_SCORES_KEPT = 10;
     let scores = []
     let surface = [
@@ -34,6 +35,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
     let gameStatRenderer = renderer.Status;
+    let gameMsgRenderer = renderer.Message;
     let particleSystemController = partSys.ParticleSystemController({ systems: [] });
 
     let myPlayer;
@@ -59,6 +61,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         myGraphics.drawMoon(surface);
         boardRenderer.renderPieces(gameBoard);
         gameStatRenderer.renderStats(myPlayer);
+        gameMsgRenderer.renderMessage(myPlayer, boardDim)
+
         particleSystemRenderer.render(particleSystemController.systems);
     }
 
@@ -119,6 +123,16 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         processInput(elapsedTime);
         update(elapsedTime);
         render();
+        if (myPlayer.gameEnd && myPlayer.won) {
+            // wait for a few seconds for animation
+            if (waited >= 3000) {
+                insertScore(myPlayer.displayFuel);
+                return;
+            }
+            else {
+                waited += elapsedTime;
+            }
+        }
         // check game ending condition (player out of lives)
         requestAnimationFrame(gameLoop);
     }
