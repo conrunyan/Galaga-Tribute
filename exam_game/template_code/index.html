@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./styles/styles.css" type="text/css" />
+    <title>Final Project - Galaga</title>
+</head>
+
+<!-- <body background="assets/background_gif.gif"> -->
+<body>
+    <!-- The video -->
+    <!-- <video autoplay muted loop id="myVideo">
+        <source src="assets\64vSL57.mp4" type="video/mp4">
+    </video> -->
+    <div id="galaga-game" class="galaga-game">
+        <div class="screen" id="galaga-board">
+            <div id='game-info'></div>
+            <canvas id="canvas" width="750" height="750"></canvas>
+        </div>
+        <div class="screen" id="main-menu">
+            <div id="main-menu-title">
+                <h1 class="main-menu-text-heading">Game Name</h1>
+            </div>
+            <div id='nav-buttons'>
+                <ul class="menu">
+                    <li><button id="button-new-game" type="submit">NEW-GAME</button></li>
+                    <li><button id="button-high-scores" type="submit">HIGH-SCORES</button></li>
+                    <li><button id="button-help" type="submit">HELP</button></li>
+                    <li><button id="button-about" type="submit">CREDITS</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="screen" id="high-scores-screen">
+            <div id='high-scores-div'>
+                <h1 class="menu-text-heading">HIGH-SCORES</h1>
+                <button id="button-score-back-menu" type="submit">Main-Menu</button>
+                <ul id="high-scores-list">
+
+                </ul>
+            </div>
+        </div>
+        <div class="screen" id="help-screen">
+            <div id='help-div'>
+                <h1 class="menu-text-heading">HELP SCREEN</h1>
+                <button class="sub-menu-button" id="button-help-back-menu" type="submit">Main-Menu</button>
+                <p class="menu-text">UFOs spawn in intervals of: SMALL - 45 seconds -- LARGE: 30 seconds</p>
+                <p class="menu-text">Player Levels:</p>
+                <p class="menu-text">Level One: 0-4999 Points</p>
+                <p class="menu-text">Level Two: 5000-24999 Points</p>
+                <p class="menu-text">Level Three: 25000-43999 Points</p>
+                <p class="menu-text">Level Four: 45000+ Points</p>
+                <p class="menu-text">More galaga spaw as the levels increase, so watch out!</p>
+            </div>
+        </div>
+        <div class="screen" id="about-screen">
+            <div id='about-div'>
+                <h1 class="menu-text-heading">ABOUT SCREEN</h1>
+                <button id="button-about-back-menu" type="submit">Main-Menu</button>
+                <p class="menu-text">Starfox-esque galaga - Developed by: Connor Runyan</p>
+                <p class="menu-text">For: CS5410 - Game Development</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let Galaga = {
+            objects: {
+                player: {},
+                projectile: {},
+                ufo: {},
+            },
+            render: {},
+            graphics: {},
+            input: {},
+            particles: {},
+            screens: {},
+            game: {},
+            sounds: {},
+            utils: {},
+        };
+    </script>
+    <script src="scripts/input/input.js"></script>
+    <script src="scripts/objects/player/player.js"></script>
+    <script src="scripts/objects/projectiles/playerShot.js"></script>
+    <script src="scripts/objects/hazards/ufoSmall.js"></script>
+    <script src="scripts/game/board.js"></script>
+    <script src="scripts/audio/audioPlayer.js"></script>
+    <script src="scripts/screens/screenController.js"></script>
+    <script src="scripts/screens/gameScreen.js"></script>
+    <script src="scripts/screens/highscoreScreen.js"></script>
+    <script src="scripts/screens/helpScreen.js"></script>
+    <script src="scripts/screens/aboutScreen.js"></script>
+    <script src="scripts/screens/mainMenu.js"></script>
+    <script src="scripts/utilites/random.js"></script>
+    <script src="scripts/utilites/storage.js"></script>
+    <script src="scripts/render/core.js"></script>
+    <script src="scripts/render/renderPlayer.js"></script>
+    <script src="scripts/render/renderBoard.js"></script>
+    <script src="scripts/render/renderProjectile.js"></script>
+    <script src="scripts/render/renderParticleSystem.js"></script>
+    <script src="scripts/render/renderGameStatus.js"></script>
+    <script src="scripts/particleSystem/particle-system.js"></script>
+    <script src="scripts/particleSystem/particleSystemController.js"></script>
+    <script src="scripts/game.js"></script>
+</body>
+
+</html>

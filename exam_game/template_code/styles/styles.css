@@ -1,0 +1,168 @@
+body {
+    /* background-size: 100%, 100%; */
+    margin: 0;
+}
+
+#myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: 0;
+}
+
+.galaga-game {
+    margin: auto;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    position: fixed;
+    border-style: solid;
+    background-color: grey;
+    border-width: 1px;
+}
+
+#main-menu-title {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+#main-menu-title.h1 {
+    font-size: 1em;
+}
+
+ul.menu {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+ul.menu li {
+    margin: 7em 0;
+}
+
+ul.menu li button {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #CECEF6;
+    width: 50em;
+    height: 5em;
+    transform: skew(-20deg);
+    background: rgba(42, 42, 42, 0.822);
+    border: 0.1em solid rgba(11, 172, 236, 0.959);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#button-score-back-menu {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #CECEF6;
+    width: 10em;
+    height: 3em;
+    transform: skew(-20deg);
+    background: rgba(42, 42, 42, 0.822);
+    border: 0.1em solid rgba(11, 172, 236, 0.959);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#button-score-back-menu:hover {
+    background: rgb(26, 10, 170);
+}
+
+#button-about-back-menu {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #CECEF6;
+    width: 10em;
+    height: 3em;
+    transform: skew(-20deg);
+    background: rgba(42, 42, 42, 0.822);
+    border: 0.1em solid rgba(11, 172, 236, 0.959);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#button-about-back-menu:hover {
+    background: rgb(26, 10, 170);
+}
+
+#button-help-back-menu {
+    font-size: 10pt;
+    font-weight: bold;
+    color: #CECEF6;
+    width: 10em;
+    height: 3em;
+    transform: skew(-20deg);
+    background: rgba(42, 42, 42, 0.822);
+    border: 0.1em solid rgba(11, 172, 236, 0.959);
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.3em rgb(0, 0, 0);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#button-help-back-menu:hover {
+    background: rgb(26, 10, 170);
+}
+
+ul.menu li button:hover {
+    background: rgb(26, 10, 170);
+}
+
+ul.menu li button:active {
+    color: #CECEF6;
+    background: rgb(0, 0, 0);
+}
+
+#galaga-game .screen {
+    display: none
+}
+
+#galaga-game .screen.active {
+    display: block;
+}
+
+.screen:not(#galaga-board) {
+    background: url('../assets/gameBackground.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    position: fixed;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.menu-text {
+    color: aqua;
+    font-size: 20pt;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.menu-text-heading {
+    color: aqua;
+    font-size: 30pt;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.main-menu-text-heading {
+    color: aqua;
+    font-size: 30pt;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+}
