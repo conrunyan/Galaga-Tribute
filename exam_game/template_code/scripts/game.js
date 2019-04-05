@@ -71,7 +71,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             maxSpeed: 5, // pixels per second
             acceleration: 10,
             velocities: { x: 0, y: 10 },
-            rotation: -Math.PI / 3,
+            rotation: 0,
             boardSize: boardDim,
             size: 30,
             shot: projectiles,

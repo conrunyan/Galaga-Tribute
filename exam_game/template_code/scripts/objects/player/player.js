@@ -95,14 +95,14 @@ Galaga.objects.player.Player = function (spec) {
     }
 
     function stopPlayerMovement() {
-        spec.velocities = {x: 0, y: 0};
+        spec.velocities = { x: 0, y: 0 };
         spec.playerStop = true;
     }
 
     function playerThrust(elapsedTime) {
         // console.log('old velocity: ', spec.velocities);
-        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation) / 180);
-        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation) / 180);
+        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI/2)) / 180);
+        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI/2)) / 180);
         // check for max velocity
         // console.log('max speed', spec.maxSpeed)
         if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
@@ -111,17 +111,17 @@ Galaga.objects.player.Player = function (spec) {
             spec.velocities.y += newYVel;
         }
         // let newPS = spec.partSys.ParticleSystemThruster({
-            //     center: { x: shipCenter.x, y: shipCenter.y },
-            //     size: { mean: 15, stdev: 5 },
-            //     speed: { mean: 65, stdev: 35 },
-            //     lifetime: { mean: .5, stdev: .25 },
-            //     totalLife: elapsedTime / 1000,
-            //     imageSrc: './assets/green_laser.png',
-            //     startAngle: spec.rotation - 180,
-            //     range: 15,
-            //     density: 2,
-            // }, spec.myRandom)
-            // spec.particleController.addNewSystem(newPS);
+        //     center: { x: shipCenter.x, y: shipCenter.y },
+        //     size: { mean: 15, stdev: 5 },
+        //     speed: { mean: 65, stdev: 35 },
+        //     lifetime: { mean: .5, stdev: .25 },
+        //     totalLife: elapsedTime / 1000,
+        //     imageSrc: './assets/green_laser.png',
+        //     startAngle: spec.rotation - 180,
+        //     range: 15,
+        //     density: 2,
+        // }, spec.myRandom)
+        // spec.particleController.addNewSystem(newPS);
         // console.log('new velocity: ', spec.velocities);
         spec.playerStop = false;
     }
@@ -205,6 +205,13 @@ Galaga.objects.player.Player = function (spec) {
         return nose;
     }
 
+    function _determineSpeed() {
+        // let speedX = spec.velocities.x;
+        let speedY = spec.velocities.y;
+        // let speed = Math.sqrt((speedX * speedX) * (speedY * speedY));
+        return Math.abs(speedY)/ 10;
+    }
+
     function _determineLevel() {
         let level = '';
         if (score < 5000) {
@@ -221,6 +228,12 @@ Galaga.objects.player.Player = function (spec) {
         }
 
         return level
+    }
+
+    function printStats() {
+        console.log('speed:', _determineSpeed());
+        console.log('fuel:', spec.fuel);
+        console.log('rotation:', (spec.rotation * 180) / Math.PI);
     }
 
     function updateShots(elapsedTime) {
@@ -248,6 +261,9 @@ Galaga.objects.player.Player = function (spec) {
         get lives() { return lives },
         get score() { return score },
         get level() { return _determineLevel() },
+        get displayRot() { return (spec.rotation * 180) / Math.PI },
+        get displaySpeed() { return _determineSpeed() },
+        get displayFuel() { return spec.fuel },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,
@@ -258,6 +274,7 @@ Galaga.objects.player.Player = function (spec) {
         stopPlayerMovement: stopPlayerMovement,
         increaseScore: increaseScore,
         respawn: respawn,
+        printStats: printStats,
     };
 
     return api;

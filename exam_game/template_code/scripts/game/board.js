@@ -45,10 +45,20 @@ Galaga.game.Board = function (spec) {
         //     console.log(spec.gamePieces.player.coords)
         //     console.log('SAFE SPOT!');
         // }
-        if (didCollide(spec.gamePieces.player)) {
+        spec.gamePieces.player.printStats();
+        let collResults = didCollide(spec.gamePieces.player);
+        if (collResults.collision) {
             console.log(spec.gamePieces.player.center)
-            console.log('HIT SURFACE!');
-            spec.gamePieces.player.stopPlayerMovement();
+            
+            // is place safe?
+            if (collResults.safe) {
+                spec.gamePieces.player.stopPlayerMovement();
+                console.log('Safe!');
+            }
+            else {
+                console.log('HIT SURFACE!');
+                spec.gamePieces.player.stopPlayerMovement();
+            }
         }
     }
 
@@ -64,16 +74,18 @@ Galaga.game.Board = function (spec) {
     function didCollide(player) {
         // check all points of the mountain
         let curPoint1 = { x: surface[0].x * spec.boardDimmensions.x, y: spec.boardDimmensions.y - (surface[0].y * spec.boardDimmensions.y) };
+        let collInfo = {safe: true, collision: false};
         let playerCollision = false;
         for (let i = 1; i < surface.length; i++) {
             let curPoint2 = { x: surface[i].x * spec.boardDimmensions.x, y: spec.boardDimmensions.y - (surface[i].y * spec.boardDimmensions.y) }
             if (lineCircleIntersection(curPoint1, curPoint2, player)) {
-                playerCollision = true;
+                collInfo.collision = true;
+                collInfo.safe = surface[i - 1].safe && surface[i];
                 break;
             }
             curPoint1 = curPoint2;
         }
-        return playerCollision;
+        return collInfo;
     }
 
     // Reference: https://stackoverflow.com/questions/37224912/circle-line-segment-collision
