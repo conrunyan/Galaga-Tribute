@@ -47,17 +47,17 @@ Galaga.game.Board = function (spec) {
         // }
         // spec.gamePieces.player.printStats();
         let collResults = didCollide(spec.gamePieces.player);
-        if (collResults.collision) {
+        if (collResults.collision && !spec.gamePieces.player.gameEnd) {
             
             // is place safe?
             if (collResults.safe && spec.gamePieces.player.landedSafe()) {
-                spec.gamePieces.player.stopPlayerMovement();
-                // console.log('Safe!');
+                console.log('Safe!');
+                spec.gamePieces.player.stopPlayerMovement('safe');
             }
             else {
-                // console.log('HIT SURFACE!');
-                explosion(spec.gamePieces.player, './assets/fire.png', 2, 10);
-                spec.gamePieces.player.stopPlayerMovement();
+                console.log('HIT SURFACE!');
+                spec.gamePieces.player.stopPlayerMovement('died');
+                explosion(spec.gamePieces.player, './assets/fire.png', 2, { mean: 3, stdev: 1});
             }
         }
     }

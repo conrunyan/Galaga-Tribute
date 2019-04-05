@@ -38,6 +38,7 @@ Galaga.objects.player.Player = function (spec) {
     let lives = 3;
     let score = 0;
     let level = 1;
+    let canMove = true;
     // const GRAVITY = 0.25;
     const GRAVITY = 0.25;
     let lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
@@ -74,51 +75,69 @@ Galaga.objects.player.Player = function (spec) {
 
     }
 
-    function stopPlayerMovement() {
+    function stopPlayerMovement(result) {
         spec.velocities = { x: 0, y: 0 };
         spec.playerStop = true;
+        if (result == 'safe') {
+            spec.won = true;
+            spec.gameEnd = true;
+            canMove = false;
+        }
+        else {
+            spec.won = false;
+            spec.gameEnd = true;
+            canMove = false;
+        }
     }
 
     function playerThrust(elapsedTime) {
         // console.log('old velocity: ', spec.velocities);
-        decreaseFuel(elapsedTime);
-        let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI / 2)) / 180);
-        let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI / 2)) / 180);
-        // check for max velocity
-        // console.log('max speed', spec.maxSpeed)
-        if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
-            // console.log('accelerating');
-            spec.velocities.x += newXVel;
-            spec.velocities.y += newYVel;
+        if (canMove) {
+            decreaseFuel(elapsedTime);
+            let newXVel = (spec.velocities.x + spec.acceleration * elapsedTime) * (Math.cos(spec.rotation - (Math.PI / 2)) / 180);
+            let newYVel = (spec.velocities.y + spec.acceleration * elapsedTime) * (Math.sin(spec.rotation - (Math.PI / 2)) / 180);
+            // check for max velocity
+            // console.log('max speed', spec.maxSpeed)
+            if (Math.abs(newXVel) < spec.maxSpeed && Math.abs(newYVel) < spec.maxSpeed) {
+                // console.log('accelerating');
+                spec.velocities.x += newXVel;
+                spec.velocities.y += newYVel;
+            }
+            let center = _getPlayerCenter();
+            let newPS = spec.partSys.ParticleSystemThruster({
+                center: _getPlayerNose(),
+                size: { mean: 15, stdev: 5 },
+                speed: { mean: 65, stdev: 35 },
+                lifetime: { mean: 2, stdev: .25 },
+                totalLife: elapsedTime / 1000,
+                imageSrc: './assets/smoke-2.png',
+                startAngle: spec.rotation - 180,
+                range: 15,
+                density: 2,
+                isReady: true,
+            }, spec.myRandom)
+            spec.particleController.addNewSystem(newPS);
+            spec.playerStop = false;
         }
-        let center = _getPlayerCenter();
-        let newPS = spec.partSys.ParticleSystemThruster({
-            center: _getPlayerNose(),
-            size: { mean: 15, stdev: 5 },
-            speed: { mean: 65, stdev: 35 },
-            lifetime: { mean: 2, stdev: .25 },
-            totalLife: elapsedTime / 1000,
-            imageSrc: './assets/smoke-2.png',
-            startAngle: spec.rotation - 180,
-            range: 15,
-            density: 2,
-            isReady: true,
-        }, spec.myRandom)
-        spec.particleController.addNewSystem(newPS);
-        spec.playerStop = false;
     }
 
     function turnPlayerLeft(elapsedTime) {
         // console.log('turning player left');
         // spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
-        spec.rotation -= turnSpeed * elapsedTime;
+        if (canMove) {
+            spec.rotation -= turnSpeed * elapsedTime;
+        }
+
         // console.log(spec.rotation);
     }
 
     function turnPlayerRight(elapsedTime) {
         // console.log('turning player right');
         // spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
-        spec.rotation += turnSpeed * elapsedTime;
+        if (canMove) {
+            spec.rotation += turnSpeed * elapsedTime;
+        }
+
         // console.log(spec.rotation);
     }
 
@@ -247,6 +266,9 @@ Galaga.objects.player.Player = function (spec) {
         get displayFuelColor() { return 'green' },
         get displaySpeedColor() { return getDisplaySpeedColor() },
         get displayAngleColor() { return getDisplayAngleColor() },
+        get gameEnd() { return spec.gameEnd },
+        get won() { return spec.won },
+        get canMove() { return canMove },
         setDidCollide: setDidCollide,
         playerMoveLocation: playerMoveLocation,
         turnPlayerLeft: turnPlayerLeft,

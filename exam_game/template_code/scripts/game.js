@@ -85,6 +85,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             isThrusting: false,
             fuel: 20000,
             playerStop: false,
+            gameEnd: false,
+            won: true,
         });
         gameBoard = myGame.Board({
             gamePieces: {
@@ -118,12 +120,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         update(elapsedTime);
         render();
         // check game ending condition (player out of lives)
-        if (myPlayer.lives <= 0) {
-            // save highscores
-            saveHighScore();
-            screens.Controller.showScreen('high-scores-screen');
-            return;
-        }
         requestAnimationFrame(gameLoop);
     }
 
