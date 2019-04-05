@@ -10,7 +10,7 @@ Galaga.render.Player = (function (graphics) {
             y: player.coords.y + (player.size / 2),
         };
         if (player.image.isReady && !player.didCollide) {
-            graphics.drawTexture(player.image, center, player.rotation, { width: player.size * scale, height: player.size * scale });
+            graphics.drawTexture(player.image, player.center, player.rotation, { width: player.size * scale, height: player.size * scale });
         }
     }
 

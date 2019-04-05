@@ -38,6 +38,7 @@ Galaga.objects.player.Player = function (spec) {
     let lives = 3;
     let score = 0;
     let level = 1;
+    // const GRAVITY = 0.25;
     const GRAVITY = 0.25;
     let lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
@@ -65,7 +66,9 @@ Galaga.objects.player.Player = function (spec) {
         spec.coords.y += dy;
 
         // if player isn't thrusting, accel down
-        spec.velocities.y += GRAVITY;
+        if (!spec.playerStop) {
+            spec.velocities.y += GRAVITY;
+        }
         // if (!spec.isThrusting) {
         //     spec.velocities.y -= GRAVITY;
         // }
@@ -89,6 +92,11 @@ Galaga.objects.player.Player = function (spec) {
 
         lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
+    }
+
+    function stopPlayerMovement() {
+        spec.velocities = {x: 0, y: 0};
+        spec.playerStop = true;
     }
 
     function playerThrust(elapsedTime) {
@@ -115,17 +123,18 @@ Galaga.objects.player.Player = function (spec) {
             // }, spec.myRandom)
             // spec.particleController.addNewSystem(newPS);
         // console.log('new velocity: ', spec.velocities);
+        spec.playerStop = false;
     }
 
     function turnPlayerLeft(elapsedTime) {
-        console.log('turning player left');
+        // console.log('turning player left');
         // spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
         spec.rotation -= turnSpeed * elapsedTime;
         // console.log(spec.rotation);
     }
 
     function turnPlayerRight(elapsedTime) {
-        console.log('turning player right');
+        // console.log('turning player right');
         // spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
         spec.rotation += turnSpeed * elapsedTime;
         // console.log(spec.rotation);
@@ -246,6 +255,7 @@ Galaga.objects.player.Player = function (spec) {
         playerThrust: playerThrust,
         removeLife: removeLife,
         addLife: addLife,
+        stopPlayerMovement: stopPlayerMovement,
         increaseScore: increaseScore,
         respawn: respawn,
     };

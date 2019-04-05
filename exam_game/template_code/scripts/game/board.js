@@ -28,60 +28,74 @@ Galaga.game.Board = function (spec) {
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
     let aliens = []
+    let surface = [
+        { x: 0.00, y: 0.00, safe: false },
+        { x: 0.25, y: 0.25, safe: false },
+        { x: 0.40, y: 0.10, safe: true },
+        { x: 0.70, y: 0.10, safe: true },
+        { x: 0.80, y: 0.45, safe: false },
+        { x: 1.00, y: 0.00, safe: false },
+    ];
 
     function updatePieces(elapsedTime) {
         // update player
         spec.gamePieces.player.playerMoveLocation(elapsedTime);
-        // spec.gamePieces.player.updateShots(elapsedTime);
-
-        // // detect colision
-        // // check player with ufos
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
-        //     let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
-        //     if (playerUfoDist < sumOfRadi && !playerDead) {
-        //         playerDied();
-        //         ufo.setDidCollide(true);
-        //     }
-        // });
-        // // check player with ufo shots
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     ufo.projectiles.forEach(shot => {
-        //         let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
-        //         let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
-        //         if (ufoPlayerShot < sumOfRadi && !playerDead) {
-        //             playerDied();
-        //             shot.setDidCollide(true);
-        //         }
-        //     })
-        // });
-
-        // // check projectiles with ufos
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     spec.gamePieces.player.projectiles.forEach(shot => {
-        //         let ufoShot = _getDistanceBetweenPoints(shot.center, ufo.center);
-        //         let sumOfRadi = ufo.radius + shot.radius;
-        //         if (ufoShot < sumOfRadi) {
-        //             ufo.setDidCollide(true);
-        //             shot.setDidCollide(true);
-        //             spec.gamePieces.player.increaseScore(ufo.points);
-        //         }
-        //     })
-
-        // });
-        // split asteroids in two that have colided, then remove the original
+        // check for collision:
+        // if (spotIsSafe(spec.gamePieces.player.coords)) {
+        //     console.log(spec.gamePieces.player.coords)
+        //     console.log('SAFE SPOT!');
+        // }
+        if (didCollide(spec.gamePieces.player)) {
+            console.log(spec.gamePieces.player.center)
+            console.log('HIT SURFACE!');
+            spec.gamePieces.player.stopPlayerMovement();
+        }
     }
 
-    function didCollide(obj1, obj2) {
-        let dist = _getDistanceBetweenPoints(obj1.center, obj2.center);
-        let sumOfRadi = obj1.radius + obj2.radius;
-        if (dist < sumOfRadi) {
-            obj1.setDidCollide(true);
-            obj2.setDidCollide(true);
+    // function didCollide(obj1, obj2) {
+    //     let dist = _getDistanceBetweenPoints(obj1.center, obj2.center);
+    //     let sumOfRadi = obj1.radius + obj2.radius;
+    //     if (dist < sumOfRadi) {
+    //         obj1.setDidCollide(true);
+    //         obj2.setDidCollide(true);
+    //     }
+    // }
+
+    function didCollide(player) {
+        // check all points of the mountain
+        let curPoint1 = { x: surface[0].x * spec.boardDimmensions.x, y: spec.boardDimmensions.y - (surface[0].y * spec.boardDimmensions.y) };
+        let playerCollision = false;
+        for (let i = 1; i < surface.length; i++) {
+            let curPoint2 = { x: surface[i].x * spec.boardDimmensions.x, y: spec.boardDimmensions.y - (surface[i].y * spec.boardDimmensions.y) }
+            if (lineCircleIntersection(curPoint1, curPoint2, player)) {
+                playerCollision = true;
+                break;
+            }
+            curPoint1 = curPoint2;
         }
+        return playerCollision;
+    }
+
+    // Reference: https://stackoverflow.com/questions/37224912/circle-line-segment-collision
+    function lineCircleIntersection(pt2, pt1, circle) {
+        let v1 = { x: pt2.x - pt1.x, y: pt2.y - pt1.y };
+        let v2 = { x: pt1.x - circle.center.x, y: pt1.y - circle.center.y };
+        let b = -2 * (v1.x * v2.x + v1.y * v2.y);
+        let c = 2 * (v1.x * v1.x + v1.y * v1.y);
+        let d = Math.sqrt(b * b - 2 * c * (v2.x * v2.x + v2.y * v2.y - circle.radius * circle.radius));
+        if (isNaN(d)) { // no intercept
+            return false;
+        }
+        // These represent the unit distance of point one and two on the line
+        let u1 = (b - d) / c;
+        let u2 = (b + d) / c;
+        if (u1 <= 1 && u1 >= 0) {  // If point on the line segment
+            return true;
+        }
+        if (u2 <= 1 && u2 >= 0) {  // If point on the line segment
+            return true;
+        }
+        return false;
     }
 
     function updateClock(totalTime) {
@@ -99,6 +113,20 @@ Galaga.game.Board = function (spec) {
             imageSrc: image,
         }, spec.Random)
         spec.particleController.addNewSystem(newPS);
+    }
+
+    function spotIsSafe(coords) {
+        // x: 0.40, y: 0.10
+        // x: 0.70, y: 0.10
+        let safeLeftX = spec.boardDimmensions.x * 0.4;
+        let safeRightX = spec.boardDimmensions.x * 0.7;
+        let safeYPlus = (spec.boardDimmensions.y * 0.9 + 0.1) - (spec.gamePieces.player.size - 0.2);
+        let safeYMin = (spec.boardDimmensions.y * 0.9 - 0.1) - (spec.gamePieces.player.size + 0.2);
+
+        if (coords.x >= safeLeftX && coords.x <= safeRightX && coords.y <= safeYPlus && coords.y >= safeYMin) {
+            return true;
+        }
+        return false;
     }
 
     /////////////////////////////////
@@ -139,7 +167,7 @@ Galaga.game.Board = function (spec) {
     // }
 
     // function addUFO() {
-        // _addSmallUFO();
+    // _addSmallUFO();
     // }
     //     let smallUFOAttacking = false;
     //     let largeUFOAttacking = false;
@@ -214,7 +242,7 @@ Galaga.game.Board = function (spec) {
         get image() { return backgroundImg },
         get player() { return spec.gamePieces.player },
         get ufos() { return spec.gamePieces.ufos },
-        get surface() {return surface},
+        get surface() { return surface },
         updatePieces: updatePieces,
         updateClock: updateClock,
     }

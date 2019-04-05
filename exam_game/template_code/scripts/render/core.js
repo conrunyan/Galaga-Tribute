@@ -11,7 +11,7 @@ Galaga.graphics = (function () {
 
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
-        resizeCanvas();
+        // resizeCanvas();
     }
 
     // --------------------------------------------------------------
@@ -98,8 +98,8 @@ Galaga.graphics = (function () {
         context.fillStyle = "#000000";
         context.strokeStyle = "#000000";
         context.lineWidth = 2;
-        let mapWidth = window.innerWidth;
-        let mapHeight = window.innerHeight;
+        let mapWidth = 1000;
+        let mapHeight = 750;
         // context.drawImage(
         //     spec.cellBackgroundImg,
         //     spec.xCoord,
@@ -112,8 +112,8 @@ Galaga.graphics = (function () {
         context.beginPath();
         let initPoint = surface[0];
         for (let i = 1; i < surface.length; i++) {
-            let y1 = mapHeight - (initPoint.y * mapWidth);
-            let y2 = mapHeight - (surface[i].y * mapWidth);
+            let y1 = mapHeight - (initPoint.y * mapHeight);
+            let y2 = mapHeight - (surface[i].y * mapHeight);
             let x1 = initPoint.x * mapWidth;
             let x2 = surface[i].x * mapWidth;
 

@@ -1,7 +1,7 @@
 Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, projectiles, sounds, partSys, myRandom, myStorage, ufo) {
     'use strict';
 
-    let boardDim = { x: window.innerWidth, y: window.innerHeight }; // measurement in pixels
+    let boardDim = { x: 1000, y: 750 }; // measurement in pixels
     let myKeyboard = input.Keyboard();
     let lastTimeStamp;
     let totalElapsedTime = 0;
@@ -65,7 +65,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function init() {
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
-            coords: { x: boardDim.x * .25, y: boardDim.y * .1 },
+            // coords: { x: boardDim.x * .25, y: boardDim.y * .1 },
+            coords: { x: boardDim.x * .6, y: boardDim.y * .7 },
             imageSrc: './assets/lander-2.png',
             maxSpeed: 5, // pixels per second
             acceleration: 10,
@@ -83,6 +84,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             myRandom: myRandom,
             isThrusting: false,
             fuel: 20000,
+            playerStop: false,
         });
         gameBoard = myGame.Board({
             gamePieces: {
