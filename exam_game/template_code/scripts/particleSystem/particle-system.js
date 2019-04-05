@@ -6,9 +6,10 @@ Galaga.particles.ParticleSystem = function (spec, Random) {
     let timeAliveSoFar = 0;
 
     let image = new Image();
-    let isReady = false;
+    let isReady = true;
 
     image.onload = () => {
+        console.log('loaded picutre');
         isReady = true;
     };
     image.src = spec.imageSrc;

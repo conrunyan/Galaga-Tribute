@@ -48,15 +48,14 @@ Galaga.game.Board = function (spec) {
         // spec.gamePieces.player.printStats();
         let collResults = didCollide(spec.gamePieces.player);
         if (collResults.collision) {
-            console.log(spec.gamePieces.player.center)
             
             // is place safe?
             if (collResults.safe) {
                 spec.gamePieces.player.stopPlayerMovement();
-                console.log('Safe!');
+                // console.log('Safe!');
             }
             else {
-                console.log('HIT SURFACE!');
+                // console.log('HIT SURFACE!');
                 spec.gamePieces.player.stopPlayerMovement();
             }
         }

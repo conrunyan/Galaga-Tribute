@@ -44,7 +44,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     }
 
     function update(elapsedTime) {
-        // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
         gameBoard.updateClock(totalElapsedTime);
         particleSystemController.update(elapsedTime);
@@ -60,7 +59,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         myGraphics.drawMoon(surface);
         boardRenderer.renderPieces(gameBoard);
         gameStatRenderer.renderStats(myPlayer);
-        // particleSystemRenderer.render(particleSystemController.systems);
+        particleSystemRenderer.render(particleSystemController.systems);
     }
 
     function init() {
@@ -70,7 +69,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             coords: { x: boardDim.x * .6, y: boardDim.y * .7 },
             imageSrc: './assets/lander-2.png',
             maxSpeed: 5, // pixels per second
-            acceleration: 10,
+            acceleration: 7.5,
             velocities: { x: 0, y: 10 },
             rotation: 0,
             boardSize: boardDim,

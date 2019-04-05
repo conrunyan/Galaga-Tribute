@@ -69,26 +69,6 @@ Galaga.objects.player.Player = function (spec) {
         if (!spec.playerStop) {
             spec.velocities.y += GRAVITY;
         }
-        // if (!spec.isThrusting) {
-        //     spec.velocities.y -= GRAVITY;
-        // }
-
-        // // wrap around coords
-        // if (spec.coords.x > spec.boardSize.x) {
-        //     spec.coords.x = 0;
-        // }
-        // else if (spec.coords.x < 0) {
-        //     spec.coords.x = spec.boardSize.x;
-        // }
-
-        // if (spec.coords.y > spec.boardSize.y) {
-        //     spec.coords.y = 0;
-        // }
-        // else if (spec.coords.y < 0) {
-        //     spec.coords.y = spec.boardSize.y;
-        // }
-        // // console.log('player coords: ', spec.coords);
-        // // console.log('dX:', dx, 'dY:', dy);
 
         lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
@@ -111,19 +91,20 @@ Galaga.objects.player.Player = function (spec) {
             spec.velocities.x += newXVel;
             spec.velocities.y += newYVel;
         }
-        // let newPS = spec.partSys.ParticleSystemThruster({
-        //     center: { x: shipCenter.x, y: shipCenter.y },
-        //     size: { mean: 15, stdev: 5 },
-        //     speed: { mean: 65, stdev: 35 },
-        //     lifetime: { mean: .5, stdev: .25 },
-        //     totalLife: elapsedTime / 1000,
-        //     imageSrc: './assets/green_laser.png',
-        //     startAngle: spec.rotation - 180,
-        //     range: 15,
-        //     density: 2,
-        // }, spec.myRandom)
-        // spec.particleController.addNewSystem(newPS);
-        // console.log('new velocity: ', spec.velocities);
+        let center = _getPlayerCenter();
+        let newPS = spec.partSys.ParticleSystemThruster({
+            center: _getPlayerNose(),
+            size: { mean: 15, stdev: 5 },
+            speed: { mean: 65, stdev: 35 },
+            lifetime: { mean: 2, stdev: .25 },
+            totalLife: elapsedTime / 1000,
+            imageSrc: './assets/smoke-2.png',
+            startAngle: spec.rotation - 180,
+            range: 15,
+            density: 2,
+            isReady: true,
+        }, spec.myRandom)
+        spec.particleController.addNewSystem(newPS);
         spec.playerStop = false;
     }
 
@@ -141,29 +122,6 @@ Galaga.objects.player.Player = function (spec) {
         // console.log(spec.rotation);
     }
 
-    // function playerShoot(elapsedTime) {
-    //     if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval) {
-    //         // console.log('creating new shot...');
-    //         let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
-    //         let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
-    //         let newShot = spec.shot.PlayerShot({
-    //             coords: _getPlayerNose(),
-    //             imageSrc: spec.shotImgSource,
-    //             maxSpeed: spec.shotSpeed,
-    //             velocities: { x: tmpShotXVel, y: tmpShotYVel },
-    //             size: 5,
-    //             lifeTime: 0,
-    //             maxLifeTime: 10000,
-    //         });
-    //         projectiles.push(newShot);
-    //         timeSinceLastShot = 0;
-    //         // trigger sound of shot
-    //         spec.sounds.playSound('audio/player-laser-shot');
-    //     }
-    //     else {
-    //         timeSinceLastShot += elapsedTime
-    //     }
-    // }
 
     function respawn(safeCoords) {
         lives -= 1;
@@ -199,8 +157,8 @@ Galaga.objects.player.Player = function (spec) {
 
     function _getPlayerNose() {
         let nose = {
-            x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation)) * spec.size / 2),
-            y: (spec.coords.y + (spec.size / 2)) + ((Math.sin(spec.rotation)) * spec.size / 2),
+            x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation + (Math.PI / 2))) * spec.size / 2),
+            y: (spec.coords.y + (spec.size / 2)) + ((Math.sin(spec.rotation + (Math.PI / 2))) * spec.size / 2),
         };
 
         return nose;
@@ -247,7 +205,7 @@ Galaga.objects.player.Player = function (spec) {
     }
     function getDisplayAngleColor() {
         let angle = _determineAngle();
-        if (angle < 2) {
+        if (angle <= 5 || angle >= 355) {
             return 'green';
         }
         return 'white';
