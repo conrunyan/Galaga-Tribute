@@ -7,6 +7,14 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let totalElapsedTime = 0;
     let MAX_SCORES_KEPT = 10;
     let scores = []
+    let surface = [
+        { x: 0.00, y: 0.00, safe: false },
+        { x: 0.25, y: 0.25, safe: false },
+        { x: 0.40, y: 0.10, safe: true },
+        { x: 0.70, y: 0.10, safe: true },
+        { x: 0.80, y: 0.45, safe: false },
+        { x: 1.00, y: 0.00, safe: false },
+    ];
 
     // initialize screens
     screens.Controller.initScreens();
@@ -49,6 +57,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         myGraphics.clear();
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
+        myGraphics.drawMoon(surface);
         boardRenderer.renderPieces(gameBoard);
         // particleSystemRenderer.render(particleSystemController.systems);
     }
@@ -56,11 +65,11 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function init() {
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
-            coords: { x: boardDim.x / 4, y: boardDim.y / 4 },
+            coords: { x: boardDim.x * .25, y: boardDim.y * .1 },
             imageSrc: './assets/lander-2.png',
             maxSpeed: 5, // pixels per second
-            acceleration: 40,
-            velocities: { x: 0, y: 20 },
+            acceleration: 10,
+            velocities: { x: 0, y: 10 },
             rotation: -Math.PI / 3,
             boardSize: boardDim,
             size: 30,
@@ -73,6 +82,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             partSys: partSys,
             myRandom: myRandom,
             isThrusting: false,
+            fuel: 20000,
         });
         gameBoard = myGame.Board({
             gamePieces: {

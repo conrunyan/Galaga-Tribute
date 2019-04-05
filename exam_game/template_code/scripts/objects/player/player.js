@@ -30,14 +30,15 @@ Galaga.objects.player.Player = function (spec) {
     };
 
     let projectiles = [];
-    let turnSpeed = 200; // not sure what unit yet
+    // let turnSpeed = 200; // not sure what unit yet
+    let turnSpeed = 0.0015;
     let timeSinceLastShot = 300;
     let shotInterval = 300;
     let didCollide = false;
     let lives = 3;
     let score = 0;
     let level = 1;
-    const GRAVITY = 0.25
+    const GRAVITY = 0.25;
     let lastVelocity = { x: spec.velocities.x, y: spec.velocities.y };
 
     function playerMoveLocation(elapsedTime) {
@@ -118,13 +119,15 @@ Galaga.objects.player.Player = function (spec) {
 
     function turnPlayerLeft(elapsedTime) {
         console.log('turning player left');
-        spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        // spec.rotation -= (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        spec.rotation -= turnSpeed * elapsedTime;
         // console.log(spec.rotation);
     }
 
     function turnPlayerRight(elapsedTime) {
         console.log('turning player right');
-        spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        // spec.rotation += (Math.PI * (turnSpeed * (elapsedTime / 1000))) / 180;
+        spec.rotation += turnSpeed * elapsedTime;
         // console.log(spec.rotation);
     }
 

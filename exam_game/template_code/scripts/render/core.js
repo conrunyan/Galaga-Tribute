@@ -93,6 +93,40 @@ Galaga.graphics = (function () {
 
     }
 
+    function drawMoon(surface) {
+        context.save();
+        context.fillStyle = "#000000";
+        context.strokeStyle = "#000000";
+        context.lineWidth = 2;
+        let mapWidth = window.innerWidth;
+        let mapHeight = window.innerHeight;
+        // context.drawImage(
+        //     spec.cellBackgroundImg,
+        //     spec.xCoord,
+        //     spec.yCoord,
+        //     spec.size, spec.size);
+
+        // draw breadCrumb, if applicable
+
+        // draw shortest path, if applicable
+        context.beginPath();
+        let initPoint = surface[0];
+        for (let i = 1; i < surface.length; i++) {
+            let y1 = mapHeight - (initPoint.y * mapWidth);
+            let y2 = mapHeight - (surface[i].y * mapWidth);
+            let x1 = initPoint.x * mapWidth;
+            let x2 = surface[i].x * mapWidth;
+
+            context.moveTo(x1, y1);
+            context.lineTo(x2, y2);
+            context.stroke();
+            initPoint = surface[i];
+        }
+        // });
+        context.closePath();
+        context.restore();
+    }
+
     let api = {
         get canvas() { return canvas; },
         clear: clear,
@@ -100,6 +134,7 @@ Galaga.graphics = (function () {
         drawPlayer: drawPlayer,
         drawSprite: drawSprite,
         drawText: drawText,
+        drawMoon: drawMoon,
     };
 
     return api;
