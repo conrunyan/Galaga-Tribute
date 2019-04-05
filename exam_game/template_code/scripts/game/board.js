@@ -50,12 +50,13 @@ Galaga.game.Board = function (spec) {
         if (collResults.collision) {
             
             // is place safe?
-            if (collResults.safe) {
+            if (collResults.safe && spec.gamePieces.player.landedSafe()) {
                 spec.gamePieces.player.stopPlayerMovement();
                 // console.log('Safe!');
             }
             else {
                 // console.log('HIT SURFACE!');
+                explosion(spec.gamePieces.player, './assets/fire.png', 2, 10);
                 spec.gamePieces.player.stopPlayerMovement();
             }
         }

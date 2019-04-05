@@ -211,6 +211,14 @@ Galaga.objects.player.Player = function (spec) {
         return 'white';
     }
 
+    function landedSafe() {
+        let angle = _determineAngle();
+        if (_determineSpeed() < 2 && (angle <= 5 || angle >= 355)) {
+            return true
+        }
+        return false;
+    }
+
     function decreaseFuel(elapsedTime) {
         spec.fuel -= elapsedTime;
     }
@@ -219,19 +227,6 @@ Galaga.objects.player.Player = function (spec) {
         console.log('speed:', _determineSpeed());
         console.log('fuel:', spec.fuel);
         console.log('rotation:', (spec.rotation * 180) / Math.PI);
-    }
-
-    function updateShots(elapsedTime) {
-        let shotsToKeep = [];
-        projectiles.forEach(shot => {
-            // console.log(shot)
-            shot.moveProjectileFoward(elapsedTime);
-            // TODO: check if a shot needs to be removed, based on how long it's been alive
-        });
-        // check if a shot needs to be removed, based on how long it's been alive
-        // also remove if it's run into something
-
-        projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) && !shot.didCollide);
     }
 
     let api = {
@@ -264,6 +259,7 @@ Galaga.objects.player.Player = function (spec) {
         respawn: respawn,
         printStats: printStats,
         decreaseFuel: decreaseFuel,
+        landedSafe: landedSafe,
     };
 
     return api;
