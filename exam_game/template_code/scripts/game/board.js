@@ -18,32 +18,21 @@ Galaga.game.Board = function (spec) {
     'use strict';
 
     // load image
-    let backgroundImg = new Image();
-    backgroundImg.isReady = false;
-    backgroundImg.src = spec.imageSrc;
-    backgroundImg.onload = function () {
-        // console.log('loaded image...');
-        this.isReady = true;
-    };
+    // let backgroundImg = new Image();
+    // backgroundImg.isReady = false;
+    // backgroundImg.src = spec.imageSrc;
+    // backgroundImg.onload = function () {
+    //     // console.log('loaded image...');
+    //     this.isReady = true;
+    // };
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
     let aliens = []
 
     function updatePieces(elapsedTime) {
         // update player
-        spec.gamePieces.player.updateShots(elapsedTime);
-        spec.gamePieces.ufos.forEach(ufo => {
-            ufo.ufoMove(elapsedTime);
-        });
-
-        // add a new ufo each half second
-        if (spec.boardClock >= 250) {
-            addUFO();
-            spec.boardClock = 0;
-        }
-        else {
-            spec.boardClock += elapsedTime;
-        }
+        spec.gamePieces.player.playerMoveLocation(elapsedTime);
+        // spec.gamePieces.player.updateShots(elapsedTime);
 
         // // detect colision
         // // check player with ufos
@@ -149,9 +138,9 @@ Galaga.game.Board = function (spec) {
     //     }
     // }
 
-    function addUFO() {
-        _addSmallUFO();
-    }
+    // function addUFO() {
+        // _addSmallUFO();
+    // }
     //     let smallUFOAttacking = false;
     //     let largeUFOAttacking = false;
     //     // remove UFOs that collided or are out of time
@@ -184,21 +173,21 @@ Galaga.game.Board = function (spec) {
     //     timeUntilLargeUFO = largeUFOAttacking ? ufoIntervalLarge : timeUntilLargeUFO;
     // }
 
-    function _addSmallUFO() {
-        let smallUFO = spec.constructors.ufos.UFOSmall({
-            coords: { x: 300, y: spec.boardDimmensions.y / 2 },
-            imageSrc: './assets/green-yellow-alien.png',
-            rotation: -Math.PI / 2,
-            boardSize: spec.boardDimmensions,
-            size: 35,
-            shotImgSource: './assets/green-yellow-alien.png',
-            shot: spec.constructors.shot,
-            ufoType: 'small',
-            maxProjectiles: 40,
-            theta: Math.PI / 5,
-        });
-        spec.gamePieces.ufos.push(smallUFO);
-    }
+    //function _addSmallUFO() {
+    //    let smallUFO = spec.constructors.ufos.UFOSmall({
+    //        coords: { x: 300, y: spec.boardDimmensions.y / 2 },
+    //        imageSrc: './assets/green-yellow-alien.png',
+    //        rotation: -Math.PI / 2,
+    //        boardSize: spec.boardDimmensions,
+    //        size: 35,
+    //        shotImgSource: './assets/green-yellow-alien.png',
+    //        shot: spec.constructors.shot,
+    //        ufoType: 'small',
+    //        maxProjectiles: 40,
+    //        theta: Math.PI / 5,
+    //    });
+    //    spec.gamePieces.ufos.push(smallUFO);
+    //}
 
 
     /////////////////////////////////
@@ -227,7 +216,6 @@ Galaga.game.Board = function (spec) {
         get ufos() { return spec.gamePieces.ufos },
         updatePieces: updatePieces,
         updateClock: updateClock,
-        addUFO: addUFO,
     }
 
     return api;

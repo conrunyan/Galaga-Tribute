@@ -16,7 +16,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     // background image
     let backgroundImg = new Image();
     backgroundImg.isReady = false;
-    backgroundImg.src = 'assets/gameBackground.jpg';
+    backgroundImg.src = 'assets/background-1.jpg';
     backgroundImg.onload = function () {
         console.log('loaded image...');
         this.isReady = true;
@@ -48,7 +48,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function render() {
         myGraphics.clear();
         // render board background
-        // myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
+        myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
         // particleSystemRenderer.render(particleSystemController.systems);
     }
@@ -56,16 +56,16 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function init() {
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
-            coords: { x: boardDim.x / 2, y: boardDim.y - 30 },
-            imageSrc: './assets/playerShip.png',
-            maxSpeed: 0.33, // pixels per second
+            coords: { x: boardDim.x / 4, y: boardDim.y / 4 },
+            imageSrc: './assets/lander-2.png',
+            maxSpeed: 5, // pixels per second
             acceleration: 40,
             velocities: { x: 0, y: 0 },
-            rotation: -Math.PI / 2,
+            rotation: -Math.PI / 3,
             boardSize: boardDim,
             size: 30,
             shot: projectiles,
-            shotImgSource: './assets/playerShip.png',
+            shotImgSource: './assets/green_laser.png',
             shotSpeed: 50,
             maxProjectiles: 40,
             sounds: sounds,
@@ -95,8 +95,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         registerKeyEvents();
         console.log(myPlayer);
         requestAnimationFrame(gameLoop);
-        console.log('adding ufo')
-        gameBoard.addUFO();
     }
 
     function gameLoop(time) {
@@ -118,9 +116,11 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     function registerKeyEvents() {
         // Register Arrow keys
-        myKeyboard.register(' ', myPlayer.playerShoot);
-        myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft);
-        myKeyboard.register('ArrowRight', myPlayer.movePlayerRight);
+        myKeyboard.register('ArrowUp', myPlayer.playerThrust);
+        // myKeyboard.register('ArrowUp', myPlayer.moveUp);
+        // myKeyboard.register(' ', myPlayer.playerShoot);
+        myKeyboard.register('ArrowLeft', myPlayer.turnPlayerLeft);
+        myKeyboard.register('ArrowRight', myPlayer.turnPlayerRight);
     }
 
     function saveHighScore() {

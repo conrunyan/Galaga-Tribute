@@ -131,7 +131,7 @@ Asteroids.main = (function (myGraphics, input, player, renderer, screens, myGame
         // Register Arrow keys
         myKeyboard.register('ArrowUp', myPlayer.playerThrust);
         // myKeyboard.register('ArrowUp', myPlayer.moveUp);
-        myKeyboard.register(' ', myPlayer.playerShoot);
+        // myKeyboard.register(' ', myPlayer.playerShoot);
         myKeyboard.register('ArrowLeft', myPlayer.turnPlayerLeft);
         myKeyboard.register('ArrowRight', myPlayer.turnPlayerRight);
         // Register scoring events 

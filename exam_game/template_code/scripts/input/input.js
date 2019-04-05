@@ -6,6 +6,7 @@ Galaga.input.Keyboard = function () {
     };
 
     function keyPress(e) {
+        console.log('key pressed');
         e.preventDefault();
         that.keys[e.key] = e.key;
     }
