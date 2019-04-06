@@ -37,7 +37,7 @@ Galaga.game.Board = function (spec) {
         });
 
         // add a new ufo each half second
-        if (spec.boardClock >= 250) {
+        if (spec.boardClock >= 1000000) {
             addUFO();
             spec.boardClock = 0;
         }

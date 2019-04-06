@@ -48,7 +48,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move 
-        getNextCoords(elapsedTime)
+        getNextCoordsTriLoop(elapsedTime)
 
         lifeTime -= elapsedTime;
     }
@@ -82,17 +82,28 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y -= (movementSpeed * elapsedTime);
     }
 
-    function getNextCoords(elapsedTime) {
+    function getNextCoordsTriLoop(elapsedTime) {
         // TODO: Break off into move too coord when the ship hits the apex of the figure. 
         let r = spec.size * Math.cos(3 * spec.theta);
-        let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
-        let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+        // break off if r < -20 && theta > 2.8
+        console.log(`R: ${ r } Theta: ${ spec.theta}`);
+        if (spec.theta < 2.8) {
+            let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+            let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+            console.log(`X: ${nextX} Y: ${nextY}`);
+
+            spec.coords.x = nextX;
+            spec.coords.y = nextY;
+
+            spec.theta += movementSpeed * elapsedTime;
+            return true;
+        }
+        return false;
+    }
+
+    function moveToNextOpenSlotInGrid() {
+        // TODO: given a grid of possible places for aliens, moves to the next one that is available
         
-        spec.coords.x = nextX;
-        spec.coords.y = nextY;
-
-        spec.theta += movementSpeed * elapsedTime;
-
     }
 
     // function found on https://stackoverflow.com/questions/32219051/how-to-convert-cartesian-coordinates-to-polar-coordinates-in-js
