@@ -50,7 +50,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
-        // particleSystemRenderer.render(particleSystemController.systems);
+        particleSystemRenderer.render(particleSystemController.systems);
     }
 
     function init() {

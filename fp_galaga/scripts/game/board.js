@@ -157,6 +157,7 @@ Galaga.game.Board = function (spec) {
             }
             else {
                 explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
+                explosion(ufo, './assets/firework_yellow.png', 0.75, { mean: 3, stdev: 1 })
                 return false;
             }
         });
