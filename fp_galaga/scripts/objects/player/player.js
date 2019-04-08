@@ -58,10 +58,10 @@ Galaga.objects.player.Player = function (spec) {
                 velocities: { x: tmpShotXVel, y: tmpShotYVel },
                 size: 5,
                 lifeTime: 0,
-                maxLifeTime: 10000,
+                maxLifeTime: 20000,
             });
             projectiles.push(newShot);
-            timeSinceLastShot = 0;
+            timeSinceLastShot = timeSinceLastShot - shotInterval;
             // trigger sound of shot
             spec.sounds.playSound('audio/player-laser-shot');
         }

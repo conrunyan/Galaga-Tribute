@@ -33,14 +33,14 @@ Galaga.game.Board = function (spec) {
         // update player
         spec.gamePieces.player.updateShots(elapsedTime);
         // update grid
-        spec.gamePieces.alienGrid.moveGrid(elapsedTime);
+        spec.gamePieces.alienGrid.update(elapsedTime);
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid);
         });
 
         // add a new ufo each half second
-        if (spec.boardClock >= 100 && !spec.gamePieces.alienGrid.full) {
+        if (spec.boardClock >= 100 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
             addUFO();
             spec.boardClock = 0;
         }
@@ -49,44 +49,46 @@ Galaga.game.Board = function (spec) {
         }
 
         // // detect colision
-        // // check player with ufos
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
-        //     let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
-        //     if (playerUfoDist < sumOfRadi && !playerDead) {
-        //         playerDied();
-        //         ufo.setDidCollide(true);
-        //     }
-        // });
+        // check player with ufos
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
+            let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
+            if (playerUfoDist < sumOfRadi && !playerDead) {
+                playerDied();
+                ufo.setDidCollide(true);
+            }
+        });
         // // check player with ufo shots
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     ufo.projectiles.forEach(shot => {
-        //         let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
-        //         let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
-        //         if (ufoPlayerShot < sumOfRadi && !playerDead) {
-        //             playerDied();
-        //             shot.setDidCollide(true);
-        //         }
-        //     })
-        // });
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            ufo.projectiles.forEach(shot => {
+                let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
+                let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
+                if (ufoPlayerShot < sumOfRadi && !playerDead) {
+                    playerDied();
+                    shot.setDidCollide(true);
+                }
+            })
+        });
 
         // // check projectiles with ufos
-        // spec.gamePieces.ufos.forEach(ufo => {
-        //     // console.log('ufo', ufo);
-        //     spec.gamePieces.player.projectiles.forEach(shot => {
-        //         let ufoShot = _getDistanceBetweenPoints(shot.center, ufo.center);
-        //         let sumOfRadi = ufo.radius + shot.radius;
-        //         if (ufoShot < sumOfRadi) {
-        //             ufo.setDidCollide(true);
-        //             shot.setDidCollide(true);
-        //             spec.gamePieces.player.increaseScore(ufo.points);
-        //         }
-        //     })
+        spec.gamePieces.ufos.forEach(ufo => {
+            // console.log('ufo', ufo);
+            spec.gamePieces.player.projectiles.forEach(shot => {
+                let ufoShot = _getDistanceBetweenPoints(shot.center, ufo.center);
+                let sumOfRadi = ufo.radius + shot.radius;
+                if (ufoShot < sumOfRadi) {
+                    ufo.setDidCollide(true);
+                    shot.setDidCollide(true);
+                    spec.gamePieces.player.increaseScore(ufo.points);
+                }
+            })
 
-        // });
-        // split asteroids in two that have colided, then remove the original
+        });
+        
+        // clean up units
+        removeUFOs();
     }
 
     function updateClock(totalTime) {
@@ -102,6 +104,7 @@ Galaga.game.Board = function (spec) {
             totalLife: time,
             density: 5,
             imageSrc: image,
+            alive: true,
         }, spec.Random)
         spec.particleController.addNewSystem(newPS);
     }
@@ -146,37 +149,18 @@ Galaga.game.Board = function (spec) {
     function addUFO() {
         _addSmallUFO();
     }
-    //     let smallUFOAttacking = false;
-    //     let largeUFOAttacking = false;
-    //     // remove UFOs that collided or are out of time
-    //     spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
-    //         if (!ufo.shouldExplode && !ufo.didCollide) {
-    //             return true;
-    //         }
-    //         else {
-    //             explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
-    //             return false;
-    //         }
-    //     }
-    //     );
-    //     let postSize = spec.gamePieces.ufos.length;
-    //     // remove UFOs that have gone off the screen
-    //     _cleanUFOsFromScreen();
-    //     // reset UFO timer
-    //     spec.gamePieces.ufos.forEach(ufo => {
-    //         if (ufo.ufoType === 'small') {
-    //             smallUFOAttacking = true;
-    //         }
-    //         else if (ufo.ufoType === 'large') {
-    //             largeUFOAttacking = true;
-    //         }
-    //     });
-    //     // console.log('Small UFO', smallUFOAttacking);
-    //     // console.log('Large UFO', largeUFOAttacking);
-    //     // reset ufo time if needed
-    //     timeUntilSmallUFO = smallUFOAttacking ? ufoInterval : timeUntilSmallUFO;
-    //     timeUntilLargeUFO = largeUFOAttacking ? ufoIntervalLarge : timeUntilLargeUFO;
-    // }
+    function removeUFOs() {
+        // remove UFOs that collided or are out of time
+        spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
+            if (!ufo.didCollide) {
+                return true;
+            }
+            else {
+                explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
+                return false;
+            }
+        });
+    }
 
     function _addSmallUFO() {
         let smallUFO = spec.constructors.ufos.UFOSmall({

@@ -23,6 +23,28 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     let yOffset = 0;
 
     // moves grid containing aliens
+    function update(elapsedTime) {
+        // move grid items
+        moveGrid(elapsedTime);
+        // clean up grid
+        for (let row = 0; row < grid.length; row++) {
+            for (let col = 0; col < grid[row].length; col++) {
+                if (grid[row][col].dead) {
+                    let oldCoords = grid[row][col].coords;
+                    let newSlot = GridSlot({
+                        coords: oldCoords,
+                        imageSrc: './assets/red-grey-alien.png',
+                        contains: null,
+                        size: 30,
+                        available: true,
+                        dead: false,
+                    });
+                    grid[row][col] = newSlot;
+                }
+            }
+        }
+    }
+
     function moveGrid(elapsedTime) {
         // console.log('time: ', timeSinceLastMove)
         // check if grid needs to move back
@@ -83,47 +105,33 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
             gridSpecs.contains = null;
         }
 
-        function _isAvailable() {
-            if (gridSpecs.contains === null) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        function toggleAvailable() {
+            gridSpecs.available = !gridSpecs.available;
+        }
+
+        function toggleDead() {
+            gridSpecs.dead = !gridSpecs.dead;
         }
 
         let api = {
             get image() { return image },
             get coords() { return gridSpecs.coords },
-            get available() { return _isAvailable() },
+            get available() { return gridSpecs.available },
             get contains() { return gridSpecs.contains },
             get size() { return gridSpecs.size },
+            get dead() { return gridSpecs.dead },
             get center() { return { x: gridSpecs.coords.x + (gridSpecs.size / 2), y: gridSpecs.coords.y + (gridSpecs.size / 2), } },
             setCoords: setCoords,
             setContains: setContains,
             removeObj: removeObj,
+            toggleAvailable: toggleAvailable,
+            toggleDead: toggleDead,
         }
         return api;
     }
 
     function _getNextSlotCoords(newXOffset, newYOffset) {
         return { x: spec.coords.x + newXOffset, y: spec.coords.y + newYOffset }
-    }
-
-    function _determineIfFull() {
-        let usedSlots = 0;
-        grid.forEach(row => {
-            row.forEach(slot => {
-                if (!slot.available) {
-                    usedSlots++;
-                }
-            });
-        });
-        
-        if (usedSlots < spec.gridHeight * spec.gridWidth) {
-            return false;
-        }
-        return true;
     }
 
     function getNextOpen() {
@@ -149,6 +157,8 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
                     imageSrc: './assets/red-grey-alien.png',
                     contains: null,
                     size: 30,
+                    available: true,
+                    dead: false,
                 });
                 newRow.push(newSlot);
                 // update xOffset
@@ -164,8 +174,8 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
         get coords() { return spec.coords },
         get grid() { return grid },
         get debugging() { return spec.debugging },
-        get full() { return _determineIfFull() },
-        moveGrid: moveGrid,
+        get size() { return spec.gridHeight * spec.gridWidth },
+        update: update,
         initGrid: initGrid,
         getNextOpen: getNextOpen,
     };

@@ -50,7 +50,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move 
-        if(!getNextCoordsTriLoop(elapsedTime)) {
+        if (!getNextCoordsTriLoop(elapsedTime)) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
         }
 
@@ -109,7 +109,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // TODO: given a grid of possible places for aliens, moves to the next one that is available
         if (slot === null) {
             slot = grid.getNextOpen();
-            slot.setContains(spec);
+            slot.toggleAvailable();
         }
         // let withinMargin = ?
         if (spec.coords !== slot.coords) {
@@ -176,6 +176,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
     function setDidCollide(newVal) {
         didCollide = newVal;
+        slot.toggleDead();
     }
 
     function _getDistanceBetweenPoints(p1, p2) {
@@ -208,6 +209,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get shouldExplode() { return lifeTime <= 0 },
         get points() { return points },
+        get spec() { return spec },
+        get alive() { return spec.alive },
         setDidCollide: setDidCollide,
         ufoMove: ufoMove,
         ufoShoot: ufoSmallShootPlayer,
