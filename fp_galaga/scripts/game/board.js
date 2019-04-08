@@ -169,7 +169,7 @@ Galaga.game.Board = function (spec) {
             imageSrc: './assets/green-yellow-alien.png',
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
-            size: 35,
+            size: 45,
             shotImgSource: './assets/green-yellow-alien.png',
             shot: spec.constructors.shot,
             ufoType: 'small',

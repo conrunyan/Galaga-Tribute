@@ -18,7 +18,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     let numMoves = 0;
     let maxNumMoves = 10;
     let grid = [];
-    let gridMargin = 50; // in pixels
+    let gridMargin = 70; // in pixels
     let xOffset = 0;
     let yOffset = 0;
 

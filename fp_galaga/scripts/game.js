@@ -56,14 +56,14 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     function init() {
         lastTimeStamp = performance.now();
         myPlayer = player.Player({
-            coords: { x: boardDim.x / 2, y: boardDim.y - 30 },
+            coords: { x: boardDim.x / 2, y: boardDim.y - 60 },
             imageSrc: './assets/playerShip.png',
             maxSpeed: 0.33, // pixels per second
             acceleration: 40,
             velocities: { x: 0, y: 0 },
             rotation: -Math.PI / 2,
             boardSize: boardDim,
-            size: 30,
+            size: 50,
             shot: projectiles,
             shotImgSource: './assets/playerShip.png',
             shotSpeed: 50,
@@ -76,7 +76,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         let myGrid = ufo.AlienGrid({
             coords: {x: boardDim.x / 3, y: boardDim.y / 6},
             gridWidth: 10,
-            gridHeight: 4,
+            gridHeight: 5,
             debugging: false,
         })
         gameBoard = myGame.Board({
