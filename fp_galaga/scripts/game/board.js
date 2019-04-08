@@ -36,11 +36,11 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.alienGrid.moveGrid(elapsedTime);
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
-            ufo.ufoMove(elapsedTime);
+            ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid);
         });
 
         // add a new ufo each half second
-        if (spec.boardClock >= 1000000) {
+        if (spec.boardClock >= 100 && !spec.gamePieces.alienGrid.full) {
             addUFO();
             spec.boardClock = 0;
         }

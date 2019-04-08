@@ -77,6 +77,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             coords: {x: boardDim.x / 3, y: boardDim.y / 6},
             gridWidth: 10,
             gridHeight: 4,
+            debugging: false,
         })
         gameBoard = myGame.Board({
             gamePieces: {

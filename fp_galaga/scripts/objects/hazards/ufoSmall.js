@@ -35,20 +35,24 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let timeSpentOnPath = 0;
     let shotInterval = 2000;
     let didCollide = false;
-    let movementSpeed = 0.0002;
+    let movementSpeed = 0.0009;
+    let followSpeed = .1;
     let shotSpeed = .15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
     let points = 1000;
+    let slot = null;
 
-    function ufoMove(elapsedTime) {
+    function ufoMove(elapsedTime, grid) {
         // TODO: Add function here to move the ufoSmall in a direction
         // move in preset path around the board
         // move for three seconds
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move 
-        getNextCoordsTriLoop(elapsedTime)
+        if(!getNextCoordsTriLoop(elapsedTime)) {
+            moveToNextOpenSlotInGrid(grid, elapsedTime);
+        }
 
         lifeTime -= elapsedTime;
     }
@@ -83,7 +87,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function getNextCoordsTriLoop(elapsedTime) {
-        // TODO: Break off into move too coord when the ship hits the apex of the figure. 
+        // Break off into move to coord when the ship hits the apex of the figure. 
         let r = spec.size * Math.cos(3 * spec.theta);
         // break off if r < -20 && theta > 2.8
         // console.log(`R: ${ r } Theta: ${ spec.theta}`);
@@ -101,9 +105,33 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         return false;
     }
 
-    function moveToNextOpenSlotInGrid() {
+    function moveToNextOpenSlotInGrid(grid, elapsedTime) {
         // TODO: given a grid of possible places for aliens, moves to the next one that is available
-        
+        if (slot === null) {
+            slot = grid.getNextOpen();
+            slot.setContains(spec);
+        }
+        // let withinMargin = ?
+        if (spec.coords !== slot.coords) {
+            moveTo(slot.coords, elapsedTime);
+        }
+        else {
+            // spec.coords = nextSlot.coords;
+            next
+            console.log('Alien on grid slot');
+        }
+    }
+
+    function moveTo(coords, elapsedTime) {
+        let oLine = (coords.y - spec.coords.y);
+        let aLine = (coords.x - spec.coords.x);
+        let angle = Math.atan(oLine, aLine);
+        let dist = _getDistanceBetweenPoints(coords, spec.coords);
+        let xVel = (elapsedTime * aLine * followSpeed) / dist;
+        let yVel = (elapsedTime * oLine * followSpeed) / dist;
+
+        spec.coords.x += xVel;
+        spec.coords.y += yVel;
     }
 
     // function found on https://stackoverflow.com/questions/32219051/how-to-convert-cartesian-coordinates-to-polar-coordinates-in-js

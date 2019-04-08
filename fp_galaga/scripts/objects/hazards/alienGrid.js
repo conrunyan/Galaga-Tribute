@@ -24,7 +24,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
 
     // moves grid containing aliens
     function moveGrid(elapsedTime) {
-        console.log('time: ', timeSinceLastMove)
+        // console.log('time: ', timeSinceLastMove)
         // check if grid needs to move back
         // check if it's time to move the grid
         if (timeSinceLastMove >= timeForEachMovement) {
@@ -76,11 +76,11 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
         }
 
         function setContains(newObj) {
-            spec.contains = newObj;
+            gridSpecs.contains = newObj;
         }
 
         function removeObj() {
-            spec.contains = null;
+            gridSpecs.contains = null;
         }
 
         function _isAvailable() {
@@ -110,6 +110,34 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
         return { x: spec.coords.x + newXOffset, y: spec.coords.y + newYOffset }
     }
 
+    function _determineIfFull() {
+        let usedSlots = 0;
+        grid.forEach(row => {
+            row.forEach(slot => {
+                if (!slot.available) {
+                    usedSlots++;
+                }
+            });
+        });
+        
+        if (usedSlots < spec.gridHeight * spec.gridWidth) {
+            return false;
+        }
+        return true;
+    }
+
+    function getNextOpen() {
+        let openSlot = null;
+        grid.forEach(row => {
+            row.forEach(slot => {
+                if (slot.available) {
+                    openSlot = slot;
+                }
+            });
+        });
+        return openSlot;
+    }
+
     // set up empty grid of places for aliens
     function initGrid() {
         for (let row = 0; row < spec.gridHeight; row++) {
@@ -135,8 +163,11 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     let api = {
         get coords() { return spec.coords },
         get grid() { return grid },
+        get debugging() { return spec.debugging },
+        get full() { return _determineIfFull() },
         moveGrid: moveGrid,
         initGrid: initGrid,
+        getNextOpen: getNextOpen,
     };
 
 

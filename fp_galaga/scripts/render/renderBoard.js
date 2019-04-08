@@ -19,12 +19,15 @@ Galaga.render.Board = (function (graphics, renderer) {
         }
 
         // render grid
-        let grid = gamePieces.alienGrid.grid;
-        grid.forEach(row => {
-            row.forEach(slot => {
-                renderer.Player.renderPlayer(slot);
+        if (gamePieces.alienGrid.debugging) {
+            let grid = gamePieces.alienGrid.grid;
+            grid.forEach(row => {
+                row.forEach(slot => {
+                    renderer.Player.renderPlayer(slot);
+                })
             })
-        })
+        }
+        
     }
 
     let api = {
