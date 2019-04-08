@@ -32,6 +32,9 @@ Galaga.game.Board = function (spec) {
     function updatePieces(elapsedTime) {
         // update player
         spec.gamePieces.player.updateShots(elapsedTime);
+        // update grid
+        spec.gamePieces.alienGrid.moveGrid(elapsedTime);
+        // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime);
         });
@@ -197,7 +200,7 @@ Galaga.game.Board = function (spec) {
     /////////////////////////////////
 
     // removes any asteroids that are off the screen
-    
+
 
     function _nextRange(min, max) {
         let range = max - min;
@@ -216,6 +219,7 @@ Galaga.game.Board = function (spec) {
         get image() { return backgroundImg },
         get player() { return spec.gamePieces.player },
         get ufos() { return spec.gamePieces.ufos },
+        get alienGrid() { return spec.gamePieces.alienGrid },
         updatePieces: updatePieces,
         updateClock: updateClock,
         addUFO: addUFO,

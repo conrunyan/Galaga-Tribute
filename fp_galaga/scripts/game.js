@@ -73,11 +73,17 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             partSys: partSys,
             myRandom: myRandom,
         });
+        let myGrid = ufo.AlienGrid({
+            coords: {x: boardDim.x / 2, y: boardDim.y / 6},
+            gridWidth: 10,
+            gridHeight: 4,
+        })
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
                 galaga: [],
                 ufos: [],
+                alienGrid: myGrid,
             },
             constructors: {
                 galaga: '',

@@ -86,11 +86,11 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // TODO: Break off into move too coord when the ship hits the apex of the figure. 
         let r = spec.size * Math.cos(3 * spec.theta);
         // break off if r < -20 && theta > 2.8
-        console.log(`R: ${ r } Theta: ${ spec.theta}`);
+        // console.log(`R: ${ r } Theta: ${ spec.theta}`);
         if (spec.theta < 2.8) {
             let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
             let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
-            console.log(`X: ${nextX} Y: ${nextY}`);
+            // console.log(`X: ${nextX} Y: ${nextY}`);
 
             spec.coords.x = nextX;
             spec.coords.y = nextY;

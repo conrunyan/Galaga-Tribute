@@ -17,6 +17,14 @@ Galaga.render.Board = (function (graphics, renderer) {
                 renderer.Projectile.renderProjectile(shot);
             })
         }
+
+        // render grid
+        let grid = gamePieces.alienGrid.grid;
+        grid.forEach(row => {
+            row.forEach(slot => {
+                renderer.Player.renderPlayer(slot);
+            })
+        })
     }
 
     let api = {
