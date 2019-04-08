@@ -12,34 +12,40 @@
 Galaga.objects.ufo.AlienGrid = function (spec) {
     'use strict';
 
-    let movementSpeed = 0.0002;
-    let timeForEachMovement = 1000;
+    let movementSpeed = 0.0009;
+    let timeForEachMovement = 5000;
     let timeSinceLastMove = 0;
+    let numMoves = 0;
+    let maxNumMoves = 10;
     let grid = [];
-    let gridMargin = 20; // in pixels
+    let gridMargin = 50; // in pixels
     let xOffset = 0;
     let yOffset = 0;
 
     // moves grid containing aliens
     function moveGrid(elapsedTime) {
+        console.log('time: ', timeSinceLastMove)
+        // check if grid needs to move back
         // check if it's time to move the grid
         if (timeSinceLastMove >= timeForEachMovement) {
-            grid.forEach(row => {
-                row.forEach(slot => {
-
-                    let curX = slot.coords.x;
-                    let curY = slot.coords.y;
-                    let newCoords = { x: curX - gridMargin, y: curY };
-                    slot.setCoords(newCoords);
-                    
-
-                });
-            });
+            gridMargin = -gridMargin;
             timeSinceLastMove = timeSinceLastMove - timeForEachMovement;
         }
         else {
-            timeForEachMovement += elapsedTime;
+            timeSinceLastMove += elapsedTime;
         }
+
+        grid.forEach(row => {
+            row.forEach(slot => {
+
+                let curX = slot.coords.x;
+                let curY = slot.coords.y;
+                let newCoords = { x: curX - (gridMargin * movementSpeed * elapsedTime), y: curY };
+                slot.setCoords(newCoords);
+
+
+            });
+        });
     }
 
     function addToGrid(obj) {
@@ -114,7 +120,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
                     coords: newCoords,
                     imageSrc: './assets/red-grey-alien.png',
                     contains: null,
-                    size: 10,
+                    size: 30,
                 });
                 newRow.push(newSlot);
                 // update xOffset
