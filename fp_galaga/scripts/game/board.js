@@ -25,6 +25,13 @@ Galaga.game.Board = function (spec) {
         // console.log('loaded image...');
         this.isReady = true;
     };
+    let levelLogic = {
+        'one': {
+            1000: {wave: ['blueWave'], offset: 0, side: 'left'},
+            3000: {wave: ['greenWave'], offset: 0, side: 'right'},
+            7000: {wave: ['greyWave', 'blueWave'], offset: 20, side: 'top'}
+        }
+    }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
     let aliens = []
@@ -34,6 +41,10 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.player.updateShots(elapsedTime);
         // update grid
         spec.gamePieces.alienGrid.update(elapsedTime);
+        // level logic:
+        if (spec.level === 'one') {
+            loadWave(levelLogic['one'])
+        }
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid, spec.gamePieces.player.coords);
@@ -118,6 +129,14 @@ Galaga.game.Board = function (spec) {
     //        UFO   FUNCTIONS      //
     /////////////////////////////////
 
+    function loadWave(levelSpecs) {
+        
+    }
+
+    function _loadWave(side, color) {
+
+    }
+
     // function addUFOs(elapsedTime) {
     //     let hasSmall = false;
     //     let hasLarge = false;
@@ -147,7 +166,7 @@ Galaga.game.Board = function (spec) {
     // }
 
     function addUFO() {
-        _addSmallUFO();
+        _addSmallUFO('down', 'triRose');
     }
     function removeUFOs() {
         // remove UFOs that collided or are out of time
@@ -163,9 +182,9 @@ Galaga.game.Board = function (spec) {
         });
     }
 
-    function _addSmallUFO() {
+    function _addSmallUFO(direction, pattern) {
         let smallUFO = spec.constructors.ufos.UFOSmall({
-            coords: { x: 300, y: spec.boardDimmensions.y / 2 },
+            coords: { x: 0, y: 0 },
             imageSrc: './assets/green-yellow-alien.png',
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
@@ -176,7 +195,9 @@ Galaga.game.Board = function (spec) {
             maxProjectiles: 40,
             theta: Math.PI / 5,
             willDive: _willDive(),
-            timeInGrid: 0
+            timeInGrid: 0,
+            startDirection: direction,
+            pattern: pattern,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

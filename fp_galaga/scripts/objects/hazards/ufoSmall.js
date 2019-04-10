@@ -33,14 +33,14 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let projectiles = [];
     let timeSinceLastShot = 2000;
     let timeSpentOnPath = 0;
+    let timeForStartPath = 1500;
     let timeLimitInGrid = 1000;
     let shotInterval = 2000;
     let didCollide = false;
     let movementSpeed = 0.0009;
     let followSpeed = .075;
-    let diveSpeed = 0.1;
+    let diveSpeed = 0.3;
     let shotSpeed = 0.15;
-    let timeForEachMovement = 3000;
     let lifeTime = 60000;
     let points = 1000;
     let slot = null;
@@ -50,22 +50,45 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // move in preset path around the board
         // move for three seconds
         // console.log('moving ufo', spec);
-        timeSpentOnPath += elapsedTime;
-        // move 
-        if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
-            moveToNextOpenSlotInGrid(grid, elapsedTime);
+        // timeSpentOnPath += elapsedTime;
+
+        // init ufoMovement
+        if (timeSpentOnPath < timeForStartPath) {
+            ufoStartMovement(elapsedTime, spec.startDirection);
         }
-        else if (spec.willDive && spec.timeInGrid > timeLimitInGrid) {
-            // check if alien is close to the player. If it is, dive down
-            if (spec.coords.y + 10 > playerCoords.y) {
-                _moveDown(elapsedTime);
+        else {
+            if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
+                moveToNextOpenSlotInGrid(grid, elapsedTime);
             }
-            else {
-                diveAtPlayer(elapsedTime, playerCoords);
+            else if (spec.willDive && spec.timeInGrid > timeLimitInGrid) {
+                // check if alien is close to the player. If it is, dive down
+                if (spec.coords.y + 30 > playerCoords.y) {
+                    _moveDown(elapsedTime);
+                }
+                else {
+                    diveAtPlayer(elapsedTime, playerCoords);
+                }
             }
         }
 
         lifeTime -= elapsedTime;
+    }
+
+    function ufoStartMovement(elapsedTime, direction) {
+        switch (direction) {
+            case 'down':
+                _moveDown(elapsedTime);
+                timeSpentOnPath += elapsedTime;
+                break;
+            case 'left':
+                _moveLeft(elapsedTime);
+                timeSpentOnPath += elapsedTime;
+            case 'right':
+                _moveRight(elapsedTime);
+                timeSpentOnPath += elapsedTime;
+            default:
+                console.log(`INVALID DIRECTION IN UFO START ${direction}`);
+        }
     }
 
     function diveAtPlayer(elapsedTime, playerCoords) {
@@ -97,10 +120,10 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y -= (movementSpeed * elapsedTime);
     }
     function _moveLeft(elapsedTime) {
-        spec.coords.x -= (movementSpeed * elapsedTime);
+        spec.coords.x -= (diveSpeed * elapsedTime);
     }
     function _moveDownLeft(elapsedTime) {
-        spec.coords.x -= (movementSpeed * elapsedTime);
+        spec.coords.x -= (diveSpeed * elapsedTime);
         spec.coords.y += (movementSpeed * elapsedTime);
     }
     function _moveDown(elapsedTime) {
@@ -111,7 +134,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y += (movementSpeed * elapsedTime);
     }
     function _moveRight(elapsedTime) {
-        spec.coords.x += (movementSpeed * elapsedTime);
+        spec.coords.x += (diveSpeed * elapsedTime);
     }
     function _moveUpRight(elapsedTime) {
         spec.coords.x += (movementSpeed * elapsedTime);
