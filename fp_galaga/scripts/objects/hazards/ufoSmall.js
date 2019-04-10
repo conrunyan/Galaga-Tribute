@@ -33,28 +33,60 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let projectiles = [];
     let timeSinceLastShot = 2000;
     let timeSpentOnPath = 0;
+    let timeLimitInGrid = 1000;
     let shotInterval = 2000;
     let didCollide = false;
     let movementSpeed = 0.0009;
-    let followSpeed = .05;
-    let shotSpeed = .15;
+    let followSpeed = .075;
+    let diveSpeed = 0.1;
+    let shotSpeed = 0.15;
     let timeForEachMovement = 3000;
     let lifeTime = 60000;
     let points = 1000;
     let slot = null;
 
-    function ufoMove(elapsedTime, grid) {
+    function ufoMove(elapsedTime, grid, playerCoords) {
         // TODO: Add function here to move the ufoSmall in a direction
         // move in preset path around the board
         // move for three seconds
         // console.log('moving ufo', spec);
         timeSpentOnPath += elapsedTime;
         // move 
-        if (!getNextCoordsTriLoop(elapsedTime)) {
+        if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
+        }
+        else if (spec.willDive && spec.timeInGrid > timeLimitInGrid) {
+            // check if alien is close to the player. If it is, dive down
+            if (spec.coords.y + 10 > playerCoords.y) {
+                _moveDown(elapsedTime);
+            }
+            else {
+                diveAtPlayer(elapsedTime, playerCoords);
+            }
         }
 
         lifeTime -= elapsedTime;
+    }
+
+    function diveAtPlayer(elapsedTime, playerCoords) {
+        // do a downwards sqrt function
+        // x = -a\sqrt{ \left(b\left(-y - c\right) \right) } +d
+        let oLine = (playerCoords.y - spec.coords.y);
+        let aLine = (playerCoords.x - spec.coords.x);
+        let angle = Math.atan(oLine, aLine);
+        let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
+        let xVel = (elapsedTime * aLine * followSpeed) / dist;
+        let yVel = (elapsedTime * oLine * followSpeed) / dist;
+        spec.coords.x += xVel;
+        spec.coords.y += yVel;
+        // spec.coords.y = getDownRightY(spec.coords.x, );
+        // spec.coords.x += (diveSpeed * elapsedTime);
+    }
+
+    function getDownRightY(x) {
+        let result = (diveSpeed) * + (spec.coords.y);
+        // console.log('result', result);
+        return -result;
     }
 
     function _moveUp(elapsedTime) {
@@ -72,7 +104,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y += (movementSpeed * elapsedTime);
     }
     function _moveDown(elapsedTime) {
-        spec.coords.y += (movementSpeed * elapsedTime);
+        spec.coords.y += (diveSpeed * elapsedTime);
     }
     function _moveDownRight(elapsedTime) {
         spec.coords.x += (movementSpeed * elapsedTime);
@@ -112,14 +144,18 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             slot.toggleAvailable();
         }
         // let withinMargin = ?
-        if (spec.coords !== slot.coords) {
+        if (!_coordsAreClose(spec.coords, slot.coords)) {
             moveTo(slot.coords, elapsedTime);
         }
         else {
             // spec.coords = nextSlot.coords;
-            next
-            console.log('Alien on grid slot');
+            spec.timeInGrid += elapsedTime;
         }
+    }
+
+    function _coordsAreClose(coord1, coord2) {
+        let margin = 2; // distance in pixels
+        return ((Math.abs(coord1.x - coord2.x) < margin) && (Math.abs(coord1.y - coord2.y) < margin));
     }
 
     function moveTo(coords, elapsedTime) {

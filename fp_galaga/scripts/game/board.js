@@ -36,7 +36,7 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.alienGrid.update(elapsedTime);
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
-            ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid);
+            ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid, spec.gamePieces.player.coords);
         });
 
         // add a new ufo each half second
@@ -175,8 +175,19 @@ Galaga.game.Board = function (spec) {
             ufoType: 'small',
             maxProjectiles: 40,
             theta: Math.PI / 5,
+            willDive: _willDive(),
+            timeInGrid: 0
         });
         spec.gamePieces.ufos.push(smallUFO);
+    }
+
+    function _willDive() {
+        let prob = 0.25;
+        let result = Math.random();
+        if (result < prob) {
+            return true;
+        }
+        return false;
     }
 
 
