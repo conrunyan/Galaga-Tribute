@@ -29,7 +29,7 @@ Galaga.game.Board = function (spec) {
         'one': {
             first: { time: 1000, wave: ['blue'], offset: 0, side: 'left', numToSpawn: 10 },
             second: { time: 5000, wave: ['green'], offset: 0, side: 'right', numToSpawn: 10 },
-            third: { time: 8000, wave: ['red', 'blue'], offset: 20, side: 'top', numToSpawn: 10 }
+            third: { time: 8000, wave: ['red', 'blue'], offset: 40, side: 'top', numToSpawn: 20 }
         }
     }
     let levelStats = {
@@ -151,10 +151,10 @@ Galaga.game.Board = function (spec) {
         // add a new ufo
         if (spec.unitClock >= 250 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
             // add alien based on wave color
-            waveSpecs.wave.forEach(color => {
-                _addSmallUFO(color, 'triRose');
-                levelStats[level].spawned[wave] ++;
-            })
+            for (let colorIdx = 0; colorIdx < waveSpecs.wave.length; colorIdx++) {
+                _addSmallUFO(waveSpecs.wave[colorIdx], 'triRose', waveSpecs.offset * colorIdx);
+                levelStats[level].spawned[wave]++;
+            }
             spec.unitClock = 0;
         }
     }
@@ -173,7 +173,7 @@ Galaga.game.Board = function (spec) {
         });
     }
 
-    function _addSmallUFO(color, pattern) {
+    function _addSmallUFO(color, pattern, offset) {
         let smallUFO = spec.constructors.ufos.UFOSmall({
             coords: { x: - 10, y: 300 },
             imageSrc: ufoAssets[color],
@@ -188,6 +188,7 @@ Galaga.game.Board = function (spec) {
             willDive: _willDive(),
             timeInGrid: 0,
             pattern: pattern,
+            patternOffset: offset
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

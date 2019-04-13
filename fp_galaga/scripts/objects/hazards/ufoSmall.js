@@ -147,8 +147,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // break off if r < -20 && theta > 2.8
         // console.log(`R: ${ r } Theta: ${ spec.theta}`);
         if (spec.theta < 2.8) {
-            let nextX = (r * Math.cos(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
-            let nextY = (r * Math.sin(spec.theta) * 10) + 300; //(elapsedTime * movementSpeed);
+            let nextX = (r * Math.cos(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
+            let nextY = (r * Math.sin(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
             // console.log(`X: ${nextX} Y: ${nextY}`);
 
             spec.coords.x = nextX;
