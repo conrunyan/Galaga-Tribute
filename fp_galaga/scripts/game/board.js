@@ -27,9 +27,9 @@ Galaga.game.Board = function (spec) {
     };
     let levelLogic = {
         'one': {
-            first: { time: 1000, wave: ['blue'], offset: 0, side: 'left', numToSpawn: 10 },
-            second: { time: 5000, wave: ['green'], offset: 0, side: 'right', numToSpawn: 10 },
-            third: { time: 8000, wave: ['red', 'blue'], offset: 40, side: 'top', numToSpawn: 20 }
+            first: { time: 1000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
+            second: { time: 5000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
+            third: { time: 8000, wave: ['bee', 'bossGreen'], offset: 40, pattern: 'triLoop', numToSpawn: 20 }
         }
     }
     let levelStats = {
@@ -41,10 +41,34 @@ Galaga.game.Board = function (spec) {
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let ufoAssets = {
-        blue: './assets/blue-purple-alien.png',
-        green: './assets/green-yellow-alien.png',
-        red: './assets/red-grey-alien.png',
+        bossPurple: './assets/blue-purple-alien.png',
+        bossGreen: './assets/green-yellow-alien.png',
+        butterfly: './assets/red-grey-alien.png',
+        bee: './assets/bee.png',
+        sasori: './assets/sasori.png',
+        tonbo: './assets/tonbo.png',
+        momiji: './assets/momiji.png',
+        midori: './assets/midori.png',
+        galflagship: './assets/galflagship.png',
     }
+
+    let portalLeft = spec.constructors.ufos.Portal({
+        size: { x: 75, y: 20 },
+        center: { x: 200, y: 250 },
+        rotation: Math.PI / 6,
+    });
+    let portalRight = spec.constructors.ufos.Portal({
+        size: { x: 75, y: 20 },
+        center: { x: spec.boardDimmensions.x - 200, y: 250 },
+        rotation: Math.PI / 6,
+    });
+    let portalTop = spec.constructors.ufos.Portal({
+        size: { x: 75, y: 20 },
+        center: { x: 200, y: 250 },
+        rotation: Math.PI / 6,
+    });
+
+    spec.gamePieces.portals = [portalLeft, portalRight];
 
     function updatePieces(elapsedTime) {
         // update player
@@ -137,12 +161,27 @@ Galaga.game.Board = function (spec) {
         // load relevant wave
         if (spec.boardClock >= levelSpecs.third.time) {
             _loadWave(levelSpecs.third, level, 'third');
+            spec.showThirdPortal = true;
+            spec.showSecondPortal = false;
+            spec.showFirstPortal = false;
         }
         else if (spec.boardClock >= levelSpecs.second.time) {
             _loadWave(levelSpecs.second, level, 'second');
+            spec.showThirdPortal = false;
+            spec.showSecondPortal = true;
+            spec.showFirstPortal = false;
         }
         if (spec.boardClock >= levelSpecs.first.time) {
             _loadWave(levelSpecs.first, level, 'first');
+            spec.showThirdPortal = false;
+            spec.showSecondPortal = false;
+            spec.showFirstPortal = true;
+        }
+        // hide portals
+        else {
+            spec.showThirdPortal = false;
+            spec.showSecondPortal = false;
+            spec.showFirstPortal = false;
         }
     }
 
@@ -152,7 +191,7 @@ Galaga.game.Board = function (spec) {
         if (spec.unitClock >= 250 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
             // add alien based on wave color
             for (let colorIdx = 0; colorIdx < waveSpecs.wave.length; colorIdx++) {
-                _addSmallUFO(waveSpecs.wave[colorIdx], 'triRose', waveSpecs.offset * colorIdx);
+                _addSmallUFO(waveSpecs.wave[colorIdx], waveSpecs.pattern, waveSpecs.offset * colorIdx);
                 levelStats[level].spawned[wave]++;
             }
             spec.unitClock = 0;
@@ -173,10 +212,11 @@ Galaga.game.Board = function (spec) {
         });
     }
 
-    function _addSmallUFO(color, pattern, offset) {
+    function _addSmallUFO(type, pattern, offset) {
         let smallUFO = spec.constructors.ufos.UFOSmall({
             coords: { x: - 10, y: 300 },
-            imageSrc: ufoAssets[color],
+            imageSrc: ufoAssets[type],
+            boss2ndSrc: ufoAssets['bossPurple'],
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
             size: 45,

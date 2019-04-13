@@ -73,21 +73,16 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             velocities: { x: 0, y: 0 },
             rotation: -Math.PI / 2,
             boardSize: boardDim,
-            size: 50,
+            size: 40,
             shot: projectiles,
             shotImgSource: './assets/playerShip.png',
             shotSpeed: 50,
-            maxProjectiles: 40,
+            maxProjectiles: 1000,
             sounds: sounds,
             particleController: particleSystemController,
             partSys: partSys,
             myRandom: myRandom,
         });
-        let testPortal = ufo.Portal({
-            size: { x: 50, y: 20 },
-            center: {x: 200, y: 250},
-            rotation: Math.PI / 6,
-        })
         let myGrid = ufo.AlienGrid({
             coords: {x: boardDim.x / 3, y: boardDim.y / 6},
             gridWidth: 10,
@@ -99,7 +94,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
                 player: myPlayer,
                 galaga: [],
                 ufos: [],
-                portals: [testPortal],
+                portals: [],
                 alienGrid: myGrid,
             },
             constructors: {

@@ -39,7 +39,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let didCollide = false;
     let movementSpeed = 0.0002;
     let followSpeed = .075;
-    let diveSpeed = 0.3;
+    let diveSpeed = 0.7;
     let shotSpeed = 0.15;
     let lifeTime = 60000;
     let points = 1000;
@@ -52,11 +52,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // console.log('moving ufo', spec);
         // timeSpentOnPath += elapsedTime;
 
-        // init ufoMovement
-        // if (timeSpentOnPath < timeForStartPath) {
-        //     ufoStartMovement(elapsedTime, spec.startDirection);
-        // }
-        // else {
+
+
         if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
         }
@@ -98,8 +95,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         let aLine = (playerCoords.x - spec.coords.x);
         let angle = Math.atan(oLine, aLine);
         let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
-        let xVel = (elapsedTime * aLine * followSpeed) / dist;
-        let yVel = (elapsedTime * oLine * followSpeed) / dist;
+        let xVel = (elapsedTime * aLine * diveSpeed) / dist;
+        let yVel = (elapsedTime * oLine * diveSpeed) / dist;
         spec.coords.x += xVel;
         spec.coords.y += yVel;
         // spec.coords.y = getDownRightY(spec.coords.x, );
@@ -112,51 +109,66 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         return -result;
     }
 
-    function _moveUp(elapsedTime) {
-        spec.coords.y -= (movementSpeed * elapsedTime);
-    }
-    function _moveUpLeft(elapsedTime) {
-        spec.coords.x -= (movementSpeed * elapsedTime);
-        spec.coords.y -= (movementSpeed * elapsedTime);
-    }
-    function _moveLeft(elapsedTime) {
-        spec.coords.x -= (diveSpeed * elapsedTime);
-    }
-    function _moveDownLeft(elapsedTime) {
-        spec.coords.x -= (diveSpeed * elapsedTime);
-        spec.coords.y += (movementSpeed * elapsedTime);
-    }
-    function _moveDown(elapsedTime) {
-        spec.coords.y += (diveSpeed * elapsedTime);
-    }
-    function _moveDownRight(elapsedTime) {
-        spec.coords.x += (movementSpeed * elapsedTime);
-        spec.coords.y += (movementSpeed * elapsedTime);
-    }
-    function _moveRight(elapsedTime) {
-        spec.coords.x += (diveSpeed * elapsedTime);
-    }
-    function _moveUpRight(elapsedTime) {
-        spec.coords.x += (movementSpeed * elapsedTime);
-        spec.coords.y -= (movementSpeed * elapsedTime);
-    }
+    // function _moveUp(elapsedTime) {
+    //     spec.coords.y -= (movementSpeed * elapsedTime);
+    // }
+    // function _moveUpLeft(elapsedTime) {
+    //     spec.coords.x -= (movementSpeed * elapsedTime);
+    //     spec.coords.y -= (movementSpeed * elapsedTime);
+    // }
+    // function _moveLeft(elapsedTime) {
+    //     spec.coords.x -= (diveSpeed * elapsedTime);
+    // }
+    // function _moveDownLeft(elapsedTime) {
+    //     spec.coords.x -= (diveSpeed * elapsedTime);
+    //     spec.coords.y += (movementSpeed * elapsedTime);
+    // }
+    // function _moveDown(elapsedTime) {
+    //     spec.coords.y += (diveSpeed * elapsedTime);
+    // }
+    // function _moveDownRight(elapsedTime) {
+    //     spec.coords.x += (movementSpeed * elapsedTime);
+    //     spec.coords.y += (movementSpeed * elapsedTime);
+    // }
+    // function _moveRight(elapsedTime) {
+    //     spec.coords.x += (diveSpeed * elapsedTime);
+    // }
+    // function _moveUpRight(elapsedTime) {
+    //     spec.coords.x += (movementSpeed * elapsedTime);
+    //     spec.coords.y -= (movementSpeed * elapsedTime);
+    // }
 
     function getNextCoordsTriLoop(elapsedTime) {
-        // Break off into move to coord when the ship hits the apex of the figure. 
-        let r = spec.size * Math.cos(3 * spec.theta);
-        // break off if r < -20 && theta > 2.8
-        // console.log(`R: ${ r } Theta: ${ spec.theta}`);
-        if (spec.theta < 2.8) {
-            let nextX = (r * Math.cos(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
-            let nextY = (r * Math.sin(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
-            // console.log(`X: ${nextX} Y: ${nextY}`);
+        // move in a loop pattern
+        if (spec.pattern === 'triLoop') {
+            let r = spec.size * Math.cos(3 * spec.theta);
+            if (spec.theta < 2.8) {
+                let nextX = (r * Math.cos(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
+                // console.log(`X: ${nextX} Y: ${nextY}`);
 
-            spec.coords.x = nextX;
-            spec.coords.y = nextY;
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
 
-            spec.theta += movementSpeed * elapsedTime;
-            return true;
+                spec.theta += movementSpeed * elapsedTime;
+                return true;
+            }
         }
+        else if (spec.pattern === 'triLoopInvert') {
+            let r = -spec.size * Math.cos(3 * spec.theta);
+            if (spec.theta < 2.8) {
+                let nextX = (r * Math.cos(spec.theta) * 10) + (spec.boardSize.x - 300 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + (200 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                // console.log(`X: ${nextX} Y: ${nextY}`);
+
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
+
+                spec.theta += movementSpeed * elapsedTime;
+                return true;
+            }
+        }
+
         return false;
     }
 
