@@ -59,20 +59,14 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function ufoMove(elapsedTime, grid, playerCoords) {
-        // TODO: Add function here to move the ufoSmall in a direction
         // move in preset path around the board
-        // move for three seconds
-        // console.log('moving ufo', spec);
-        // timeSpentOnPath += elapsedTime;
-
-
 
         if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
         }
-        else if (spec.willDive && spec.timeInGrid > timeLimitInGrid) {
+        else if (spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) {
             // check if alien is close to the player. If it is, dive down
-            if (spec.coords.y + 30 > playerCoords.y) {
+            if (spec.coords.y + 50 > playerCoords.y) {
                 _moveDown(elapsedTime);
             }
             else {
@@ -132,19 +126,19 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     // function _moveLeft(elapsedTime) {
     //     spec.coords.x -= (diveSpeed * elapsedTime);
     // }
-    function _moveDownLeft(elapsedTime) {
-        spec.coords.x -= (diveSpeed * elapsedTime);
+    // function _moveDownLeft(elapsedTime) {
+    //     spec.coords.x -= (movementSpeed * elapsedTime);
+    //     spec.coords.y += (movementSpeed * elapsedTime);
+    // }
+    function _moveDown(elapsedTime) {
         spec.coords.y += (movementSpeed * elapsedTime);
     }
-    // function _moveDown(elapsedTime) {
-    //     spec.coords.y += (diveSpeed * elapsedTime);
-    // }
     // function _moveDownRight(elapsedTime) {
     //     spec.coords.x += (movementSpeed * elapsedTime);
     //     spec.coords.y += (movementSpeed * elapsedTime);
     // }
     // function _moveRight(elapsedTime) {
-    //     spec.coords.x += (diveSpeed * elapsedTime);
+    //     spec.coords.x += (movementSpeed * elapsedTime);
     // }
     // function _moveUpRight(elapsedTime) {
     //     spec.coords.x += (movementSpeed * elapsedTime);
@@ -277,7 +271,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             spec.form = 'second';
         }
 
-        
+
     }
 
     function _getDistanceBetweenPoints(p1, p2) {

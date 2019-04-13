@@ -54,7 +54,7 @@ Galaga.game.Board = function (spec) {
 
     let portalLeft = spec.constructors.ufos.Portal({
         size: { x: 75, y: 20 },
-        center: { x: 200, y: 250 },
+        center: { x: 250, y: 275 },
         rotation: Math.PI / 6,
     });
     let portalRight = spec.constructors.ufos.Portal({
@@ -228,6 +228,7 @@ Galaga.game.Board = function (spec) {
             theta: Math.PI / 5,
             willDive: _willDive(),
             willTransform: _willTransform(),
+            diveInterval: _nextRange(3000, 6000),
             timeInGrid: 0,
             pattern: pattern,
             patternOffset: offset
