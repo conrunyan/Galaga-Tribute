@@ -27,13 +27,20 @@ Galaga.game.Board = function (spec) {
     };
     let levelLogic = {
         'one': {
-            1000: {wave: ['blueWave'], offset: 0, side: 'left'},
-            3000: {wave: ['greenWave'], offset: 0, side: 'right'},
-            7000: {wave: ['greyWave', 'blueWave'], offset: 20, side: 'top'}
+            1000: { wave: ['blueWave'], offset: 0, side: 'left' },
+            3000: { wave: ['greenWave'], offset: 0, side: 'right' },
+            7000: { wave: ['greyWave', 'blueWave'], offset: 20, side: 'top' }
         }
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
+    let leftPortalCoords = { x: 200, y: 200 };
+    let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
+    let ufoAssets = {
+        blue: '.assets/blue-purple-alien.png',
+        green: '.assets/green-yellow-alien.png',
+        red: '.assets/red-grey-alien.png',
+    }
 
     function updatePieces(elapsedTime) {
         // update player
@@ -48,15 +55,6 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid, spec.gamePieces.player.coords);
         });
-
-        // add a new ufo each half second
-        if (spec.boardClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
-            addUFO();
-            spec.boardClock = 0;
-        }
-        else {
-            spec.boardClock += elapsedTime;
-        }
 
         // // detect colision
         // check player with ufos
@@ -96,7 +94,7 @@ Galaga.game.Board = function (spec) {
             })
 
         });
-        
+
         // clean up units
         removeUFOs();
     }
@@ -129,44 +127,21 @@ Galaga.game.Board = function (spec) {
     /////////////////////////////////
 
     function loadWave(levelSpecs) {
-        
+
     }
 
     function _loadWave(side, color) {
-
+        
+        // add a new ufo each half second
+        if (spec.boardClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
+            _addSmallUFO(color, 'triRose');
+            spec.boardClock = 0;
+        }
+        else {
+            spec.boardClock += elapsedTime;
+        }
     }
 
-    // function addUFOs(elapsedTime) {
-    //     let hasSmall = false;
-    //     let hasLarge = false;
-    //     spec.gamePieces.ufos.forEach(ufo => {
-    //         if (ufo.ufoType === 'small') {
-    //             hasSmall = true;
-    //         }
-    //         else if (ufo.ufoType === 'large') {
-    //             hasLarge = true;
-    //         }
-    //     })
-    //     if (!hasSmall && timeUntilSmallUFO <= 0) {
-    //         // console.log('adding new UFO', timeUntilSmallUFO);
-    //         _addSmallUFO();
-    //     }
-    //     else {
-    //         timeUntilSmallUFO -= elapsedTime;
-    //     }
-
-    //     if (!hasLarge && timeUntilLargeUFO <= 0) {
-    //         // console.log('adding new UFO', timeUntilSmallUFO);
-    //         _addLargeUFO();
-    //     }
-    //     else {
-    //         timeUntilLargeUFO -= elapsedTime;
-    //     }
-    // }
-
-    function addUFO() {
-        _addSmallUFO('right', 'triRose');
-    }
     function removeUFOs() {
         // remove UFOs that collided or are out of time
         spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
@@ -181,10 +156,10 @@ Galaga.game.Board = function (spec) {
         });
     }
 
-    function _addSmallUFO(direction, pattern) {
+    function _addSmallUFO(color, pattern) {
         let smallUFO = spec.constructors.ufos.UFOSmall({
             coords: { x: - 10, y: 300 },
-            imageSrc: './assets/green-yellow-alien.png',
+            imageSrc: ufoAssets[color],
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,
             size: 45,
@@ -236,9 +211,10 @@ Galaga.game.Board = function (spec) {
         get player() { return spec.gamePieces.player },
         get ufos() { return spec.gamePieces.ufos },
         get alienGrid() { return spec.gamePieces.alienGrid },
+        get portals() { return spec.gamePieces.portals },
         updatePieces: updatePieces,
         updateClock: updateClock,
-        addUFO: addUFO,
+        // addUFO: addUFO,
     }
 
     return api;

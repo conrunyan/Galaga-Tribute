@@ -26,6 +26,7 @@ Galaga.render.AnimatedModel = function (spec, graphics) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime) {
+        // console.log("updating AM");
         animationTime += elapsedTime;
         //
         // Check to see if we should update the animation frame
@@ -47,8 +48,9 @@ Galaga.render.AnimatedModel = function (spec, graphics) {
     //
     //------------------------------------------------------------------
     function render(model) {
+        // console.log("rendering AM");
         if (isReady) {
-            graphics.drawSubTexture(image, subImageIndex, subTextureWidth, model.center, model.rotation, model.size);
+            graphics.drawSubTexture(image, subImageIndex, subTextureWidth, model.center, 0, model.size);
         }
     }
 

@@ -30,8 +30,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let portalRenderer = renderer.AnimatedModel({
         spriteSheet: 'assets/portal_strip4.png',
         spriteCount: 4,
-        spriteTime: [25, 25, 25, 25],   // ms per frame
-    })
+        spriteTime: [125, 125, 125, 125],   // ms per frame
+    }, myGraphics);
 
     let myPlayer;
     let gameBoard;
@@ -56,7 +56,10 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
-        portalRenderer.render(gameBoard.portals)
+        // render portals, if any
+        gameBoard.portals.forEach(portal => {
+            portalRenderer.render(portal);
+        });
         particleSystemRenderer.render(particleSystemController.systems);
     }
 
@@ -80,6 +83,11 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             partSys: partSys,
             myRandom: myRandom,
         });
+        let testPortal = ufo.Portal({
+            size: { x: 50, y: 20 },
+            center: {x: 200, y: 250},
+            rotation: Math.PI / 6,
+        })
         let myGrid = ufo.AlienGrid({
             coords: {x: boardDim.x / 3, y: boardDim.y / 6},
             gridWidth: 10,
@@ -91,7 +99,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
                 player: myPlayer,
                 galaga: [],
                 ufos: [],
-                portals: [],
+                portals: [testPortal],
                 alienGrid: myGrid,
             },
             constructors: {
@@ -111,8 +119,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         registerKeyEvents();
         console.log(myPlayer);
         requestAnimationFrame(gameLoop);
-        console.log('adding ufo')
-        gameBoard.addUFO();
+        console.log('adding ufo');
     }
 
     function gameLoop(time) {
