@@ -49,22 +49,22 @@ Galaga.graphics = (function () {
         context.restore();
     }
 
-    function drawSprite(image, center, rotation, size, subImageLocations) {
+    function drawSubTexture(image, index, subTextureWidth, center, rotation, size) {
         context.save();
 
         context.translate(center.x, center.y);
         context.rotate(rotation);
         context.translate(-center.x, -center.y);
 
+        //
+        // Pick the selected sprite from the sprite sheet to render
         context.drawImage(
             image,
-            subImageLocations.sx,
-            subImageLocations.sy,
-            subImageLocations.sWidth,
-            subImageLocations.sHeigt,
-            center.x - size.width / 2,
-            center.y - size.height / 2,
-            size.width, size.height);
+            subTextureWidth * index, 0,      // Which sub-texture to pick out
+            subTextureWidth, image.height,   // The size of the sub-texture
+            center.x - size.x / 2,           // Where to draw the sub-texture
+            center.y - size.y / 2,
+            size.x, size.y);
 
         context.restore();
     }
@@ -98,7 +98,7 @@ Galaga.graphics = (function () {
         clear: clear,
         drawTexture: drawTexture,
         drawPlayer: drawPlayer,
-        drawSprite: drawSprite,
+        drawSubTexture: drawSubTexture,
         drawText: drawText,
     };
 

@@ -34,7 +34,6 @@ Galaga.game.Board = function (spec) {
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
-    let aliens = []
 
     function updatePieces(elapsedTime) {
         // update player
@@ -51,7 +50,7 @@ Galaga.game.Board = function (spec) {
         });
 
         // add a new ufo each half second
-        if (spec.boardClock >= 100 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
+        if (spec.boardClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
             addUFO();
             spec.boardClock = 0;
         }
@@ -166,7 +165,7 @@ Galaga.game.Board = function (spec) {
     // }
 
     function addUFO() {
-        _addSmallUFO('down', 'triRose');
+        _addSmallUFO('right', 'triRose');
     }
     function removeUFOs() {
         // remove UFOs that collided or are out of time
@@ -184,7 +183,7 @@ Galaga.game.Board = function (spec) {
 
     function _addSmallUFO(direction, pattern) {
         let smallUFO = spec.constructors.ufos.UFOSmall({
-            coords: { x: 0, y: 0 },
+            coords: { x: - 10, y: 300 },
             imageSrc: './assets/green-yellow-alien.png',
             rotation: -Math.PI / 2,
             boardSize: spec.boardDimmensions,

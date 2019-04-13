@@ -27,6 +27,11 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let particleSystemRenderer = renderer.ParticleSystem;
     // let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({ systems: [] });
+    let portalRenderer = renderer.AnimatedModel({
+        spriteSheet: 'assets/portal_strip4.png',
+        spriteCount: 4,
+        spriteTime: [25, 25, 25, 25],   // ms per frame
+    })
 
     let myPlayer;
     let gameBoard;
@@ -39,6 +44,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
         gameBoard.updateClock(totalElapsedTime);
+        portalRenderer.update(elapsedTime);
         particleSystemController.update(elapsedTime);
         totalElapsedTime += elapsedTime;
 
@@ -50,6 +56,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         boardRenderer.renderPieces(gameBoard);
+        portalRenderer.render(gameBoard.portals)
         particleSystemRenderer.render(particleSystemController.systems);
     }
 
@@ -84,6 +91,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
                 player: myPlayer,
                 galaga: [],
                 ufos: [],
+                portals: [],
                 alienGrid: myGrid,
             },
             constructors: {
