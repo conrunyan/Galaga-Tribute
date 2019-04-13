@@ -112,6 +112,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             particleController: particleSystemController,
             Random: myRandom,
             boardClock: 0,
+            unitClock: 0,
             level: 'one',
         });
 

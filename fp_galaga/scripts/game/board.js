@@ -27,9 +27,9 @@ Galaga.game.Board = function (spec) {
     };
     let levelLogic = {
         'one': {
-            1000: { wave: ['blueWave'], offset: 0, side: 'left' },
-            3000: { wave: ['greenWave'], offset: 0, side: 'right' },
-            7000: { wave: ['greyWave', 'blueWave'], offset: 20, side: 'top' }
+            first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
+            second: { time: 5000, wave: ['green'], offset: 0, side: 'right' },
+            third: { time: 8000, wave: ['red', 'blue'], offset: 20, side: 'top' }
         }
     }
     let totalElapsedTime = 0;
@@ -37,9 +37,9 @@ Galaga.game.Board = function (spec) {
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let ufoAssets = {
-        blue: '.assets/blue-purple-alien.png',
-        green: '.assets/green-yellow-alien.png',
-        red: '.assets/red-grey-alien.png',
+        blue: './assets/blue-purple-alien.png',
+        green: './assets/green-yellow-alien.png',
+        red: './assets/red-grey-alien.png',
     }
 
     function updatePieces(elapsedTime) {
@@ -97,6 +97,9 @@ Galaga.game.Board = function (spec) {
 
         // clean up units
         removeUFOs();
+        // update time
+        spec.unitClock += elapsedTime;
+        spec.boardClock += elapsedTime;
     }
 
     function updateClock(totalTime) {
@@ -127,18 +130,27 @@ Galaga.game.Board = function (spec) {
     /////////////////////////////////
 
     function loadWave(levelSpecs) {
-
+        // load relevant wave
+        if (spec.boardClock >= levelSpecs.third.time) {
+            _loadWave(levelSpecs.third);
+        }
+        else if (spec.boardClock >= levelSpecs.second.time) {
+            _loadWave(levelSpecs.second);
+        }
+        if (spec.boardClock >= levelSpecs.first.time) {
+            _loadWave(levelSpecs.first);
+        }
     }
 
-    function _loadWave(side, color) {
-        
-        // add a new ufo each half second
-        if (spec.boardClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
-            _addSmallUFO(color, 'triRose');
-            spec.boardClock = 0;
-        }
-        else {
-            spec.boardClock += elapsedTime;
+    function _loadWave(waveSpecs) {
+        // first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
+        // add a new ufo
+        if (spec.unitClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
+            // add alien based on wave color
+            waveSpecs.wave.forEach(color => {
+                _addSmallUFO(color, 'triRose');
+            })
+            spec.unitClock = 0;
         }
     }
 
@@ -170,7 +182,6 @@ Galaga.game.Board = function (spec) {
             theta: Math.PI / 5,
             willDive: _willDive(),
             timeInGrid: 0,
-            startDirection: direction,
             pattern: pattern,
         });
         spec.gamePieces.ufos.push(smallUFO);
