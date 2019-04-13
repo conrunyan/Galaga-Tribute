@@ -27,10 +27,14 @@ Galaga.game.Board = function (spec) {
     };
     let levelLogic = {
         'one': {
-            first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
-            second: { time: 5000, wave: ['green'], offset: 0, side: 'right' },
-            third: { time: 8000, wave: ['red', 'blue'], offset: 20, side: 'top' }
+            first: { time: 1000, wave: ['blue'], offset: 0, side: 'left', numToSpawn: 10 },
+            second: { time: 5000, wave: ['green'], offset: 0, side: 'right', numToSpawn: 10 },
+            third: { time: 8000, wave: ['red', 'blue'], offset: 20, side: 'top', numToSpawn: 10 }
         }
+    }
+    let levelStats = {
+        'one': { spawned: { first: 0, second: 0, third: 0, } },
+        'two': { spawned: { first: 0, second: 0, third: 0, } },
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
@@ -49,7 +53,7 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.alienGrid.update(elapsedTime);
         // level logic:
         if (spec.level === 'one') {
-            loadWave(levelLogic['one'])
+            loadWave(levelLogic['one'], 'one')
         }
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
@@ -129,26 +133,27 @@ Galaga.game.Board = function (spec) {
     //        UFO   FUNCTIONS      //
     /////////////////////////////////
 
-    function loadWave(levelSpecs) {
+    function loadWave(levelSpecs, level) {
         // load relevant wave
         if (spec.boardClock >= levelSpecs.third.time) {
-            _loadWave(levelSpecs.third);
+            _loadWave(levelSpecs.third, level, 'third');
         }
         else if (spec.boardClock >= levelSpecs.second.time) {
-            _loadWave(levelSpecs.second);
+            _loadWave(levelSpecs.second, level, 'second');
         }
         if (spec.boardClock >= levelSpecs.first.time) {
-            _loadWave(levelSpecs.first);
+            _loadWave(levelSpecs.first, level, 'first');
         }
     }
 
-    function _loadWave(waveSpecs) {
+    function _loadWave(waveSpecs, level, wave) {
         // first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
         // add a new ufo
-        if (spec.unitClock >= 250 && spec.gamePieces.ufos.length < spec.gamePieces.alienGrid.size) {
+        if (spec.unitClock >= 250 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
             // add alien based on wave color
             waveSpecs.wave.forEach(color => {
                 _addSmallUFO(color, 'triRose');
+                levelStats[level].spawned[wave] ++;
             })
             spec.unitClock = 0;
         }
