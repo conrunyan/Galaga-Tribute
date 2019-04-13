@@ -30,20 +30,33 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         this.isReady = true;
     };
 
+    let image2 = new Image();
+    image2.isReady = false;
+    image2.src = spec.boss2ndSrc;
+    image2.onload = function () {
+        // console.log('loaded image...');
+        this.isReady = true;
+    };
+
     let projectiles = [];
     let timeSinceLastShot = 2000;
-    let timeSpentOnPath = 0;
-    let timeForStartPath = 500;
     let timeLimitInGrid = 1000;
     let shotInterval = 2000;
     let didCollide = false;
     let movementSpeed = 0.0002;
     let followSpeed = .075;
-    let diveSpeed = 0.7;
+    let diveSpeed = 0.1;
     let shotSpeed = 0.15;
     let lifeTime = 60000;
-    let points = 1000;
     let slot = null;
+
+    let types = {
+        boss: { lives: 2, points: 150 },
+        boss2: { lives: 2, points: 150 },
+        bee: { lives: 1, points: 50 },
+        butterfly: { lives: 1, points: 100 },
+        transformed: { lives: 1, points: 160 },
+    }
 
     function ufoMove(elapsedTime, grid, playerCoords) {
         // TODO: Add function here to move the ufoSmall in a direction
@@ -119,10 +132,10 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     // function _moveLeft(elapsedTime) {
     //     spec.coords.x -= (diveSpeed * elapsedTime);
     // }
-    // function _moveDownLeft(elapsedTime) {
-    //     spec.coords.x -= (diveSpeed * elapsedTime);
-    //     spec.coords.y += (movementSpeed * elapsedTime);
-    // }
+    function _moveDownLeft(elapsedTime) {
+        spec.coords.x -= (diveSpeed * elapsedTime);
+        spec.coords.y += (movementSpeed * elapsedTime);
+    }
     // function _moveDown(elapsedTime) {
     //     spec.coords.y += (diveSpeed * elapsedTime);
     // }
@@ -246,8 +259,25 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function setDidCollide(newVal) {
-        didCollide = newVal;
-        slot.toggleDead();
+        if (spec.type !== 'boss') {
+            if (slot !== null) {
+                slot.toggleDead();
+            }
+            didCollide = newVal;
+        }
+        // boss galaga died
+        else if (spec.type === 'boss' && spec.form === 'second') {
+            if (slot !== null) {
+                slot.toggleDead();
+            }
+            didCollide = newVal;
+        }
+        // boss galaga swap to 2nd phase
+        else if (spec.type === 'boss' && spec.form === 'first') {
+            spec.form = 'second';
+        }
+
+        
     }
 
     function _getDistanceBetweenPoints(p1, p2) {
@@ -268,8 +298,17 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) && !shot.didCollide);
     }
 
+    function _getImage() {
+        if (spec.form === 'second' && spec.type === 'boss') {
+            return image2;
+        }
+        else {
+            return image;
+        }
+    }
+
     let api = {
-        get image() { return image },
+        get image() { return _getImage() },
         get coords() { return spec.coords },
         get size() { return spec.size },
         get radius() { return spec.size / 2 },
@@ -279,7 +318,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
         get shouldExplode() { return lifeTime <= 0 },
-        get points() { return points },
+        get points() { return types[spec.type].points },
         get spec() { return spec },
         get alive() { return spec.alive },
         setDidCollide: setDidCollide,

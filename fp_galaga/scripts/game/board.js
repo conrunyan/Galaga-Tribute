@@ -29,7 +29,7 @@ Galaga.game.Board = function (spec) {
         'one': {
             first: { time: 1000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
             second: { time: 5000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
-            third: { time: 8000, wave: ['bee', 'bossGreen'], offset: 40, pattern: 'triLoop', numToSpawn: 20 }
+            third: { time: 8000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 }
         }
     }
     let levelStats = {
@@ -42,7 +42,7 @@ Galaga.game.Board = function (spec) {
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let ufoAssets = {
         bossPurple: './assets/blue-purple-alien.png',
-        bossGreen: './assets/green-yellow-alien.png',
+        boss: './assets/green-yellow-alien.png',
         butterfly: './assets/red-grey-alien.png',
         bee: './assets/bee.png',
         sasori: './assets/sasori.png',
@@ -218,14 +218,16 @@ Galaga.game.Board = function (spec) {
             imageSrc: ufoAssets[type],
             boss2ndSrc: ufoAssets['bossPurple'],
             rotation: -Math.PI / 2,
+            form: 'first',
             boardSize: spec.boardDimmensions,
-            size: 45,
+            size: 30,
             shotImgSource: './assets/green-yellow-alien.png',
             shot: spec.constructors.shot,
-            ufoType: 'small',
+            type: type,
             maxProjectiles: 40,
             theta: Math.PI / 5,
             willDive: _willDive(),
+            willTransform: _willTransform(),
             timeInGrid: 0,
             pattern: pattern,
             patternOffset: offset
@@ -233,8 +235,23 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.ufos.push(smallUFO);
     }
 
+    function _transformImg(type) {
+        if (type === 'bee') {
+
+        }
+    }
+
     function _willDive() {
         let prob = 0.25;
+        let result = Math.random();
+        if (result < prob) {
+            return true;
+        }
+        return false;
+    }
+
+    function _willTransform() {
+        let prob = 0.1;
         let result = Math.random();
         if (result < prob) {
             return true;

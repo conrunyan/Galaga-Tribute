@@ -76,7 +76,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             size: 40,
             shot: projectiles,
             shotImgSource: './assets/playerShip.png',
-            shotSpeed: 50,
+            shotSpeed: 150,
             maxProjectiles: 1000,
             sounds: sounds,
             particleController: particleSystemController,
