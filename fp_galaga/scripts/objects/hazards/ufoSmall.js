@@ -43,7 +43,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let timeLimitInGrid = 1000;
     let shotInterval = 2000;
     let didCollide = false;
-    let movementSpeed = 0.0002;
+    let movementSpeed = 0.002;
     let followSpeed = .075;
     let diveSpeed = 0.1;
     let shotSpeed = 0.15;
@@ -65,12 +65,11 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
         }
         else if (spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) {
-            // check if alien is close to the player. If it is, dive down
-            if (spec.coords.y + 50 > playerCoords.y) {
-                _moveDown(elapsedTime);
+            if (spec.diveTheta < 2 * Math.PI) {
+                diveAtPlayer(elapsedTime, playerCoords);                
             }
             else {
-                diveAtPlayer(elapsedTime, playerCoords);
+                moveToNextOpenSlotInGrid(grid, elapsedTime);
             }
         }
         // }
@@ -98,16 +97,15 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function diveAtPlayer(elapsedTime, playerCoords) {
         // do a downwards sqrt function
         // x = -a\sqrt{ \left(b\left(-y - c\right) \right) } +d
-        let oLine = (playerCoords.y - spec.coords.y);
-        let aLine = (playerCoords.x - spec.coords.x);
-        let angle = Math.atan(oLine, aLine);
-        let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
-        let xVel = (elapsedTime * aLine * diveSpeed) / dist;
-        let yVel = (elapsedTime * oLine * diveSpeed) / dist;
-        spec.coords.x += xVel;
-        spec.coords.y += yVel;
-        // spec.coords.y = getDownRightY(spec.coords.x, );
-        // spec.coords.x += (diveSpeed * elapsedTime);
+        let prevX = spec.coords.x;
+        let prevY = spec.coords.y;
+
+        let r = 2 + 2 * Math.sin(spec.diveTheta);
+        let nextX = (r * Math.sin(spec.diveTheta)) + prevX;
+        let nextY = (r * Math.cos(spec.diveTheta)) + prevY;
+        spec.diveTheta += movementSpeed * elapsedTime;
+        spec.coords.x = nextX;
+        spec.coords.y = nextY;
     }
 
     function getDownRightY(x) {

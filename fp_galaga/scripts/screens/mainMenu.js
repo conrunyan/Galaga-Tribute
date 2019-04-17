@@ -64,7 +64,7 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
     }
 
     function playMouseOverSound() {
-        audio.playSound('audio/menu-mouse-over');
+        // audio.playSound('audio/menu-mouse-over');
     }
 
     return {

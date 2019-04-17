@@ -254,7 +254,7 @@ MyGame.loader = (function () {
     //------------------------------------------------------------------
     function mainComplete() {
         console.log('it is all loaded up');
-        // Galaga.main.initialize();
+        // Galaga.main.initMenu();
     }
 
     //

@@ -231,7 +231,8 @@ Galaga.game.Board = function (spec) {
             diveInterval: _nextRange(3000, 6000),
             timeInGrid: 0,
             pattern: pattern,
-            patternOffset: offset
+            patternOffset: offset,
+            diveTheta: 0,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }
