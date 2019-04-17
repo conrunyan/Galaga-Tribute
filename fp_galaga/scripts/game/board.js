@@ -231,7 +231,7 @@ Galaga.game.Board = function (spec) {
             theta: Math.PI / 5,
             willDive: _willDive(),
             willTransform: _willTransform(),
-            diveInterval: _nextRange(1000, 6000),
+            diveInterval: _nextRange(2000, 4000),
             transformTime: _nextRange(5000, 20000),
             timeInGrid: 0,
             pattern: pattern,

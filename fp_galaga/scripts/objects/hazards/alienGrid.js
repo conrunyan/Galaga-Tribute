@@ -38,6 +38,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
                         size: 30,
                         available: true,
                         dead: false,
+                        row: row,
                     });
                     grid[row][col] = newSlot;
                 }
@@ -121,6 +122,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
             get size() { return gridSpecs.size },
             get dead() { return gridSpecs.dead },
             get center() { return { x: gridSpecs.coords.x + (gridSpecs.size / 2), y: gridSpecs.coords.y + (gridSpecs.size / 2), } },
+            get diveOffset() { return gridSpecs.row },
             setCoords: setCoords,
             setContains: setContains,
             removeObj: removeObj,
@@ -159,6 +161,7 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
                     size: 30,
                     available: true,
                     dead: false,
+                    row: row,
                 });
                 newRow.push(newSlot);
                 // update xOffset
