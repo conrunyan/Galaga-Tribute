@@ -49,8 +49,8 @@ function initialize() {
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
         Galaga.sounds['audio/player-laser-shot'] = loadSound('assets/sfx/shipFireSound.mp3', 'Sound 1', 'id-play1');
         // Galaga.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
-        // Galaga.sounds['audio/game-music'] = loadSound('assets/sounds/11 Meteo.mp3', 'Sound 3', 'id-play1');
-        Galaga.sounds['audio/menu-mouse-over'] = loadSound('assets/mouse-over.wav');
+        Galaga.sounds['audio/start-game-music'] = loadSound('assets/music/01 Stage Intro.mp3', 'Game start music', 'id-play-start-music');
+        Galaga.sounds['audio/menu-mouse-over'] = loadSound('assets/mouse-over.mp3');
     }
 
     loadAudio();

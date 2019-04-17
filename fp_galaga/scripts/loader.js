@@ -128,13 +128,16 @@ MyGame.loader = (function () {
             source: 'assets/gameBackground.png'
         }, {
             key: 'other-mouse-over',
-            source: 'assets/mouse-over.wav'
+            source: 'assets/mouse-over.mp3'
         }, {
             key: 'other-portal_strip4',
             source: 'assets/portal_strip4.png'
         }, {
             key: 'sound-ship-fire',
             source: 'assets/sfx/shipFireSound.mp3'
+        }, {
+            key: 'sound-start-game-music',
+            source: 'assets/music/01 Stage Intro.mp3'
         }];
 
     //------------------------------------------------------------------

@@ -65,6 +65,10 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     function init() {
         lastTimeStamp = performance.now();
+
+        playIntroMusic();
+
+        // initialize player
         myPlayer = player.Player({
             coords: { x: boardDim.x / 2, y: boardDim.y - 60 },
             imageSrc: './assets/playerShip.png',
@@ -83,12 +87,16 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             partSys: partSys,
             myRandom: myRandom,
         });
+
+        // initialize alien grid
         let myGrid = ufo.AlienGrid({
             coords: {x: boardDim.x / 3, y: boardDim.y / 6},
             gridWidth: 10,
             gridHeight: 5,
             debugging: false,
         })
+
+        // initialize board
         gameBoard = myGame.Board({
             gamePieces: {
                 player: myPlayer,
@@ -133,6 +141,10 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             return;
         }
         requestAnimationFrame(gameLoop);
+    }
+
+    function playIntroMusic() {
+        sounds.playSound('audio/start-game-music');
     }
 
     function registerKeyEvents() {
