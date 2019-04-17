@@ -117,6 +117,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             boardClock: 0,
             unitClock: 0,
             level: 'one',
+            levelStarted: false,
         });
 
         console.log('SCREENS:', screens);

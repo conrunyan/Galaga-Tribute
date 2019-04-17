@@ -1,3 +1,5 @@
+import { symlinkSync } from "fs";
+
 // --------------------------------------------------------------
 //
 // Creates a Player object, with functions for managing state.
@@ -29,12 +31,17 @@ Galaga.game.Board = function (spec) {
         'one': {
             first: { time: 1000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
             second: { time: 5000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
-            third: { time: 8000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 }
+            third: { time: 8000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+        },
+        'two': {
+            first: { time: 1000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            second: { time: 5000, wave: ['butterfly', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            third: { time: 8000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
         }
     }
     let levelStats = {
-        'one': { spawned: { first: 0, second: 0, third: 0, } },
-        'two': { spawned: { first: 0, second: 0, third: 0, } },
+        'one': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 40 },
+        'two': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 45 },
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
@@ -130,6 +137,26 @@ Galaga.game.Board = function (spec) {
         // update time
         spec.unitClock += elapsedTime;
         spec.boardClock += elapsedTime;
+
+        // change level, if applicable
+        if (levelStats[spec.level].numLeft == 0) {
+            spec.level = getNextLevel(spec.level);
+        }
+    }
+
+    function getNextLevel(level) {
+        if (level === 'one') {
+            return 'two';
+        }
+        else if (level === 'two') {
+            return 'challenge';
+        }
+        else if (level === 'challenge') {
+            return 'one';
+        }
+        else {
+            console.warn('ERROR: Invalid level', level);
+        }
     }
 
     function updateClock(totalTime) {
@@ -207,6 +234,8 @@ Galaga.game.Board = function (spec) {
                 return true;
             }
             else {
+                // decrease number of ufos left
+                levelStats[spec.level].numLeft--;
                 explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
                 explosion(ufo, './assets/firework_yellow.png', 0.75, { mean: 3, stdev: 1 })
                 return false;
@@ -308,6 +337,7 @@ Galaga.game.Board = function (spec) {
         get ufos() { return spec.gamePieces.ufos },
         get alienGrid() { return spec.gamePieces.alienGrid },
         get portals() { return spec.gamePieces.portals },
+        get levelStarted() { return spec.levelStarted },
         updatePieces: updatePieces,
         updateClock: updateClock,
         // addUFO: addUFO,
