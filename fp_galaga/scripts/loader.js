@@ -44,6 +44,12 @@ MyGame.loader = (function () {
             onComplete: null,
         }, {
             scripts: [
+                'scripts/game/board.js',
+            ],
+            message: 'Board loaded',
+            onComplete: null
+        }, {
+            scripts: [
                 'scripts/utilites/random.js',
                 'scripts/utilites/storage.js',
             ],
@@ -61,20 +67,13 @@ MyGame.loader = (function () {
             ],
             message: 'Renderers loaded',
             onComplete: null
-        },
-        {
+        }, {
             scripts: [
                 'scripts/particleSystem/particle-system.js',
                 'scripts/particleSystem/particleSystemController.js',
             ],
             message: 'Particle systems loaded',
             onComplete: null,
-        }, {
-            scripts: [
-                'scripts/game/board.js',
-            ],
-            message: 'Board loaded',
-            onComplete: null
         }, {
             scripts: [
                 'scripts/audio/audioPlayer.js',

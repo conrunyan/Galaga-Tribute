@@ -12,8 +12,8 @@
 Galaga.objects.ufo.AlienGrid = function (spec) {
     'use strict';
 
-    let movementSpeed = 0.0009;
-    let timeForEachMovement = 5000;
+    let movementSpeed = 0.00045;
+    let timeForEachMovement = 3500;
     let timeSinceLastMove = 0;
     let numMoves = 0;
     let maxNumMoves = 10;

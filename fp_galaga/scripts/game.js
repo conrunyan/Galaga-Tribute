@@ -90,7 +90,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
         // initialize alien grid
         let myGrid = ufo.AlienGrid({
-            coords: {x: boardDim.x / 3, y: boardDim.y / 6},
+            coords: {x: boardDim.x / 4, y: boardDim.y / 6},
             gridWidth: 10,
             gridHeight: 5,
             debugging: false,

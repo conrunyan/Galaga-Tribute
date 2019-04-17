@@ -65,10 +65,11 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             moveToNextOpenSlotInGrid(grid, elapsedTime);
         }
         else if (spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) {
-            if (spec.diveTheta < 2 * Math.PI) {
+            if (spec.diveTheta < 4 * Math.PI) {
                 diveAtPlayer(elapsedTime, playerCoords);                
             }
             else {
+                spec.timeInGrid = 0;
                 moveToNextOpenSlotInGrid(grid, elapsedTime);
             }
         }
@@ -100,9 +101,9 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         let prevX = spec.coords.x;
         let prevY = spec.coords.y;
 
-        let r = 2 + 2 * Math.sin(spec.diveTheta);
-        let nextX = (r * Math.sin(spec.diveTheta)) + prevX;
-        let nextY = (r * Math.cos(spec.diveTheta)) + prevY;
+        let r = 5 + (Math.cos(3*spec.diveTheta));
+        let nextX = (r * Math.cos(spec.diveTheta)) + prevX;
+        let nextY = (r * Math.sin(spec.diveTheta)) + prevY;
         spec.diveTheta += movementSpeed * elapsedTime;
         spec.coords.x = nextX;
         spec.coords.y = nextY;
