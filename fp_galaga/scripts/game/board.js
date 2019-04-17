@@ -40,6 +40,7 @@ Galaga.game.Board = function (spec) {
     let timeSincePlayerDeath = 0;
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
+    let playerDead = false;
     let ufoAssets = {
         bossPurple: './assets/blue-purple-alien.png',
         boss: './assets/green-yellow-alien.png',
@@ -50,6 +51,7 @@ Galaga.game.Board = function (spec) {
         momiji: './assets/momiji.png',
         midori: './assets/midori.png',
         galflagship: './assets/galflagship.png',
+        enterprise: './assets/enterprise.png',
     }
 
     let portalLeft = spec.constructors.ufos.Portal({
@@ -91,7 +93,7 @@ Galaga.game.Board = function (spec) {
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
             if (playerUfoDist < sumOfRadi && !playerDead) {
-                playerDied();
+                // playerDied();
                 ufo.setDidCollide(true);
             }
         });
@@ -102,7 +104,7 @@ Galaga.game.Board = function (spec) {
                 let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
                 let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
                 if (ufoPlayerShot < sumOfRadi && !playerDead) {
-                    playerDied();
+                    // playerDied();
                     shot.setDidCollide(true);
                 }
             })
@@ -217,6 +219,7 @@ Galaga.game.Board = function (spec) {
             coords: { x: - 10, y: 300 },
             imageSrc: ufoAssets[type],
             boss2ndSrc: ufoAssets['bossPurple'],
+            transformSrc: ufoAssets[_transformImg(type)],
             rotation: -Math.PI / 2,
             form: 'first',
             boardSize: spec.boardDimmensions,
@@ -229,6 +232,7 @@ Galaga.game.Board = function (spec) {
             willDive: _willDive(),
             willTransform: _willTransform(),
             diveInterval: _nextRange(1000, 6000),
+            transformTime: _nextRange(5000, 20000),
             timeInGrid: 0,
             pattern: pattern,
             patternOffset: offset,
@@ -238,9 +242,24 @@ Galaga.game.Board = function (spec) {
     }
 
     function _transformImg(type) {
-        if (type === 'bee') {
+        let newType;
 
+        switch (type) {
+            case 'bee':
+                newType = 'midori';
+                break;
+            case 'butterfly':
+                newType = 'galflagship';
+                break;
+            case 'boss':
+                newType = 'boss';
+                break;
+            default:
+                newType = 'enterprise';
+                break;
         }
+
+        return newType;
     }
 
     function _willDive() {
@@ -256,6 +275,7 @@ Galaga.game.Board = function (spec) {
         let prob = 0.1;
         let result = Math.random();
         if (result < prob) {
+            console.log('alient will transform');
             return true;
         }
         return false;

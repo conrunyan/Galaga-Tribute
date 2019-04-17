@@ -32,7 +32,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
     let image2 = new Image();
     image2.isReady = false;
-    image2.src = spec.boss2ndSrc;
+    image2.src = spec.type === 'boss' ? spec.boss2ndSrc : spec.transformSrc;
     image2.onload = function () {
         // console.log('loaded image...');
         this.isReady = true;
@@ -47,7 +47,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let followSpeed = .075;
     let diveSpeed = 0.1;
     let shotSpeed = 0.15;
-    let lifeTime = 60000;
+    let timeAlive = 0;
     let slot = null;
 
     let types = {
@@ -73,9 +73,15 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 moveToNextOpenSlotInGrid(grid, elapsedTime);
             }
         }
+
+        // transform image, if needed
+        if (timeAlive > spec.transformTime && spec.willTransform) {
+            // console.log('alien transformed');
+            spec.type = 'transformed';
+        }
         // }
 
-        lifeTime -= elapsedTime;
+        timeAlive += elapsedTime;
     }
 
     function ufoStartMovement(elapsedTime, direction) {
@@ -295,6 +301,9 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         if (spec.form === 'second' && spec.type === 'boss') {
             return image2;
         }
+        else if (spec.type === 'transformed' && spec.form !== 'second') {
+            return image2;
+        }
         else {
             return image;
         }
@@ -310,7 +319,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get didCollide() { return didCollide },
         get ufoType() { return spec.ufoType },
         get center() { return { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), } },
-        get shouldExplode() { return lifeTime <= 0 },
+        get shouldExplode() { return false },
         get points() { return types[spec.type].points },
         get spec() { return spec },
         get alive() { return spec.alive },
