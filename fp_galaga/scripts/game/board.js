@@ -29,19 +29,28 @@ Galaga.game.Board = function (spec) {
     // };
     let levelLogic = {
         'one': {
-            first: { time: 1000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
-            second: { time: 5000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
-            third: { time: 8000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            first: { time: 5000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
+            second: { time: 9000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
+            third: { time: 11000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
         },
         'two': {
-            first: { time: 1000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
-            second: { time: 5000, wave: ['butterfly', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
-            third: { time: 8000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
+            first: { time: 5000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            second: { time: 9000, wave: ['butterfly', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            third: { time: 11000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
+        },
+        'challenge': {
+            first: { time: 5000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            second: { time: 8000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            // challenge: {}
         }
     }
     let levelStats = {
         'one': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 40 },
         'two': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 45 },
+        'challenge': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 100 },
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
@@ -189,30 +198,12 @@ Galaga.game.Board = function (spec) {
 
     function loadWave(levelSpecs, level) {
         // load relevant wave
-        if (spec.boardClock >= levelSpecs.third.time) {
-            _loadWave(levelSpecs.third, level, 'third');
-            spec.showThirdPortal = true;
-            spec.showSecondPortal = false;
-            spec.showFirstPortal = false;
-        }
-        else if (spec.boardClock >= levelSpecs.second.time) {
-            _loadWave(levelSpecs.second, level, 'second');
-            spec.showThirdPortal = false;
-            spec.showSecondPortal = true;
-            spec.showFirstPortal = false;
-        }
-        if (spec.boardClock >= levelSpecs.first.time) {
-            _loadWave(levelSpecs.first, level, 'first');
-            spec.showThirdPortal = false;
-            spec.showSecondPortal = false;
-            spec.showFirstPortal = true;
-        }
-        // hide portals
-        else {
-            spec.showThirdPortal = false;
-            spec.showSecondPortal = false;
-            spec.showFirstPortal = false;
-        }
+        Object.getOwnPropertyNames(levelSpecs).forEach(wave => {
+            let curWave = levelSpecs[wave]
+            if (spec.boardClock >= curWave.time) {
+                _loadWave(curWave, level, wave);
+            }
+        });
     }
 
     function _loadWave(waveSpecs, level, wave) {
