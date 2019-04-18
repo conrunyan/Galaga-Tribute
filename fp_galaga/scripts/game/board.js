@@ -85,9 +85,7 @@ Galaga.game.Board = function (spec) {
         // update grid
         spec.gamePieces.alienGrid.update(elapsedTime);
         // level logic:
-        if (spec.level === 'one') {
-            loadWave(levelLogic['one'], 'one')
-        }
+        loadWave(levelLogic[spec.level], spec.level)
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid, spec.gamePieces.player.coords);
@@ -141,6 +139,9 @@ Galaga.game.Board = function (spec) {
         // change level, if applicable
         if (levelStats[spec.level].numLeft == 0) {
             spec.level = getNextLevel(spec.level);
+            spec.boardClock = 0;
+            // reset grid for next wave
+            // spec.gamePieces.alienGrid.initGrid()
         }
     }
 
@@ -217,7 +218,7 @@ Galaga.game.Board = function (spec) {
     function _loadWave(waveSpecs, level, wave) {
         // first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
         // add a new ufo
-        if (spec.unitClock >= 250 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
+        if (spec.unitClock >= 125 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
             // add alien based on wave color
             for (let colorIdx = 0; colorIdx < waveSpecs.wave.length; colorIdx++) {
                 _addSmallUFO(waveSpecs.wave[colorIdx], waveSpecs.pattern, waveSpecs.offset * colorIdx);
@@ -236,6 +237,7 @@ Galaga.game.Board = function (spec) {
             else {
                 // decrease number of ufos left
                 levelStats[spec.level].numLeft--;
+                console.log(`Num left: ${levelStats[spec.level].numLeft}`)
                 explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
                 explosion(ufo, './assets/firework_yellow.png', 0.75, { mean: 3, stdev: 1 })
                 return false;
