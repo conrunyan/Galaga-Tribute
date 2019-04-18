@@ -61,10 +61,19 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function ufoMove(elapsedTime, grid, playerCoords) {
         // move in preset path around the board
 
-        if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
-            moveToNextOpenSlotInGrid(grid, elapsedTime);
+        if (spec.pattern.includes('challenge')) {
+            spec.willDive = false;
         }
-        else if (spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) {
+
+        if (!getNextCoordsTriLoop(elapsedTime) && !spec.willDive || !getNextCoordsTriLoop(elapsedTime) && spec.timeInGrid < timeLimitInGrid) {
+            if (spec.pattern.includes('challenge')) {
+                moveOffScreen(elapsedTime);
+            }
+            else {
+                moveToNextOpenSlotInGrid(grid, elapsedTime);
+            }
+        }
+        else if ((spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) && !spec.pattern.includes('challenge')) {
             if (spec.diveTheta < 2 * Math.PI) {
                 diveAtPlayer(elapsedTime, playerCoords);                
             }
@@ -126,13 +135,13 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     // function _moveUp(elapsedTime) {
     //     spec.coords.y -= (movementSpeed * elapsedTime);
     // }
-    // function _moveUpLeft(elapsedTime) {
-    //     spec.coords.x -= (movementSpeed * elapsedTime);
-    //     spec.coords.y -= (movementSpeed * elapsedTime);
-    // }
-    // function _moveLeft(elapsedTime) {
-    //     spec.coords.x -= (diveSpeed * elapsedTime);
-    // }
+    function _moveUpLeft(elapsedTime) {
+        spec.coords.x -= (movementSpeed * elapsedTime * spec.size * 20);
+        spec.coords.y -= (movementSpeed * elapsedTime * spec.size * 20);
+    }
+    function _moveLeft(elapsedTime) {
+        spec.coords.x -= (movementSpeed * elapsedTime);
+    }
     // function _moveDownLeft(elapsedTime) {
     //     spec.coords.x -= (movementSpeed * elapsedTime);
     //     spec.coords.y += (movementSpeed * elapsedTime);
@@ -140,13 +149,13 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function _moveDown(elapsedTime) {
         spec.coords.y += (movementSpeed * elapsedTime);
     }
-    // function _moveDownRight(elapsedTime) {
-    //     spec.coords.x += (movementSpeed * elapsedTime);
-    //     spec.coords.y += (movementSpeed * elapsedTime);
-    // }
-    // function _moveRight(elapsedTime) {
-    //     spec.coords.x += (movementSpeed * elapsedTime);
-    // }
+    function _moveDownRight(elapsedTime) {
+        spec.coords.x += (movementSpeed * elapsedTime * spec.size * 20);
+        spec.coords.y += (movementSpeed * elapsedTime * spec.size * 20);
+    }
+    function _moveRight(elapsedTime) {
+        spec.coords.x += (movementSpeed * elapsedTime);
+    }
     // function _moveUpRight(elapsedTime) {
     //     spec.coords.x += (movementSpeed * elapsedTime);
     //     spec.coords.y -= (movementSpeed * elapsedTime);
@@ -179,6 +188,34 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 spec.coords.y = nextY;
 
                 spec.theta += movementSpeed * elapsedTime;
+                return true;
+            }
+        }
+        else if (spec.pattern === 'challengePath') {
+            let r = 20 + 5*Math.sin(10 * spec.theta);
+            if (spec.theta < 7) {
+                let nextX = (r * Math.cos(spec.theta) * 10) + (300 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + (100 + spec.patternOffset); //(elapsedTime * movementSpeed);
+
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
+
+                spec.theta += movementSpeed * elapsedTime;
+
+                return true;
+            }
+        }
+        else if (spec.pattern === 'challengePathInv') {
+            let r = 20 + 5 * Math.sin(10 * spec.theta);
+            if (spec.theta < 7) {
+                let nextX = (-r * Math.cos(spec.theta) * 10) + (spec.boardSize.x - 550 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (-r * Math.sin(spec.theta) * 10) + (100 + spec.patternOffset); //(elapsedTime * movementSpeed);
+
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
+
+                spec.theta += movementSpeed * elapsedTime;
+
                 return true;
             }
         }
@@ -217,6 +254,15 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
         spec.coords.x += xVel;
         spec.coords.y += yVel;
+    }
+
+    function moveOffScreen(elapsedTime) {
+        if (spec.pattern === 'challengePath') {
+            _moveDownRight(elapsedTime);
+        }
+        else if (spec.pattern === 'challengePathInv') {
+            _moveUpLeft(elapsedTime);
+        }
     }
 
     // function found on https://stackoverflow.com/questions/32219051/how-to-convert-cartesian-coordinates-to-polar-coordinates-in-js

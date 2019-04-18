@@ -56,9 +56,12 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // render board background
         myGraphics.drawTexture(backgroundImg, { x: boardDim.x / 2, y: boardDim.y / 2 }, 0, { width: boardDim.x, height: boardDim.y });
         // render portals, if any
-        gameBoard.portals.forEach(portal => {
-            portalRenderer.render(portal);
-        });
+        if (gameBoard.level !== 'challenge') {
+            gameBoard.portals.forEach(portal => {
+                portalRenderer.render(portal);
+            });
+        }
+        
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
     }

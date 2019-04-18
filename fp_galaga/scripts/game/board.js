@@ -24,8 +24,8 @@ Galaga.game.Board = function (spec) {
     // backgroundImg.isReady = false;
     // backgroundImg.src = spec.imageSrc;
     // backgroundImg.onload = function () {
-        // console.log('loaded image...');
-        // this.isReady = true;
+    // console.log('loaded image...');
+    // this.isReady = true;
     // };
     let levelLogic = {
         'one': {
@@ -39,11 +39,12 @@ Galaga.game.Board = function (spec) {
             third: { time: 11000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
         },
         'challenge': {
-            first: { time: 5000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
-            second: { time: 8000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
-            third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
-            third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
-            third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            first: { time: 1000, wave: ['bee'], offset: 40, pattern: 'challengePath', numToSpawn: 10 },
+            second: { time: 1000, wave: ['bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 10 },
+            // second: { time: 8000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            // third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            // third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            // third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
             // challenge: {}
         }
     }
@@ -331,6 +332,7 @@ Galaga.game.Board = function (spec) {
         get alienGrid() { return spec.gamePieces.alienGrid },
         get portals() { return spec.gamePieces.portals },
         get levelStarted() { return spec.levelStarted },
+        get level() { return spec.level },
         updatePieces: updatePieces,
         updateClock: updateClock,
         // addUFO: addUFO,
