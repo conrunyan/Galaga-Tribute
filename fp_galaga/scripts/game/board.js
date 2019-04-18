@@ -1,4 +1,4 @@
-import { symlinkSync } from "fs";
+// import { symlinkSync } from "fs";
 
 // --------------------------------------------------------------
 //
@@ -20,13 +20,13 @@ Galaga.game.Board = function (spec) {
     'use strict';
 
     // load image
-    let backgroundImg = new Image();
-    backgroundImg.isReady = false;
-    backgroundImg.src = spec.imageSrc;
-    backgroundImg.onload = function () {
+    // let backgroundImg = new Image();
+    // backgroundImg.isReady = false;
+    // backgroundImg.src = spec.imageSrc;
+    // backgroundImg.onload = function () {
         // console.log('loaded image...');
-        this.isReady = true;
-    };
+        // this.isReady = true;
+    // };
     let levelLogic = {
         'one': {
             first: { time: 1000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
