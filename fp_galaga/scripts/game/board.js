@@ -56,6 +56,7 @@ Galaga.game.Board = function (spec) {
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
+    let deadTime = 2000;
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let playerDead = false;
@@ -114,7 +115,7 @@ Galaga.game.Board = function (spec) {
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
             if (playerUfoDist < sumOfRadi && !playerDead) {
-                // playerDied();
+                playerDied();
                 ufo.setDidCollide(true);
             }
         });
@@ -125,7 +126,7 @@ Galaga.game.Board = function (spec) {
                 let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
                 let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
                 if (ufoPlayerShot < sumOfRadi && !playerDead) {
-                    // playerDied();
+                    playerDied();
                     shot.setDidCollide(true);
                 }
             })
@@ -159,6 +160,9 @@ Galaga.game.Board = function (spec) {
             // reset grid for next wave
             // spec.gamePieces.alienGrid.initGrid()
         }
+
+        // respawn player if applicable
+        playerRespawn(elapsedTime);
     }
 
     function getNextLevel(level) {
@@ -206,6 +210,23 @@ Galaga.game.Board = function (spec) {
             'two': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 45 },
             'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
         }
+    }
+
+    function playerDied() {
+        spec.gamePieces.player.setShowPlayer(false);
+        playerDead = true;
+        // start timer for player dead
+    }
+
+    function playerRespawn(elapsedTime) {
+        if (playerDead && timeSincePlayerDeath >= deadTime) {
+            spec.gamePieces.player.respawn();
+            timeSincePlayerDeath = 0;
+        }
+        else if (playerDead) {
+            timeSincePlayerDeath += elapsedTime;
+        }
+        
     }
 
     /////////////////////////////////
@@ -283,7 +304,8 @@ Galaga.game.Board = function (spec) {
             diveTheta: 0,
             deleteMe: false,
             playerCoords: spec.gamePieces.player.coords,
-            playerSize: spec.gamePieces.player.size
+            playerSize: spec.gamePieces.player.size,
+            showPlayer: spec.gamePieces.player.showPlayer,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

@@ -49,6 +49,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     let shotSpeed = 0.3;
     let timeAlive = 0;
     let slot = null;
+    let showPlayer = true;
 
     let types = {
         boss: { lives: 2, points: 150 },
@@ -371,7 +372,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function _isLinedUpWithPlayer() {
-        if (Math.abs(spec.playerCoords.x - spec.coords.x) <= 5 && spec.coords.y < (spec.boardSize.y - spec.playerSize)) {
+        if (Math.abs(spec.playerCoords.x - spec.coords.x) <= 5 && spec.coords.y < (spec.boardSize.y - spec.playerSize) && spec.showPlayer) {
             return true;
         }
         return false;
@@ -422,6 +423,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get spec() { return spec },
         get alive() { return spec.alive },
         get deleteMe() { return spec.deleteMe },
+        get showPlayer() { return showPlayer },
         setDidCollide: setDidCollide,
         ufoMove: ufoMove,
         ufoShoot: ufoSmallShootPlayer,

@@ -30,6 +30,7 @@ Galaga.objects.player.Player = function (spec) {
     let timeSinceLastShot = 150;
     let shotInterval = 150;
     let didCollide = false;
+    let displayPlayer = true;
     let lives = 3;
     let score = 0;
     let level = 1;
@@ -62,19 +63,17 @@ Galaga.objects.player.Player = function (spec) {
                 maxLifeTime: 20000,
             });
             projectiles.push(newShot);
-            timeSinceLastShot = timeSinceLastShot - shotInterval;
+            timeSinceLastShot = 0;
             // trigger sound of shot
             spec.sounds.playSound('audio/player-laser-shot');
         }
-        else {
-            timeSinceLastShot += elapsedTime
-        }
     }
 
-    function respawn(safeCoords) {
+    function respawn() {
         lives -= 1;
         didCollide = false;
-        spec.coords = safeCoords;
+        spec.coords = spec.coords;
+        displayPlayer = true;
         spec.velocities = { x: 0, y: 0 }
     }
 
@@ -92,6 +91,10 @@ Galaga.objects.player.Player = function (spec) {
 
     function setDidCollide(newVal) {
         didCollide = newVal;
+    }
+
+    function setShowPlayer(newVal) {
+        displayPlayer = newVal;
     }
 
     function _getPlayerCenter() {
@@ -132,6 +135,7 @@ Galaga.objects.player.Player = function (spec) {
 
     function updateShots(elapsedTime) {
         let shotsToKeep = [];
+        timeSinceLastShot += elapsedTime;
         projectiles.forEach(shot => {
             // console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
@@ -155,7 +159,9 @@ Galaga.objects.player.Player = function (spec) {
         get lives() { return lives },
         get score() { return score },
         get level() { return _determineLevel() },
+        get showPlayer() { return displayPlayer },
         setDidCollide: setDidCollide,
+        setShowPlayer: setShowPlayer,
         movePlayerLeft: movePlayerLeft,
         movePlayerRight: movePlayerRight,
         playerShoot: playerShoot,
