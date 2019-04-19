@@ -336,6 +336,7 @@ Galaga.game.Board = function (spec) {
             playerCoords: spec.gamePieces.player.coords,
             playerSize: spec.gamePieces.player.size,
             showPlayer: spec.gamePieces.player.showPlayer,
+            sounds: spec.sounds,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

@@ -78,6 +78,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         else if ((spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) && !spec.pattern.includes('challenge')) {
             if (spec.diveTheta < 2 * Math.PI) {
                 diveAtPlayer(elapsedTime, playerCoords);
+                // play dive sound if sound isnt' playing, and dive theta < 2 Math.PI/3
+                _playDiveSound();
                 if (_isLinedUpWithPlayer()) {
                     ufoSmallShootPlayer(elapsedTime, spec.playerCoords);
                 }
@@ -105,6 +107,15 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
         timeAlive += elapsedTime;
         timeSinceLastShot += elapsedTime;
+    }
+
+    function _playDiveSound() {
+        if (Galaga.sounds['audio/alien-dive'].currentTime === 0 && spec.diveTheta < 2 * Math.PI / 3) {
+            spec.sounds.playSound('audio/alien-dive');
+        }
+        else if (Galaga.sounds['audio/alien-dive'].currentTime == Galaga.sounds['audio/alien-dive'].duration && spec.diveTheta < 2 * Math.PI / 3) {
+            spec.sounds.playSound('audio/alien-dive');
+        }
     }
 
     function ufoStartMovement(elapsedTime, direction) {
