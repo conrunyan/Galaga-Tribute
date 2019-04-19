@@ -232,6 +232,7 @@ Galaga.game.Board = function (spec) {
     function playerDied() {
         spec.gamePieces.player.setShowPlayer(false);
         explosion(spec.gamePieces.player, './assets/shipExplosion.png', 0.75, { mean: 7, stdev: 3 })
+        spec.sounds.playSound('audio/player-explode');
         playerDead = true;
         // start timer for player dead
     }

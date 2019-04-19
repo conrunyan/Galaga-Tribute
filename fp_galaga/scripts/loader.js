@@ -140,6 +140,9 @@ MyGame.loader = (function () {
             key: 'sound-start-game-music',
             source: 'assets/music/01 Stage Intro.mp3'
         }, {
+            key: 'sound-ship-explode',
+                source: 'assets/sfx/09 Die-Start Up Sound.mp3'
+        }, {
             key: 'img-star-field-background',
             source: 'assets/starfield.png'
         }];

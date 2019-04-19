@@ -48,9 +48,11 @@ function initialize() {
     function loadAudio() {
         // Reference: https://www.sounds-resource.com/nintendo_64/starfox64/sound/1442/
         Galaga.sounds['audio/player-laser-shot'] = loadSound('assets/sfx/shipFireSound.mp3', 'Sound 1', 'id-play1');
-        // Galaga.sounds['audio/menu-music'] = loadSound('assets/sounds/02 Title.mp3', 'Sound 2', 'id-play2');
         Galaga.sounds['audio/start-game-music'] = loadSound('assets/music/01 Stage Intro.mp3', 'Game start music', 'id-play-start-music');
         Galaga.sounds['audio/menu-mouse-over'] = loadSound('assets/mouse-over.mp3');
+        // Galaga.sounds['audio/player-1UP'] = loadSound('assets/sfx/08 1-Up.mp3');
+        Galaga.sounds['audio/player-explode'] = loadSound('assets/sfx/09 Die-Start Up Sound.mp3');
+        // Galaga.sounds['audio/alien-dive'] = loadSound('assets/sfx/8d82b5_Galaga_Flying_Enemy_Sound_Effect.mp3');
     }
 
     loadAudio();
