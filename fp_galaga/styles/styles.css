@@ -12,7 +12,7 @@ body {
     z-index: 0;
 }
 
-.galaga-game {
+.galaga-game.canvas {
     margin: auto;
     z-index: 1;
     right: 0;
@@ -148,10 +148,11 @@ ul.menu li button:active {
     list-style: none;
 }
 
-.menu-text {
+.menu-text, #high-scores-hsEntry {
     color: aqua;
     font-size: 20pt;
     font-family: 'Courier New', Courier, monospace;
+    list-style-type: none;
 }
 
 .menu-text-heading {

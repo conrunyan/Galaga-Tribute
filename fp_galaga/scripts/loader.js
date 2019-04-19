@@ -137,6 +137,9 @@ MyGame.loader = (function () {
         }, {
             key: 'sound-start-game-music',
             source: 'assets/music/01 Stage Intro.mp3'
+        }, {
+            key: 'img-star-field-background',
+            source: 'assets/starfield.mp3'
         }];
 
     //------------------------------------------------------------------
@@ -223,7 +226,7 @@ MyGame.loader = (function () {
 
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    if (fileExtension === 'png' || fileExtension === 'jpg') {
+                    if (fileExtension === 'png' || fileExtension === 'jpg' || fileExtension === 'mp4') {
                         asset = new Image();
                     } else if (fileExtension === 'mp3') {
                         asset = new Audio();

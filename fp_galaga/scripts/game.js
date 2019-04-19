@@ -16,7 +16,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     // background image
     let backgroundImg = new Image();
     backgroundImg.isReady = false;
-    backgroundImg.src = 'assets/gameBackground.png';
+    backgroundImg.src = 'assets/starfield.png';
     backgroundImg.onload = function () {
         console.log('loaded image...');
         this.isReady = true;
@@ -25,7 +25,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     // Renderers & Particle System
     let boardRenderer = renderer.Board;
     let particleSystemRenderer = renderer.ParticleSystem;
-    // let gameStatRenderer = renderer.Status;
+    let gameStatRenderer = renderer.Status;
     let particleSystemController = partSys.ParticleSystemController({ systems: [] });
     let portalRenderer = renderer.AnimatedModel({
         spriteSheet: 'assets/portal_strip4.png',
@@ -64,6 +64,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
+        gameStatRenderer.renderStats(myPlayer, gameBoard);
     }
 
     function init() {

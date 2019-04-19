@@ -42,7 +42,7 @@ Galaga.graphics = (function () {
         context.save();
 
         context.fillStyle = color;
-        context.font = `${size}pt Comic Sans MS`;
+        context.font = `bold ${size}pt Courier New MS`;
         context.textAlight = 'left';
         context.fillText(text, coords.x, coords.y);
 
