@@ -301,6 +301,7 @@ Galaga.game.Board = function (spec) {
                 // decrease number of ufos left
                 levelStats[spec.level].numLeft--;
                 console.log(`Num left: ${levelStats[spec.level].numLeft}`)
+                spec.sounds.playSound('audio/alien-die');
                 explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
                 explosion(ufo, './assets/firework_yellow.png', 0.75, { mean: 3, stdev: 1 })
                 return false;

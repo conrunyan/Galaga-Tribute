@@ -52,7 +52,8 @@ function initialize() {
         Galaga.sounds['audio/menu-mouse-over'] = loadSound('assets/mouse-over.mp3');
         // Galaga.sounds['audio/player-1UP'] = loadSound('assets/sfx/08 1-Up.mp3');
         Galaga.sounds['audio/player-explode'] = loadSound('assets/sfx/09 Die-Start Up Sound.mp3');
-        // Galaga.sounds['audio/alien-dive'] = loadSound('assets/sfx/8d82b5_Galaga_Flying_Enemy_Sound_Effect.mp3');
+        Galaga.sounds['audio/alien-die'] = loadSound('assets/sfx/alien-die.mp3');
+        Galaga.sounds['audio/alien-dive'] = loadSound('assets/sfx/alien-dive.mp3');
     }
 
     loadAudio();

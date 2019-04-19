@@ -141,7 +141,13 @@ MyGame.loader = (function () {
             source: 'assets/music/01 Stage Intro.mp3'
         }, {
             key: 'sound-ship-explode',
-                source: 'assets/sfx/09 Die-Start Up Sound.mp3'
+            source: 'assets/sfx/09 Die-Start Up Sound.mp3'
+        }, {
+            key: 'sound-alien-die',
+            source: 'assets/sfx/alien-die.mp3'
+        }, {
+            key: 'sound-alien-dive',
+            source: 'assets/sfx/alien-dive.mp3'
         }, {
             key: 'img-star-field-background',
             source: 'assets/starfield.png'
