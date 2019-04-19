@@ -32,6 +32,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         spriteCount: 4,
         spriteTime: [125, 125, 125, 125],   // ms per frame
     }, myGraphics);
+    let lifeRenderer = renderer.Life;
 
     let myPlayer;
     let gameBoard;
@@ -65,6 +66,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);
+        lifeRenderer.renderLives(myPlayer, boardDim);
     }
 
     function init() {

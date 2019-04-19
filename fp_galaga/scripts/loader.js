@@ -64,6 +64,7 @@ MyGame.loader = (function () {
                 'scripts/render/renderParticleSystem.js',
                 'scripts/render/renderGameStatus.js',
                 'scripts/render/renderAnimatedModel.js',
+                'scripts/render/renderLife.js',
             ],
             message: 'Renderers loaded',
             onComplete: null
