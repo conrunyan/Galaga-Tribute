@@ -4,7 +4,16 @@ Galaga.screens['high-scores-screen'] = (function (controller, game) {
     function initialize() {
         document.getElementById('button-score-back-menu').addEventListener(
             'click',
-            function () { controller.showScreen('main-menu'); });
+            () => { goHome(); });
+    }
+
+    function goHome() {
+        // Stop menu screen music, if playing
+        if (Galaga.sounds['audio/menu-end-game-music'].currentTime !== 0) {
+            Galaga.sounds['audio/menu-end-game-music'].load();
+        }
+
+        controller.showScreen('main-menu')
     }
 
     function run() {

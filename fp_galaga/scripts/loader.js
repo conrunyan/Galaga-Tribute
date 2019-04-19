@@ -19,6 +19,12 @@ MyGame.loader = (function () {
     let scriptOrder = [
         {
             scripts: [
+                'scripts/audio/audioPlayer.js',
+            ],
+            message: 'Audio player loaded',
+            onComplete: null
+        }, {
+            scripts: [
                 'scripts/screens/screenController.js',
                 'scripts/screens/gameScreen.js',
                 'scripts/screens/highscoreScreen.js',
@@ -77,12 +83,6 @@ MyGame.loader = (function () {
             message: 'Particle systems loaded',
             onComplete: null,
         }, {
-            scripts: [
-                'scripts/audio/audioPlayer.js',
-            ],
-            message: 'Audio player loaded',
-            onComplete: null
-        }, {
             scripts: ['scripts/game.js'],
             message: 'Gameplay model loaded',
             onComplete: null
@@ -139,6 +139,9 @@ MyGame.loader = (function () {
         }, {
             key: 'sound-start-game-music',
             source: 'assets/music/01 Stage Intro.mp3'
+        }, {
+            key: 'sound-music-end-game',
+            source: 'assets/music/11 Name Entry.mp3'
         }, {
             key: 'sound-ship-explode',
             source: 'assets/sfx/09 Die-Start Up Sound.mp3'

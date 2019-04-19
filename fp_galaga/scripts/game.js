@@ -150,6 +150,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             // save highscores
             saveHighScore();
             screens.Controller.showScreen('high-scores-screen');
+            sounds.playSound('audio/menu-end-game-music');
             return;
         }
         requestAnimationFrame(gameLoop);
