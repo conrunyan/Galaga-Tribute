@@ -29,9 +29,9 @@ Galaga.game.Board = function (spec) {
     // };
     let levelLogic = {
         'one': {
-            first: { time: 5000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
-            second: { time: 9000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
-            third: { time: 11000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
+            first: { time: 7000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
+            second: { time: 11000, wave: ['butterfly'], offset: 0, pattern: 'triLoopInvert', numToSpawn: 10 },
+            third: { time: 14000, wave: ['bee', 'boss'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
         },
         'two': {
             first: { time: 5000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
@@ -268,7 +268,7 @@ Galaga.game.Board = function (spec) {
             form: 'first',
             boardSize: spec.boardDimmensions,
             size: 30,
-            shotImgSource: './assets/green-yellow-alien.png',
+            shotImgSource: './assets/shot.png',
             shot: spec.constructors.shot,
             type: type,
             maxProjectiles: 40,
@@ -283,6 +283,7 @@ Galaga.game.Board = function (spec) {
             diveTheta: 0,
             deleteMe: false,
             playerCoords: spec.gamePieces.player.coords,
+            playerSize: spec.gamePieces.player.size
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

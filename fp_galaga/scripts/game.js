@@ -82,7 +82,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             boardSize: boardDim,
             size: 40,
             shot: projectiles,
-            shotImgSource: './assets/playerShip.png',
+            shotImgSource: './assets/shot.png',
             shotSpeed: 150,
             maxProjectiles: 1000,
             sounds: sounds,

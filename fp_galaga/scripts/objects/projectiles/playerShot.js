@@ -50,6 +50,7 @@ Galaga.objects.projectile.PlayerShot = function (spec) {
         get lifeTime() { return spec.lifeTime },
         get maxLifeTime() { return spec.maxLifeTime },
         get didCollide() { return didCollide },
+        get rotation() { return spec.rotation },
         setDidCollide: setDidCollide,
         moveProjectileFoward: moveProjectileFoward,
     };

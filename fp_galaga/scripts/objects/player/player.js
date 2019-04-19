@@ -56,8 +56,9 @@ Galaga.objects.player.Player = function (spec) {
                 imageSrc: spec.shotImgSource,
                 maxSpeed: spec.shotSpeed,
                 velocities: { x: tmpShotXVel, y: tmpShotYVel },
-                size: 5,
+                size: 10,
                 lifeTime: 0,
+                rotation: 0,
                 maxLifeTime: 20000,
             });
             projectiles.push(newShot);

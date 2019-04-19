@@ -39,14 +39,14 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     };
 
     let projectiles = [];
-    let timeSinceLastShot = 2000;
+    let timeSinceLastShot = 0;
     let timeLimitInGrid = 1000;
-    let shotInterval = 2000;
+    let shotInterval = 1000;
     let didCollide = false;
     let movementSpeed = 0.0003;
     let followSpeed = .075;
     let diveSpeed = 0.002;
-    let shotSpeed = 0.15;
+    let shotSpeed = 0.3;
     let timeAlive = 0;
     let slot = null;
 
@@ -103,6 +103,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         // }
 
         timeAlive += elapsedTime;
+        timeSinceLastShot += elapsedTime;
     }
 
     function ufoStartMovement(elapsedTime, direction) {
@@ -320,15 +321,13 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function ufoSmallShootPlayer(elapsedTime, playerCoords, playerDead) {
-        if (!playerDead) {
-            let oLine = (playerCoords.y - spec.coords.y) + Math.random() * 25;
-            let aLine = (playerCoords.x - spec.coords.x) + Math.random() * 25;
-            let angle = Math.atan(oLine, aLine);
-            let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
-            let tmpShotXVel = 0;
-            let tmpShotYVel = (shotSpeed * oLine) / dist;
-            ufoSmallShoot(elapsedTime, { x: tmpShotXVel, y: tmpShotYVel });
-        }
+        let oLine = (playerCoords.y - spec.coords.y) + Math.random() * 25;
+        let aLine = (playerCoords.x - spec.coords.x) + Math.random() * 25;
+        let angle = Math.atan(oLine, aLine);
+        let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
+        let tmpShotXVel = 0;
+        let tmpShotYVel = (shotSpeed * oLine) / dist;
+        ufoSmallShoot(elapsedTime, { x: tmpShotXVel, y: tmpShotYVel });
     }
 
     function ufoSmallShoot(elapsedTime, newVelocity) {
@@ -339,15 +338,13 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 imageSrc: spec.shotImgSource,
                 maxSpeed: shotSpeed,
                 velocities: { x: newVelocity.x, y: newVelocity.y },
-                size: 5,
+                size: 10,
                 lifeTime: 0,
+                rotation: Math.PI,
                 maxLifeTime: 10000,
             });
             projectiles.push(newShot);
             timeSinceLastShot = 0;
-        }
-        else {
-            timeSinceLastShot += elapsedTime
         }
     }
 
@@ -374,7 +371,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function _isLinedUpWithPlayer() {
-        if (Math.abs((spec.playerCoords.x - spec.coords.x)) < 2) {
+        if (Math.abs(spec.playerCoords.x - spec.coords.x) <= 5 && spec.coords.y < (spec.boardSize.y - spec.playerSize)) {
             return true;
         }
         return false;
