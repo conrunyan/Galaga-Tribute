@@ -65,6 +65,7 @@ MyGame.loader = (function () {
                 'scripts/render/renderGameStatus.js',
                 'scripts/render/renderAnimatedModel.js',
                 'scripts/render/renderLife.js',
+                'scripts/render/renderLevelText.js',
             ],
             message: 'Renderers loaded',
             onComplete: null
@@ -140,7 +141,7 @@ MyGame.loader = (function () {
             source: 'assets/music/01 Stage Intro.mp3'
         }, {
             key: 'img-star-field-background',
-            source: 'assets/starfield.mp3'
+            source: 'assets/starfield.png'
         }];
 
     //------------------------------------------------------------------

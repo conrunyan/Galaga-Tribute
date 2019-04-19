@@ -6,7 +6,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let lastTimeStamp;
     let totalElapsedTime = 0;
     let MAX_SCORES_KEPT = 10;
-    let scores = []
+    let scores = [];
 
     // initialize screens
     screens.Controller.initScreens();
@@ -33,6 +33,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         spriteTime: [125, 125, 125, 125],   // ms per frame
     }, myGraphics);
     let lifeRenderer = renderer.Life;
+    let levelTextRenderer = renderer.LevelText;
 
     let myPlayer;
     let gameBoard;
@@ -66,7 +67,10 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);
-        lifeRenderer.renderLives(myPlayer, boardDim);
+        lifeRenderer.renderLives(myPlayer, boardDim)
+        if (gameBoard.displayLevelText) {
+            levelTextRenderer.renderLevelText(gameBoard.level, boardDim);
+        }
     }
 
     function init() {

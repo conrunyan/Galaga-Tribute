@@ -4,7 +4,7 @@ Galaga.render.Life = (function (graphics) {
     //drawTexture(image, center, rotation, size)
 
     function renderLives(player, boardSize) {
-        let scale = 1
+        let scale = 0.75
         let initCoords = {x: 20, y: boardSize.y - 20};
         let offset = player.size * scale + 5;
         let center = {

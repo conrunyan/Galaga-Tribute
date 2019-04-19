@@ -58,11 +58,13 @@ Galaga.game.Board = function (spec) {
     let timeSincePlayerDeath = 0;
     let deadTime = 2000;
     let playerImmuneTime = 2000;
+    let levelDisplayTime = 4500;
     let timePlayerHasBeenImmune = 0;
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let playerDead = false;
     let playerImmune = false;
+    let displayLevelText = true;
     let ufoAssets = {
         bossPurple: './assets/blue-purple-alien.png',
         boss: './assets/green-yellow-alien.png',
@@ -168,6 +170,14 @@ Galaga.game.Board = function (spec) {
             // spec.gamePieces.alienGrid.initGrid()
         }
 
+        // set display level text
+        if (spec.boardClock <= levelDisplayTime) {
+            displayLevelText = true;
+        }
+        else {
+            displayLevelText = false;
+        }
+
         // respawn player if applicable
         playerRespawn(elapsedTime);
     }
@@ -181,7 +191,7 @@ Galaga.game.Board = function (spec) {
             return 'challenge';
         }
         else if (level === 'challenge') {
-            
+
             return 'one';
         }
         else {
@@ -237,7 +247,7 @@ Galaga.game.Board = function (spec) {
         else if (playerDead) {
             timeSincePlayerDeath += elapsedTime;
         }
-        
+
         // check immunity
         if (playerImmune && timePlayerHasBeenImmune >= playerImmuneTime) {
             playerImmune = false;
@@ -419,6 +429,7 @@ Galaga.game.Board = function (spec) {
         get portals() { return spec.gamePieces.portals },
         get levelStarted() { return spec.levelStarted },
         get level() { return spec.level },
+        get displayLevelText() { return displayLevelText },
         updatePieces: updatePieces,
         updateClock: updateClock,
         // addUFO: addUFO,
