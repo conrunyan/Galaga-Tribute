@@ -56,6 +56,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         bee: { lives: 1, points: 50 },
         butterfly: { lives: 1, points: 100 },
         transformed: { lives: 1, points: 160 },
+        challenge: {lives: 1, points: 160},
     }
 
     function ufoMove(elapsedTime, grid, playerCoords) {
@@ -136,22 +137,22 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     //     spec.coords.y -= (movementSpeed * elapsedTime);
     // }
     function _moveUpLeft(elapsedTime) {
-        spec.coords.x -= (movementSpeed * elapsedTime * spec.size * 20);
-        spec.coords.y -= (movementSpeed * elapsedTime * spec.size * 20);
+        spec.coords.x -= (movementSpeed * elapsedTime * spec.size * 30);
+        spec.coords.y -= (movementSpeed * elapsedTime * spec.size * 30);
     }
     function _moveLeft(elapsedTime) {
         spec.coords.x -= (movementSpeed * elapsedTime);
     }
-    // function _moveDownLeft(elapsedTime) {
-    //     spec.coords.x -= (movementSpeed * elapsedTime);
-    //     spec.coords.y += (movementSpeed * elapsedTime);
-    // }
+    function _moveDownLeft(elapsedTime) {
+        spec.coords.x -= (movementSpeed * elapsedTime * spec.size * 30);
+        spec.coords.y += (movementSpeed * elapsedTime * spec.size * 30);
+    }
     function _moveDown(elapsedTime) {
         spec.coords.y += (movementSpeed * elapsedTime);
     }
     function _moveDownRight(elapsedTime) {
-        spec.coords.x += (movementSpeed * elapsedTime * spec.size * 20);
-        spec.coords.y += (movementSpeed * elapsedTime * spec.size * 20);
+        spec.coords.x += (movementSpeed * elapsedTime * spec.size * 30);
+        spec.coords.y += (movementSpeed * elapsedTime * spec.size * 30);
     }
     function _moveRight(elapsedTime) {
         spec.coords.x += (movementSpeed * elapsedTime);
@@ -192,15 +193,14 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             }
         }
         else if (spec.pattern === 'challengePath') {
-            let r = 20 + 5*Math.sin(10 * spec.theta);
-            if (spec.theta < 7) {
+            let r = 50 + 8 * Math.sin(10 * spec.theta);
+            if (spec.theta < 13) {
                 let nextX = (r * Math.cos(spec.theta) * 10) + (300 + spec.patternOffset); //(elapsedTime * movementSpeed);
-                let nextY = (r * Math.sin(spec.theta) * 10) + (100 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + (-250 + spec.patternOffset); //(elapsedTime * movementSpeed);
 
                 spec.coords.x = nextX;
                 spec.coords.y = nextY;
-
-                spec.theta += movementSpeed * elapsedTime;
+                spec.theta += (0.6 * movementSpeed * elapsedTime);
 
                 return true;
             }
@@ -215,6 +215,34 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 spec.coords.y = nextY;
 
                 spec.theta += movementSpeed * elapsedTime;
+
+                return true;
+            }
+        }
+        else if (spec.pattern === 'challengePath2') {
+            let r = 10 + spec.size * Math.cos(4 * spec.theta) + Math.sin(3 * spec.theta) * 0.0005;
+            if (spec.theta < 14) {
+                let nextX = (r * Math.cos(spec.theta) * 10) + (spec.boardSize.x / 2 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + (100 + spec.patternOffset); //(elapsedTime * movementSpeed);
+
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
+
+                spec.theta += movementSpeed * elapsedTime;
+
+                return true;
+            }
+        }
+        else if (spec.pattern === 'challengePath2Inv') {
+            let r = 10 + spec.size * Math.cos(4 * spec.theta) + Math.sin(3 * spec.theta) * 0.0005;
+            if (spec.theta > -14) {
+                let nextX = (r * Math.cos(spec.theta) * 10) + (40 +spec.boardSize.x / 2 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextY = (r * Math.sin(spec.theta) * 10) + (140 + spec.patternOffset); //(elapsedTime * movementSpeed);
+
+                spec.coords.x = nextX;
+                spec.coords.y = nextY;
+
+                spec.theta -= movementSpeed * elapsedTime;
 
                 return true;
             }
@@ -262,6 +290,9 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         }
         else if (spec.pattern === 'challengePathInv') {
             _moveUpLeft(elapsedTime);
+        }
+        else if (spec.pattern === 'challengePath2') {
+            _moveDownLeft(elapsedTime);
         }
     }
 
@@ -346,7 +377,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function _getImage() {
-        if (spec.form === 'second' && spec.type === 'boss') {
+        if (spec.form === 'second' && spec.type === 'boss' || spec.type === 'challenge') {
             return image2;
         }
         else if (spec.type === 'transformed' && spec.form !== 'second') {

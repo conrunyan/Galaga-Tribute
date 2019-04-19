@@ -39,9 +39,11 @@ Galaga.game.Board = function (spec) {
             third: { time: 11000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
         },
         'challenge': {
-            first: { time: 1000, wave: ['bee'], offset: 40, pattern: 'challengePath', numToSpawn: 10 },
-            second: { time: 1000, wave: ['bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 10 },
-            // second: { time: 8000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
+            first: { time: 1000, wave: ['challenge'], offset: 0, pattern: 'challengePath', numToSpawn: 10 },
+            second: { time: 4000, wave: ['butterfly'], offset: 0, pattern: 'challengePathInv', numToSpawn: 10 },
+            third: { time: 10000, wave: ['bee'], offset: 0, pattern: 'challengePath2', numToSpawn: 10 },
+            fourth: { time: 10000, wave: ['bee'], offset: 0, pattern: 'challengePath2Inv', numToSpawn: 10 },
+            fifth: { time: 20000, wave: ['bee', 'bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 20 },
             // third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
             // third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
             // third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
@@ -49,9 +51,9 @@ Galaga.game.Board = function (spec) {
         }
     }
     let levelStats = {
-        'one': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 40 },
-        'two': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 45 },
-        'challenge': { spawned: { first: 0, second: 0, third: 0, }, numLeft: 100 },
+        'one': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
+        'two': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 45 },
+        'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 100 },
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
@@ -69,6 +71,7 @@ Galaga.game.Board = function (spec) {
         midori: './assets/midori.png',
         galflagship: './assets/galflagship.png',
         enterprise: './assets/enterprise.png',
+        challenge: './assets/tonbo.png',
     }
 
     let portalLeft = spec.constructors.ufos.Portal({
@@ -264,6 +267,25 @@ Galaga.game.Board = function (spec) {
         spec.gamePieces.ufos.push(smallUFO);
     }
 
+    function _challengeForm() {
+        let randInt = Math.random();
+        console.log('randInt', randInt);
+        // sasori
+        // tonbo
+        // enterprise
+        if (randInt < 0.33) {
+            console.log('sasori');
+            return 'sasori';
+        }
+        else if (randInt >= .33 && randInt < 0.66) {
+            console.log('tonbo');
+            return 'tonbo';
+        }
+        else {
+            return 'enterprise';
+        }
+    }
+
     function _transformImg(type) {
         let newType;
 
@@ -276,6 +298,9 @@ Galaga.game.Board = function (spec) {
                 break;
             case 'boss':
                 newType = 'boss';
+                break;
+            case 'challenge':
+                newType = _challengeForm();
                 break;
             default:
                 newType = 'enterprise';
