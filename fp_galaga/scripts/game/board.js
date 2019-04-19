@@ -57,9 +57,12 @@ Galaga.game.Board = function (spec) {
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
     let deadTime = 2000;
+    let playerImmuneTime = 2000;
+    let timePlayerHasBeenImmune = 0;
     let leftPortalCoords = { x: 200, y: 200 };
     let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let playerDead = false;
+    let playerImmune = false;
     let ufoAssets = {
         bossPurple: './assets/blue-purple-alien.png',
         boss: './assets/green-yellow-alien.png',
@@ -115,7 +118,9 @@ Galaga.game.Board = function (spec) {
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
             if (playerUfoDist < sumOfRadi && !playerDead) {
-                playerDied();
+                if (!playerImmune) {
+                    playerDied();
+                }
                 ufo.setDidCollide(true);
             }
         });
@@ -126,7 +131,9 @@ Galaga.game.Board = function (spec) {
                 let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
                 let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
                 if (ufoPlayerShot < sumOfRadi && !playerDead) {
-                    playerDied();
+                    if (!playerImmune) {
+                        playerDied();
+                    }
                     shot.setDidCollide(true);
                 }
             })
@@ -214,19 +221,30 @@ Galaga.game.Board = function (spec) {
 
     function playerDied() {
         spec.gamePieces.player.setShowPlayer(false);
+        explosion(spec.gamePieces.player, './assets/shipExplosion.png', 0.75, { mean: 7, stdev: 3 })
         playerDead = true;
         // start timer for player dead
     }
 
     function playerRespawn(elapsedTime) {
+        // check death timer
         if (playerDead && timeSincePlayerDeath >= deadTime) {
             spec.gamePieces.player.respawn();
             timeSincePlayerDeath = 0;
+            playerDead = false;
+            playerImmune = true;
         }
         else if (playerDead) {
             timeSincePlayerDeath += elapsedTime;
         }
         
+        // check immunity
+        if (playerImmune && timePlayerHasBeenImmune >= playerImmuneTime) {
+            playerImmune = false;
+        }
+        else if (playerImmune) {
+            timePlayerHasBeenImmune += elapsedTime;
+        }
     }
 
     /////////////////////////////////
@@ -354,7 +372,7 @@ Galaga.game.Board = function (spec) {
     }
 
     function _willDive() {
-        let prob = 0.25;
+        let prob = 0.125;
         let result = Math.random();
         if (result < prob) {
             return true;
