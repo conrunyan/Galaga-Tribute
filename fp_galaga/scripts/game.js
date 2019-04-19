@@ -119,7 +119,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             Random: myRandom,
             boardClock: 0,
             unitClock: 0,
-            level: 'challenge',
+            level: 'one',
             levelStarted: false,
         });
 

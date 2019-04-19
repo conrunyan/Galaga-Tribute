@@ -39,21 +39,20 @@ Galaga.game.Board = function (spec) {
             third: { time: 11000, wave: ['boss'], offset: 0, pattern: 'triLoop', numToSpawn: 5 },
         },
         'challenge': {
-            first: { time: 1000, wave: ['challenge'], offset: 0, pattern: 'challengePath', numToSpawn: 10 },
-            second: { time: 4000, wave: ['butterfly'], offset: 0, pattern: 'challengePathInv', numToSpawn: 10 },
-            third: { time: 10000, wave: ['bee'], offset: 0, pattern: 'challengePath2', numToSpawn: 10 },
-            fourth: { time: 10000, wave: ['bee'], offset: 0, pattern: 'challengePath2Inv', numToSpawn: 10 },
-            fifth: { time: 20000, wave: ['bee', 'bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 20 },
+            first: { time: 5000, wave: ['butterfly'], offset: 0, pattern: 'challengePath', numToSpawn: 10 },
+            second: { time: 9000, wave: ['challenge'], offset: 0, pattern: 'challengePathInv', numToSpawn: 10 },
+            third: { time: 25000, wave: ['bee'], offset: 0, pattern: 'challengePath2', numToSpawn: 10 },
+            fourth: { time: 25000, wave: ['bee'], offset: 0, pattern: 'challengePath2Inv', numToSpawn: 10 },
+            // fifth: { time: 20000, wave: ['bee', 'bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 20 },
             // third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
             // third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
             // third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
-            // challenge: {}
         }
     }
     let levelStats = {
         'one': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
         'two': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 45 },
-        'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 100 },
+        'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
     }
     let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
@@ -102,6 +101,10 @@ Galaga.game.Board = function (spec) {
         // update UFOs
         spec.gamePieces.ufos.forEach(ufo => {
             ufo.ufoMove(elapsedTime, spec.gamePieces.alienGrid, spec.gamePieces.player.coords);
+            // update ufo shots
+            ufo.projectiles.forEach(shot => {
+                shot.moveProjectileFoward(elapsedTime);
+            })
         });
 
         // // detect colision
@@ -159,6 +162,7 @@ Galaga.game.Board = function (spec) {
     }
 
     function getNextLevel(level) {
+        restartLevelStats();
         if (level === 'one') {
             return 'two';
         }
@@ -166,6 +170,7 @@ Galaga.game.Board = function (spec) {
             return 'challenge';
         }
         else if (level === 'challenge') {
+            
             return 'one';
         }
         else {
@@ -195,6 +200,13 @@ Galaga.game.Board = function (spec) {
     //        PLAYER FUNCTIONS     //
     /////////////////////////////////
 
+    function restartLevelStats() {
+        levelStats = {
+            'one': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
+            'two': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 45 },
+            'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
+        }
+    }
 
     /////////////////////////////////
     //        UFO   FUNCTIONS      //
@@ -226,8 +238,14 @@ Galaga.game.Board = function (spec) {
     function removeUFOs() {
         // remove UFOs that collided or are out of time
         spec.gamePieces.ufos = spec.gamePieces.ufos.filter(ufo => {
-            if (!ufo.didCollide) {
+            if (!ufo.didCollide && !ufo.deleteMe) {
                 return true;
+            }
+            // ufo is off the screen as part of the challenge level
+            else if (ufo.deleteMe) {
+                levelStats[spec.level].numLeft--;
+                console.log(`Num left: ${levelStats[spec.level].numLeft}`)
+                return false;
             }
             else {
                 // decrease number of ufos left
@@ -263,6 +281,8 @@ Galaga.game.Board = function (spec) {
             pattern: pattern,
             patternOffset: offset,
             diveTheta: 0,
+            deleteMe: false,
+            playerCoords: spec.gamePieces.player.coords,
         });
         spec.gamePieces.ufos.push(smallUFO);
     }

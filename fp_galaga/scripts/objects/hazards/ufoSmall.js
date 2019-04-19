@@ -56,7 +56,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         bee: { lives: 1, points: 50 },
         butterfly: { lives: 1, points: 100 },
         transformed: { lives: 1, points: 160 },
-        challenge: {lives: 1, points: 160},
+        challenge: { lives: 1, points: 160 },
     }
 
     function ufoMove(elapsedTime, grid, playerCoords) {
@@ -76,7 +76,10 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         }
         else if ((spec.willDive && spec.timeInGrid > timeLimitInGrid || spec.timeInGrid >= spec.diveInterval) && !spec.pattern.includes('challenge')) {
             if (spec.diveTheta < 2 * Math.PI) {
-                diveAtPlayer(elapsedTime, playerCoords);                
+                diveAtPlayer(elapsedTime, playerCoords);
+                if (_isLinedUpWithPlayer()) {
+                    ufoSmallShootPlayer(elapsedTime, spec.playerCoords);
+                }
             }
             else {
                 console.log('finished diving. Resetting time in grid');
@@ -91,6 +94,12 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             // console.log('alien transformed');
             spec.type = 'transformed';
         }
+        // }
+
+        // shoot player if unit lines up with player and is diving or 
+        // if the level is challenge and unit is flagged to shoot
+        // if (_isLinedUpWithPlayer()) {
+        //     ufoSmallShootPlayer(elapsedTime, spec.playerCoords);
         // }
 
         timeAlive += elapsedTime;
@@ -119,7 +128,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         let prevX = spec.coords.x;
         let prevY = spec.coords.y;
 
-        let r = (5 + slot.diveOffset) + (Math.cos(2*spec.diveTheta));
+        let r = (5 + slot.diveOffset) + (Math.cos(2 * spec.diveTheta));
         let nextX = (r * Math.cos(spec.diveTheta)) + prevX;
         let nextY = (r * Math.sin(spec.diveTheta)) + prevY;
         spec.diveTheta += diveSpeed * elapsedTime;
@@ -236,7 +245,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         else if (spec.pattern === 'challengePath2Inv') {
             let r = 10 + spec.size * Math.cos(4 * spec.theta) + Math.sin(3 * spec.theta) * 0.0005;
             if (spec.theta > -14) {
-                let nextX = (r * Math.cos(spec.theta) * 10) + (40 +spec.boardSize.x / 2 + spec.patternOffset); //(elapsedTime * movementSpeed);
+                let nextX = (r * Math.cos(spec.theta) * 10) + (40 + spec.boardSize.x / 2 + spec.patternOffset); //(elapsedTime * movementSpeed);
                 let nextY = (r * Math.sin(spec.theta) * 10) + (140 + spec.patternOffset); //(elapsedTime * movementSpeed);
 
                 spec.coords.x = nextX;
@@ -285,14 +294,20 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function moveOffScreen(elapsedTime) {
-        if (spec.pattern === 'challengePath') {
-            _moveDownRight(elapsedTime);
+        // check if ready to mark for deletion
+        if ((spec.coords.x < -spec.size || spec.coords.x > spec.boardSize.x || spec.coords.y < -spec.size || spec.coords.y > spec.boardSize.y)) {
+            spec.deleteMe = true;
         }
-        else if (spec.pattern === 'challengePathInv') {
-            _moveUpLeft(elapsedTime);
-        }
-        else if (spec.pattern === 'challengePath2') {
-            _moveDownLeft(elapsedTime);
+        else {
+            if (spec.pattern === 'challengePath') {
+                _moveDownRight(elapsedTime);
+            }
+            else if (spec.pattern === 'challengePathInv') {
+                _moveUpLeft(elapsedTime);
+            }
+            else if (spec.pattern === 'challengePath2') {
+                _moveDownLeft(elapsedTime);
+            }
         }
     }
 
@@ -310,7 +325,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             let aLine = (playerCoords.x - spec.coords.x) + Math.random() * 25;
             let angle = Math.atan(oLine, aLine);
             let dist = _getDistanceBetweenPoints(playerCoords, spec.coords);
-            let tmpShotXVel = (shotSpeed * aLine) / dist;
+            let tmpShotXVel = 0;
             let tmpShotYVel = (shotSpeed * oLine) / dist;
             ufoSmallShoot(elapsedTime, { x: tmpShotXVel, y: tmpShotYVel });
         }
@@ -358,6 +373,13 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
     }
 
+    function _isLinedUpWithPlayer() {
+        if (Math.abs((spec.playerCoords.x - spec.coords.x)) < 2) {
+            return true;
+        }
+        return false;
+    }
+
     function _getDistanceBetweenPoints(p1, p2) {
         let x_2 = Math.pow(p2.x - p1.x, 2)
         let y_2 = Math.pow(p2.y - p1.y, 2)
@@ -402,6 +424,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         get points() { return types[spec.type].points },
         get spec() { return spec },
         get alive() { return spec.alive },
+        get deleteMe() { return spec.deleteMe },
         setDidCollide: setDidCollide,
         ufoMove: ufoMove,
         ufoShoot: ufoSmallShootPlayer,
