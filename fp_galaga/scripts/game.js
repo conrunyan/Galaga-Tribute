@@ -84,6 +84,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         if (gameType === 'normal') {
             playIntroMusic();
             gameStarted = true;
+            stopGame = false;
             clearTimeout(demoTimerID);
         }
 
@@ -175,13 +176,25 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         sounds.playSound('audio/start-game-music');
     }
 
+    function onGameOrMenuScreen() {
+        let mainMenu = document.getElementById('main-menu');
+        let gameScreen = document.getElementById('galaga-board');
+        if (mainMenu.classList.contains('active') || gameScreen.classList.contains('active')) {
+            return true;
+        }
+        return false;
+    }
+
     function resetDemoTimer() {
-        console.log('calling reset');
+        // check if on game or main menu screens
         if (!gameStarted) {
+            console.log('calling reset');
             clearTimeout(demoTimerID);
             stopGame = true;
-            screens.Controller.showScreen('main-menu');
-            startDemoCountdown();
+            if (onGameOrMenuScreen()) {
+                screens.Controller.showScreen('main-menu');
+                startDemoCountdown();
+            }
         }
     }
 

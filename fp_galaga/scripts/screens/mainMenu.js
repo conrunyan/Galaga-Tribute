@@ -13,7 +13,7 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
         document.getElementById('button-new-game').addEventListener(
             'mouseover',
             function () {
-                console.log('help sound');
+                // console.log('help sound');
                 playMouseOverSound();
             });
 
@@ -26,7 +26,7 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
         document.getElementById('button-high-scores').addEventListener(
             'mouseover',
             function () {
-                console.log('help sound');
+                // console.log('help sound');
                 playMouseOverSound();
             });
 
@@ -34,13 +34,13 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
         document.getElementById('button-help').addEventListener(
             'click',
             function () {
-                console.log('help');
+                console.log('config');
                 controller.showScreen('help-screen');
             });
         document.getElementById('button-help').addEventListener(
             'mouseover',
             function () {
-                console.log('help sound');
+                // console.log('help sound');
                 playMouseOverSound();
             });
 
@@ -53,7 +53,7 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
         document.getElementById('button-about').addEventListener(
             'mouseover',
             function () {
-                console.log('help sound');
+                // console.log('help sound');
                 playMouseOverSound();
             });
     }
