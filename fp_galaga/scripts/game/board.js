@@ -389,7 +389,7 @@ Galaga.game.Board = function (spec) {
     }
 
     function _willDive() {
-        let prob = 0.125;
+        let prob = 0.25;
         let result = Math.random();
         if (result < prob) {
             return true;
