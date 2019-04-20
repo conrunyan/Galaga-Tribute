@@ -167,3 +167,13 @@ ul.menu li button:active {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bolder;
 }
+
+.control-button {
+    background-color: aquamarine;
+    width: 100%;
+    height: 2em;
+}
+
+.control-button:hover {
+    background-color: greenyellow;
+}

@@ -12,6 +12,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     screens.Controller.initScreens();
     screens.Controller.showScreen('main-menu');
     screens.Controller.giveInitFunc(init);
+    screens.Controller.giveKeyboard(myKeyboard);
 
     // background image
     let backgroundImg = new Image();
@@ -162,9 +163,9 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     function registerKeyEvents() {
         // Register Arrow keys
-        myKeyboard.register(' ', myPlayer.playerShoot);
-        myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft);
-        myKeyboard.register('ArrowRight', myPlayer.movePlayerRight);
+        myKeyboard.register(' ', myPlayer.playerShoot, 'shoot');
+        myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft, 'left');
+        myKeyboard.register('ArrowRight', myPlayer.movePlayerRight, 'right');
     }
 
     function saveHighScore() {

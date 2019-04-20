@@ -1,6 +1,7 @@
 Galaga.screens.Controller = (function name(screens) {
 
     let gameInitFunc = null;
+    let keyboard = null;
 
     function showScreen(id) {
         // Remove the active state from all screens.
@@ -27,11 +28,17 @@ Galaga.screens.Controller = (function name(screens) {
         gameInitFunc = initFunc;
     }
 
+    function giveKeyboard(keyb) {
+        keyboard = keyb;
+    }
+
     let api = {
         showScreen: showScreen,
         initScreens: initScreens,
         giveInitFunc: giveInitFunc,
+        giveKeyboard: giveKeyboard,
         get gameInitFunc() { return gameInitFunc },
+        get keyboard() { return keyboard },
     };
 
     return api;
