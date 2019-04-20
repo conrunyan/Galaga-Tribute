@@ -100,6 +100,7 @@ Galaga.game.Board = function (spec) {
     function updatePieces(elapsedTime) {
         // update player
         spec.gamePieces.player.updateShots(elapsedTime);
+        // spec.gamePieces.player.autoPilot(elapsedTime, spec.gamePieces);
         // update grid
         spec.gamePieces.alienGrid.update(elapsedTime);
         // level logic:

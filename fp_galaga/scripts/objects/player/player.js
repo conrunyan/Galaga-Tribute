@@ -27,13 +27,122 @@ Galaga.objects.player.Player = function (spec) {
     };
 
     let projectiles = [];
-    let timeSinceLastShot = 150;
-    let shotInterval = 150;
+    let timeSinceLastShot = 0;
+    let shotInterval = 500;
+    let autoSafetyRadius = 100;
     let didCollide = false;
     let displayPlayer = true;
+    let movingLeft = true;
+    let alive = true;
     let lives = 3;
     let score = 0;
     let level = 1;
+
+    function autoPilot(elapsedTime, gamePieces) {
+        // detect if there is something near by. If so, move right
+        // otherwise, move until aliens are found. Then shoot them
+        // if edge of screen is reached, go right until aliens are found.
+        if (enemyNearby(gamePieces)) {
+            movePlayerRight(elapsedTime);
+            // check if need to move right
+            // if (enemyToRight(gamePieces)) {
+            //     movePlayerLeft(elapsedTime);
+            // }
+            // else {
+            //     movePlayerRight(elapsedTime);
+            // }
+        }
+        else if (enemyAbove(gamePieces)) {
+            playerShoot(elapsedTime);
+        }
+        else {
+            moveBackAndForth(elapsedTime);
+        }
+    }
+
+    function moveBackAndForth(elapsedTime) {
+        // determine direction of movement
+        if (spec.coords.x < spec.size) {
+            movingLeft = false;
+        }
+        else if (spec.coords.x > (spec.boardSize.x - spec.size)) {
+            movingLeft = true;
+        }
+        if (movingLeft) {
+            movePlayerLeft(elapsedTime);
+        }
+        else {
+            movePlayerRight(elapsedTime);
+        }
+    }
+
+    function enemyAbove(gamePieces) {
+        let result = false;
+        gamePieces.ufos.forEach(ufo => {
+            if (_entityIsAbove(ufo)) {
+                result = true;
+            }
+        });
+        return result;
+    }
+
+    function _entityIsAbove(entity) {
+        if (Math.abs(entity.coords.x - spec.coords.x) < 5) {
+            return true;
+        }
+        return false;
+    }
+
+    function enemyToRight(gamePieces) {
+        let result = false;
+        gamePieces.ufos.forEach(ufo => {
+            if (_checkOnRight(ufo)) {
+                result = true;
+            }
+            ufo.projectiles.forEach(element => {
+                if (_checkOnRight(element)) {
+                    result = true;
+                }
+            });
+        });
+
+        return result;
+    }
+
+    function _checkOnRight(entity) {
+        if ((entity.coords.x - spec.coords.x) > 0 && (entity.coords.x - spec.coords.x) < 20) {
+            return true;
+        }
+        return false;
+    }
+
+    function enemyNearby(gamePieces) {
+        // check aliens first, then their shots
+        let result = false;
+        gamePieces.ufos.forEach(ufo => {
+            if (_entityIsClose(ufo)) {
+                result = true;
+            }
+            ufo.projectiles.forEach(element => {
+                if (_entityIsClose(element)) {
+                    result = true;
+                }
+            });
+        });
+
+        return result;
+    }
+
+    function _entityIsClose(entity) {
+        // check y axis
+        if (Math.abs(entity.coords.y - spec.coords.y) < autoSafetyRadius) {
+            // check x axis
+            if (Math.abs(entity.coords.x - spec.coords.x) < autoSafetyRadius) {
+                return true
+            }
+        }
+        return false;
+    }
 
     function movePlayerLeft(elapsedTime) {
         // console.log('turning player left');
@@ -48,7 +157,7 @@ Galaga.objects.player.Player = function (spec) {
     }
 
     function playerShoot(elapsedTime) {
-        if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval) {
+        if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval && displayPlayer) {
             // console.log('creating new shot...');
             let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
             let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
@@ -75,6 +184,10 @@ Galaga.objects.player.Player = function (spec) {
         spec.coords = spec.coords;
         displayPlayer = true;
         spec.velocities = { x: 0, y: 0 }
+    }
+
+    function setAlive(val) {
+        alive = val;
     }
 
     function removeLife() {
@@ -159,7 +272,10 @@ Galaga.objects.player.Player = function (spec) {
         get lives() { return lives },
         get score() { return score },
         get level() { return _determineLevel() },
+        get alive() { return alive },
         get showPlayer() { return displayPlayer },
+        autoPilot: autoPilot,
+        setAlive: setAlive,
         setDidCollide: setDidCollide,
         setShowPlayer: setShowPlayer,
         movePlayerLeft: movePlayerLeft,
