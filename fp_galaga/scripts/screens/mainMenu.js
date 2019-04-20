@@ -8,7 +8,7 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
             'click',
             function () {
                 console.log('galaga-board');
-                controller.showScreen('galaga-board');
+                controller.showScreen('galaga-board', 'normal');
             });
         document.getElementById('button-new-game').addEventListener(
             'mouseover',

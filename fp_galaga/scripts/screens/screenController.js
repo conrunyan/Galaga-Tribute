@@ -3,14 +3,14 @@ Galaga.screens.Controller = (function name(screens) {
     let gameInitFunc = null;
     let keyboard = null;
 
-    function showScreen(id) {
+    function showScreen(id, gameType) {
         // Remove the active state from all screens.
         let active = document.getElementsByClassName('active');
         for (let screen = 0; screen < active.length; screen++) {
             active[screen].classList.remove('active');
         }
         // Tell the screen to start actively running
-        screens[id].run();
+        screens[id].run(gameType);
         // Then, set the new screen to be active
         document.getElementById(id).classList.add('active');
     }

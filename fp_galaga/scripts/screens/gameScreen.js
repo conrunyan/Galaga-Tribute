@@ -8,13 +8,13 @@ Galaga.screens['galaga-board'] = (function (controller, sounds) {
         console.log('initializing game screen');
     }
 
-    function run() {
+    function run(gameType) {
         console.log('on the game screen');
         // let myGame = game.Main();
         let menuSound = document.getElementById('menu-theme');
         // sounds.playSound('audio/game-music');
         // controller.gameInitFunc();
-        Galaga.main.initGame('normal');
+        Galaga.main.initGame(gameType);
     }
 
     return {

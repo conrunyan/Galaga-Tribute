@@ -80,15 +80,17 @@ Galaga.input.Keyboard = function () {
     };
 
     that.setResetFunc = function (resetFunc) {
-        that.resetFunc = resetFunc;
+        window.addEventListener('mousedown', () => resetFunc());
+        window.addEventListener('mouseup', () => resetFunc());
+        window.addEventListener('mousemove', () => resetFunc());
+        window.addEventListener('keydown', () => resetFunc());
     }
     
     loadKeyMaps();
     window.addEventListener('keydown', keyPress);
     window.addEventListener('keyup', keyRelease);
-    window.addEventListener('mousedown', that.resetFunc);
-    window.addEventListener('mouseup', that.resetFunc);
-    window.addEventListener('mousemove', that.resetFunc);
+    
+    
 // 
     return that;
 };

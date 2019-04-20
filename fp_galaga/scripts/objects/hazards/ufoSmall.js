@@ -85,7 +85,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 }
             }
             else {
-                console.log('finished diving. Resetting time in grid');
+                // console.log('finished diving. Resetting time in grid');
                 spec.timeInGrid = 0;
                 spec.diveTheta = 0;
                 moveToNextOpenSlotInGrid(grid, elapsedTime);

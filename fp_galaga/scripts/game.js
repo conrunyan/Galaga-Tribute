@@ -7,7 +7,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let totalElapsedTime = 0;
     let MAX_SCORES_KEPT = 10;
     let demoTimerID = 0;
-    let timeToDemo = 2000;
+    let timeToDemo = 10000;
     let stopGame = false;
     let gameStarted = false;
     let scores = [];
@@ -84,7 +84,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         if (gameType === 'normal') {
             playIntroMusic();
             gameStarted = true;
-            resetDemoTimer();
+            clearTimeout(demoTimerID);
         }
 
         // initialize player
@@ -96,7 +96,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             velocities: { x: 0, y: 0 },
             rotation: -Math.PI / 2,
             boardSize: boardDim,
-            size: 40,
+            size: 30,
             shot: projectiles,
             shotImgSource: './assets/shot.png',
             shotSpeed: 150,
@@ -176,8 +176,9 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     }
 
     function resetDemoTimer() {
-        clearTimeout(demoTimerID);
+        console.log('calling reset');
         if (!gameStarted) {
+            clearTimeout(demoTimerID);
             stopGame = true;
             screens.Controller.showScreen('main-menu');
             startDemoCountdown();
@@ -186,9 +187,9 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     function startDemoCountdown() {
         demoTimerID = setTimeout(() => {
-            screens.Controller.showScreen('galaga-board');
+            screens.Controller.showScreen('galaga-board', 'demo');
             stopGame = false;
-            init('demo');
+            // init('demo');
         }, timeToDemo);
     }
 
@@ -249,7 +250,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     loadScores();
     startDemoCountdown();
-    myKeyboard.setResetFunc = resetDemoTimer;
+    myKeyboard.setResetFunc(resetDemoTimer);
 
     let api = {
         initGame: init,
