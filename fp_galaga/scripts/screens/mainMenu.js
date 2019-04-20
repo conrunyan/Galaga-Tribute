@@ -56,6 +56,14 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
                 // console.log('help sound');
                 playMouseOverSound();
             });
+
+
+        document.getElementById('button-insert-coin').addEventListener(
+            'click',
+            function () {
+                // console.log('help sound');
+                insertCoin();
+            });
     }
 
     function run() {
@@ -65,6 +73,12 @@ Galaga.screens['main-menu'] = (function (controller, audio) {
 
     function playMouseOverSound() {
         audio.playSound('audio/menu-mouse-over');
+    }
+
+    function insertCoin() {
+        audio.playSound('audio/menu-insert-coin');
+        document.getElementById('button-new-game').disabled = false;
+        document.getElementById('text-insert-coin').style.display = 'none';
     }
 
     return {

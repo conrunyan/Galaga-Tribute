@@ -25,11 +25,15 @@
             </div>
             <div id='nav-buttons'>
                 <ul class="menu">
-                    <li><button id="button-new-game" type="submit">NEW-GAME</button></li>
+                    <li><button id="button-new-game" type="submit" disabled="true">NEW-GAME</button></li>
                     <li><button id="button-high-scores" type="submit">HIGH-SCORES</button></li>
                     <li><button id="button-help" type="submit">OPTIONS</button></li>
                     <li><button id="button-about" type="submit">CREDITS</button></li>
                 </ul>
+            </div>
+            <button id="button-insert-coin" type="submit">INSERT COIN</button>
+            <div>
+                <p id="text-insert-coin">PLEASE INSERT A COIN</p>
             </div>
         </div>
         <div class="screen" id="high-scores-screen">
@@ -66,7 +70,6 @@
             </div>
         </div>
     </div>
-
     <script>
         let Galaga = {
             objects: {

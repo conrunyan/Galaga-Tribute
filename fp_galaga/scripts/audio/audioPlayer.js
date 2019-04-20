@@ -55,6 +55,7 @@ function initialize() {
         Galaga.sounds['audio/alien-die'] = loadSound('assets/sfx/alien-die.mp3');
         Galaga.sounds['audio/alien-dive'] = loadSound('assets/sfx/alien-dive.mp3');
         Galaga.sounds['audio/menu-end-game-music'] = loadSound('assets/music/11 Name Entry.mp3');
+        Galaga.sounds['audio/menu-insert-coin'] = loadSound('assets/sfx/10 Coin.mp3');
     }
 
     loadAudio();

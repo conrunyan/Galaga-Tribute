@@ -154,6 +154,9 @@ MyGame.loader = (function () {
         }, {
             key: 'img-star-field-background',
             source: 'assets/starfield.png'
+        }, {
+            key: 'sound-coin-insert',
+            source: 'assets/music/10 Coin.mp3'
         }];
 
     //------------------------------------------------------------------
