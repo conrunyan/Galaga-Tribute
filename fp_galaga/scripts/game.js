@@ -64,7 +64,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
                 portalRenderer.render(portal);
             });
         }
-        
+
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);
@@ -101,7 +101,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
         // initialize alien grid
         let myGrid = ufo.AlienGrid({
-            coords: {x: boardDim.x / 4, y: boardDim.y / 6},
+            coords: { x: boardDim.x / 4, y: boardDim.y / 6 },
             gridWidth: 10,
             gridHeight: 5,
             debugging: false,
@@ -163,9 +163,18 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     function registerKeyEvents() {
         // Register Arrow keys
-        myKeyboard.register(' ', myPlayer.playerShoot, 'shoot');
-        myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft, 'left');
-        myKeyboard.register('ArrowRight', myPlayer.movePlayerRight, 'right');
+        let keyMapping = localStorage.getItem('Galaga.keymaps');
+        if (keyMapping !== null) {
+            keyMapping = JSON.parse(keyMapping);
+            myKeyboard.register(keyMapping['shoot'], myPlayer.playerShoot, 'shoot');
+            myKeyboard.register(keyMapping['left'], myPlayer.movePlayerLeft, 'left');
+            myKeyboard.register(keyMapping['right'], myPlayer.movePlayerRight, 'right');
+        }
+        else {
+            myKeyboard.register(' ', myPlayer.playerShoot, 'shoot');
+            myKeyboard.register('ArrowLeft', myPlayer.movePlayerLeft, 'left');
+            myKeyboard.register('ArrowRight', myPlayer.movePlayerRight, 'right');
+        }
     }
 
     function saveHighScore() {
@@ -198,8 +207,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         }
     }
 
-    loadScores();
-
     function loadScores() {
         // load previous scores
         let previousScores = localStorage.getItem('Galaga.highScores');
@@ -208,5 +215,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         }
         displayScores();
     }
+
+
+    loadScores();
 
 }(Galaga.graphics, Galaga.input, Galaga.objects.player, Galaga.render, Galaga.screens, Galaga.game, Galaga.objects.projectile, Galaga.sounds.Player, Galaga.particles, Galaga.utils.Random, Galaga.utils.Storage, Galaga.objects.ufo));
