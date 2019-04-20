@@ -162,11 +162,15 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             saveHighScore();
             screens.Controller.showScreen('high-scores-screen');
             sounds.playSound('audio/menu-end-game-music');
+            gameStarted = false;
+            startDemoCountdown()
             return;
         }
 
         if (stopGame) {
             screens.Controller.showScreen('main-menu');
+            gameStarted = false;
+            startDemoCountdown();
             return;
         }
         requestAnimationFrame(gameLoop);
