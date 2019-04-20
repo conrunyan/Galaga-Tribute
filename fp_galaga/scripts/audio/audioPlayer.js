@@ -10,7 +10,7 @@ Galaga.sounds.Player = function () {
     initialize();
 
     function playSound(whichSound) {
-        Galaga.sounds[whichSound].load();
+        // Galaga.sounds[whichSound].load();
         Galaga.sounds[whichSound].play();
     }
 

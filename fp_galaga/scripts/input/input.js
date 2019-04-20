@@ -8,6 +8,7 @@ Galaga.input.Keyboard = function () {
         handlers: {},
         prevMoves: [],
         functions: {},
+        resetFunc: null,
         keysToBind: {'left': '', 'right': '', 'shoot': ''},
     };
 
@@ -77,10 +78,17 @@ Galaga.input.Keyboard = function () {
         that.handlers[key] = handler;
         that.functions[name] = handler;
     };
+
+    that.setResetFunc = function (resetFunc) {
+        that.resetFunc = resetFunc;
+    }
     
     loadKeyMaps();
     window.addEventListener('keydown', keyPress);
     window.addEventListener('keyup', keyRelease);
-
+    window.addEventListener('mousedown', that.resetFunc);
+    window.addEventListener('mouseup', that.resetFunc);
+    window.addEventListener('mousemove', that.resetFunc);
+// 
     return that;
 };

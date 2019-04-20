@@ -6,6 +6,10 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     let lastTimeStamp;
     let totalElapsedTime = 0;
     let MAX_SCORES_KEPT = 10;
+    let demoTimerID = 0;
+    let timeToDemo = 2000;
+    let stopGame = false;
+    let gameStarted = false;
     let scores = [];
 
     // initialize screens
@@ -74,10 +78,14 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         }
     }
 
-    function init() {
+    function init(gameType) {
         lastTimeStamp = performance.now();
 
-        playIntroMusic();
+        if (gameType === 'normal') {
+            playIntroMusic();
+            gameStarted = true;
+            resetDemoTimer();
+        }
 
         // initialize player
         myPlayer = player.Player({
@@ -130,6 +138,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             level: 'one',
             levelStarted: false,
             sounds: sounds,
+            gameType: gameType,
         });
 
         console.log('SCREENS:', screens);
@@ -154,11 +163,33 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             sounds.playSound('audio/menu-end-game-music');
             return;
         }
+
+        if (stopGame) {
+            screens.Controller.showScreen('main-menu');
+            return;
+        }
         requestAnimationFrame(gameLoop);
     }
 
     function playIntroMusic() {
         sounds.playSound('audio/start-game-music');
+    }
+
+    function resetDemoTimer() {
+        clearTimeout(demoTimerID);
+        if (!gameStarted) {
+            stopGame = true;
+            screens.Controller.showScreen('main-menu');
+            startDemoCountdown();
+        }
+    }
+
+    function startDemoCountdown() {
+        demoTimerID = setTimeout(() => {
+            screens.Controller.showScreen('galaga-board');
+            stopGame = false;
+            init('demo');
+        }, timeToDemo);
     }
 
     function registerKeyEvents() {
@@ -216,7 +247,15 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         displayScores();
     }
 
-
     loadScores();
+    startDemoCountdown();
+    myKeyboard.setResetFunc = resetDemoTimer;
+
+    let api = {
+        initGame: init,
+        resetDemoTimer: resetDemoTimer,
+    }
+
+    return api;
 
 }(Galaga.graphics, Galaga.input, Galaga.objects.player, Galaga.render, Galaga.screens, Galaga.game, Galaga.objects.projectile, Galaga.sounds.Player, Galaga.particles, Galaga.utils.Random, Galaga.utils.Storage, Galaga.objects.ufo));

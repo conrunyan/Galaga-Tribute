@@ -87,12 +87,12 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     function GridSlot(gridSpecs) {
 
         let image = new Image();
-        image.isReady = false;
-        image.src = gridSpecs.imageSrc;
-        image.onload = function () {
-            console.log('loaded grid image...');
-            this.isReady = true;
-        };
+        // image.isReady = false;
+        // image.src = gridSpecs.imageSrc;
+        // image.onload = function () {
+        //     // console.log('loaded grid image...');
+        //     this.isReady = true;
+        // };
 
         function setCoords(coords) {
             gridSpecs.coords = coords;
