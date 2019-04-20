@@ -155,6 +155,10 @@ ul.menu li button:active {
     list-style-type: none;
 }
 
+#remap-message {
+    display: none;
+}
+
 .menu-text-heading {
     color: aqua;
     font-size: 30pt;

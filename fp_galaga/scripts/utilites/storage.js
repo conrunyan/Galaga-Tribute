@@ -10,8 +10,13 @@ Galaga.utils.Storage = function () {
         localStorage['Galaga.highScores'] = JSON.stringify(highScores);
     }
 
+    function saveMapping(mapping) {
+        localStorage['Galaga.keymaps'] = JSON.stringify(mapping);
+    }
+
 
     return {
         saveStorage: saveStorage,
+        saveMapping: saveMapping,
     };
 }();

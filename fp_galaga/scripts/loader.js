@@ -35,10 +35,6 @@ MyGame.loader = (function () {
             message: 'Screens loaded',
             onComplete: null,
         }, {
-            scripts: ['scripts/input/input.js'],
-            message: 'Input loaded',
-            onComplete: null
-        }, {
             scripts: [
                 'scripts/objects/player/player.js',
                 'scripts/objects/projectiles/playerShot.js',
@@ -60,6 +56,10 @@ MyGame.loader = (function () {
                 'scripts/utilites/storage.js',
             ],
             message: 'Utilities loaded',
+            onComplete: null
+        }, {
+            scripts: ['scripts/input/input.js'],
+            message: 'Input loaded',
             onComplete: null
         }, {
             scripts: [
