@@ -2,31 +2,35 @@
 
 // --------------------------------------------------------------
 //
-// Creates a Player object, with functions for managing state.
-// One player object will exist at a time. This object can manuever
-// around the game board and interact with the maze (exit, run into walls, etc.)
+// Creates a board object which manages the state and content of the game board.
 // spec = {
-//  gamePieces: {
-//      player: {playerObj},
-//      asteroids: [{asteroidObj}, ...],
-//      ufos: [{ufoObj}, ....]
-//  }
-//  imageSrc: image
-//  objects (constructors from game)
-//  boardDimmensions: {x: , y:}
+//     gamePieces: {
+//         player: myPlayer,
+//         galaga: [],
+//         ufos: [],
+//         portals: [],
+//         alienGrid: myGrid,
+//     },
+//     constructors: {
+//         galaga: '',
+//         ufos: ufo,
+//         shot: projectiles,
+//         particleSystem: partSys
+//     },
+//     boardDimmensions: boardDim,
+//     particleController: particleSystemController,
+//     Random: myRandom,
+//     boardClock: 0,
+//     unitClock: 0,
+//     level: 'one',
+//     levelStarted: false,
+//     sounds: sounds,
+//     gameType: gameType,
 // }
 // --------------------------------------------------------------
 Galaga.game.Board = function (spec) {
     'use strict';
 
-    // load image
-    // let backgroundImg = new Image();
-    // backgroundImg.isReady = false;
-    // backgroundImg.src = spec.imageSrc;
-    // backgroundImg.onload = function () {
-    // console.log('loaded image...');
-    // this.isReady = true;
-    // };
     let levelLogic = {
         'one': {
             first: { time: 7000, wave: ['bee'], offset: 0, pattern: 'triLoop', numToSpawn: 10 },
@@ -43,10 +47,6 @@ Galaga.game.Board = function (spec) {
             second: { time: 9000, wave: ['challenge'], offset: 0, pattern: 'challengePathInv', numToSpawn: 10 },
             third: { time: 25000, wave: ['bee'], offset: 0, pattern: 'challengePath2', numToSpawn: 10 },
             fourth: { time: 25000, wave: ['bee'], offset: 0, pattern: 'challengePath2Inv', numToSpawn: 10 },
-            // fifth: { time: 20000, wave: ['bee', 'bee'], offset: 40, pattern: 'challengePathInv', numToSpawn: 20 },
-            // third: { time: 11000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
-            // third: { time: 12000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoopInvert', numToSpawn: 20 },
-            // third: { time: 13000, wave: ['bee', 'bee'], offset: 40, pattern: 'triLoop', numToSpawn: 20 },
         }
     }
     let levelStats = {
@@ -54,14 +54,11 @@ Galaga.game.Board = function (spec) {
         'two': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 45 },
         'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
     }
-    let totalElapsedTime = 0;
     let timeSincePlayerDeath = 0;
     let deadTime = 2000;
     let playerImmuneTime = 2000;
     let levelDisplayTime = 4500;
     let timePlayerHasBeenImmune = 0;
-    let leftPortalCoords = { x: 200, y: 200 };
-    let rightPortalCoords = { x: spec.boardDimmensions - 200, y: 200 };
     let playerDead = false;
     let playerImmune = false;
     let displayLevelText = true;
@@ -87,11 +84,6 @@ Galaga.game.Board = function (spec) {
     let portalRight = spec.constructors.ufos.Portal({
         size: { x: 75, y: 20 },
         center: { x: spec.boardDimmensions.x - 200, y: 250 },
-        rotation: Math.PI / 6,
-    });
-    let portalTop = spec.constructors.ufos.Portal({
-        size: { x: 75, y: 20 },
-        center: { x: 200, y: 250 },
         rotation: Math.PI / 6,
     });
 
@@ -120,7 +112,6 @@ Galaga.game.Board = function (spec) {
         // // detect colision
         // check player with ufos
         spec.gamePieces.ufos.forEach(ufo => {
-            // console.log('ufo', ufo);
             let playerUfoDist = _getDistanceBetweenPoints(ufo.center, spec.gamePieces.player.center);
             let sumOfRadi = spec.gamePieces.player.radius + ufo.radius;
             if (playerUfoDist < sumOfRadi && !playerDead) {
@@ -132,7 +123,6 @@ Galaga.game.Board = function (spec) {
         });
         // // check player with ufo shots
         spec.gamePieces.ufos.forEach(ufo => {
-            // console.log('ufo', ufo);
             ufo.projectiles.forEach(shot => {
                 let ufoPlayerShot = _getDistanceBetweenPoints(shot.center, spec.gamePieces.player.center);
                 let sumOfRadi = spec.gamePieces.player.radius + shot.radius;
@@ -147,7 +137,6 @@ Galaga.game.Board = function (spec) {
 
         // // check projectiles with ufos
         spec.gamePieces.ufos.forEach(ufo => {
-            // console.log('ufo', ufo);
             spec.gamePieces.player.projectiles.forEach(shot => {
                 let ufoShot = _getDistanceBetweenPoints(shot.center, ufo.center);
                 let sumOfRadi = ufo.radius + shot.radius;
@@ -170,8 +159,6 @@ Galaga.game.Board = function (spec) {
         if (levelStats[spec.level].numLeft == 0) {
             spec.level = getNextLevel(spec.level);
             spec.boardClock = 0;
-            // reset grid for next wave
-            // spec.gamePieces.alienGrid.initGrid()
         }
 
         // set display level text
@@ -221,9 +208,11 @@ Galaga.game.Board = function (spec) {
         spec.particleController.addNewSystem(newPS);
     }
 
-    /////////////////////////////////
-    //        PLAYER FUNCTIONS     //
-    /////////////////////////////////
+//----------------------------
+//
+//  PLAYER FUNCTIONS
+//
+//----------------------------
 
     function restartLevelStats() {
         levelStats = {
@@ -262,9 +251,11 @@ Galaga.game.Board = function (spec) {
         }
     }
 
-    /////////////////////////////////
-    //        UFO   FUNCTIONS      //
-    /////////////////////////////////
+//----------------------------
+//
+//  UFO FUNCTIONS
+//
+//----------------------------
 
     function loadWave(levelSpecs, level) {
         // load relevant wave
@@ -277,7 +268,6 @@ Galaga.game.Board = function (spec) {
     }
 
     function _loadWave(waveSpecs, level, wave) {
-        // first: { time: 1000, wave: ['blue'], offset: 0, side: 'left' },
         // add a new ufo
         if (spec.unitClock >= 125 && levelStats[level].spawned[wave] < waveSpecs.numToSpawn) {
             // add alien based on wave color
@@ -298,13 +288,11 @@ Galaga.game.Board = function (spec) {
             // ufo is off the screen as part of the challenge level
             else if (ufo.deleteMe) {
                 levelStats[spec.level].numLeft--;
-                // console.log(`Num left: ${levelStats[spec.level].numLeft}`)
                 return false;
             }
             else {
                 // decrease number of ufos left
                 levelStats[spec.level].numLeft--;
-                // console.log(`Num left: ${levelStats[spec.level].numLeft}`)
                 spec.sounds.playSound('audio/alien-die');
                 explosion(ufo, './assets/firework_red1.png', 0.75, { mean: 15, stdev: 5 })
                 explosion(ufo, './assets/firework_yellow.png', 0.75, { mean: 3, stdev: 1 })
@@ -347,16 +335,10 @@ Galaga.game.Board = function (spec) {
 
     function _challengeForm() {
         let randInt = Math.random();
-        console.log('randInt', randInt);
-        // sasori
-        // tonbo
-        // enterprise
         if (randInt < 0.33) {
-            console.log('sasori');
             return 'sasori';
         }
         else if (randInt >= .33 && randInt < 0.66) {
-            console.log('tonbo');
             return 'tonbo';
         }
         else {
@@ -408,12 +390,11 @@ Galaga.game.Board = function (spec) {
     }
 
 
-    /////////////////////////////////
-    //     ASTEROID FUNCTIONS      //
-    /////////////////////////////////
-
-    // removes any asteroids that are off the screen
-
+//----------------------------
+//
+//  ASTEROID FUNCTIONS
+//
+//----------------------------
 
     function _nextRange(min, max) {
         let range = max - min;
@@ -439,7 +420,6 @@ Galaga.game.Board = function (spec) {
         get displayLevelText() { return displayLevelText },
         updatePieces: updatePieces,
         updateClock: updateClock,
-        // addUFO: addUFO,
     }
 
     return api;

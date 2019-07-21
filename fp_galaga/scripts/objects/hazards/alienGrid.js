@@ -7,6 +7,7 @@
 //  imageSrc: ,
 //  gridWidth: int,
 //  gridHeight: int,
+//  debugging: bool
 // }
 // --------------------------------------------------------------
 Galaga.objects.ufo.AlienGrid = function (spec) {
@@ -15,8 +16,6 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     let movementSpeed = 0.00005;
     let timeForEachMovement = 3500;
     let timeSinceLastMove = 0;
-    let numMoves = 0;
-    let maxNumMoves = 10;
     let grid = [];
     let gridMargin = 70; // in pixels
     let xOffset = 0;
@@ -47,7 +46,6 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     }
 
     function moveGrid(elapsedTime) {
-        // console.log('time: ', timeSinceLastMove)
         // check if grid needs to move back
         // check if it's time to move the grid
         if (timeSinceLastMove >= timeForEachMovement) {
@@ -65,21 +63,11 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
                 let curY = slot.coords.y;
                 let newCoords = { x: curX - (gridMargin * movementSpeed * elapsedTime), y: curY };
                 slot.setCoords(newCoords);
-
-
             });
         });
     }
 
-    function addToGrid(obj) {
-
-    }
-
-    function removeFromGrid(obj) {
-
-    }
-
-    // spec = {
+    // gridSpecs = {
     //    coords: {x: , y: },
     //    available: true,
     //    contains: alient (default null)
@@ -87,12 +75,6 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
     function GridSlot(gridSpecs) {
 
         let image = new Image();
-        // image.isReady = false;
-        // image.src = gridSpecs.imageSrc;
-        // image.onload = function () {
-        //     // console.log('loaded grid image...');
-        //     this.isReady = true;
-        // };
 
         function setCoords(coords) {
             gridSpecs.coords = coords;
@@ -182,8 +164,6 @@ Galaga.objects.ufo.AlienGrid = function (spec) {
         initGrid: initGrid,
         getNextOpen: getNextOpen,
     };
-
-
 
     initGrid();
 

@@ -64,7 +64,6 @@ Galaga.input.Keyboard = function () {
     }
 
     that.update = function (elapsedTime) {
-        // console.log(that.keys)
         for (let key in that.keys) {
             if (that.keys.hasOwnProperty(key)) {
                 if (this.handlers[key]) {
@@ -90,7 +89,5 @@ Galaga.input.Keyboard = function () {
     window.addEventListener('keydown', keyPress);
     window.addEventListener('keyup', keyRelease);
     
-    
-// 
     return that;
 };
