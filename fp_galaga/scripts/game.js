@@ -54,8 +54,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         portalRenderer.update(elapsedTime);
         particleSystemController.update(elapsedTime);
         totalElapsedTime += elapsedTime;
-
-        // check for game loss condition
     }
 
     function render() {
@@ -69,6 +67,7 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             });
         }
 
+        // game pieces and display
         boardRenderer.renderPieces(gameBoard);
         particleSystemRenderer.render(particleSystemController.systems);
         gameStatRenderer.renderStats(myPlayer, gameBoard);
@@ -142,11 +141,8 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
             gameType: gameType,
         });
 
-        console.log('SCREENS:', screens);
         registerKeyEvents();
-        console.log(myPlayer);
         requestAnimationFrame(gameLoop);
-        console.log('adding ufo');
     }
 
     function gameLoop(time) {
@@ -206,7 +202,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         demoTimerID = setTimeout(() => {
             screens.Controller.showScreen('galaga-board', 'demo');
             stopGame = false;
-            // init('demo');
         }, timeToDemo);
     }
 
@@ -243,7 +238,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
         // insert new score where it belongs, with a max of MAX_SCORES_KEPT
         scores.splice(idxToPlace, 0, { score: latestScore, level: myPlayer.level });
         scores = scores.slice(0, MAX_SCORES_KEPT);
-        console.log(scores);
         myStorage.saveStorage(scores);
     }
 
@@ -276,4 +270,17 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
 
     return api;
 
-}(Galaga.graphics, Galaga.input, Galaga.objects.player, Galaga.render, Galaga.screens, Galaga.game, Galaga.objects.projectile, Galaga.sounds.Player, Galaga.particles, Galaga.utils.Random, Galaga.utils.Storage, Galaga.objects.ufo));
+}(
+    Galaga.graphics,
+    Galaga.input,
+    Galaga.objects.player,
+    Galaga.render,
+    Galaga.screens,
+    Galaga.game,
+    Galaga.objects.projectile,
+    Galaga.sounds.Player,
+    Galaga.particles,
+    Galaga.utils.Random,
+    Galaga.utils.Storage,
+    Galaga.objects.ufo
+));
