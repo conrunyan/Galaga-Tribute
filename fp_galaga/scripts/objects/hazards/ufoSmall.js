@@ -1,18 +1,35 @@
 // --------------------------------------------------------------
 //
 // Creates a ufoSmall object, with functions for managing state.
-// One ufoSmall object will exist at a time. This object can manuever
+// Multiple ufoSmall objects may exist at a time. This object can manuever
 // around the game board and shoot players.
 // spec = {
-//  coords: {x: int, y: int} ,
-//  imageSrc: ,
-//  maxSpeed: ,
-//  accelleration: ,
-//  velocities: {x: float, y: float},
-//  rotation: 45 initially,
-//  size: in pixels
-//  shot: objects.projectiles.ufoSmallShot
-//  boardSize: needs to know where it can't go
+//     coords: { x: - 10, y: 300 },
+//     imageSrc: ufoAssets[type],
+//     boss2ndSrc: ufoAssets['bossPurple'],
+//     transformSrc: ufoAssets[_transformImg(type)],
+//     rotation: -Math.PI / 2,
+//     form: 'first',
+//     boardSize: spec.boardDimmensions,
+//     size: 30,
+//     shotImgSource: './assets/shot.png',
+//     shot: spec.constructors.shot,
+//     type: type,
+//     maxProjectiles: 40,
+//     theta: Math.PI / 5,
+//     willDive: _willDive(),
+//     willTransform: _willTransform(),
+//     diveInterval: _nextRange(2000, 4000),
+//     transformTime: _nextRange(5000, 20000),
+//     timeInGrid: 0,
+//     pattern: pattern,
+//     patternOffset: offset,
+//     diveTheta: 0,
+//     deleteMe: false,
+//     playerCoords: spec.gamePieces.player.coords,
+//     playerSize: spec.gamePieces.player.size,
+//     showPlayer: spec.gamePieces.player.showPlayer,
+//     sounds: spec.sounds,
 // }
 //
 // UFOS: https://opengameart.org/content/green-alien-spaceship
@@ -26,7 +43,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        // console.log('loaded image...');
         this.isReady = true;
     };
 
@@ -34,7 +50,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     image2.isReady = false;
     image2.src = spec.type === 'boss' ? spec.boss2ndSrc : spec.transformSrc;
     image2.onload = function () {
-        // console.log('loaded image...');
         this.isReady = true;
     };
 
@@ -85,7 +100,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
                 }
             }
             else {
-                // console.log('finished diving. Resetting time in grid');
                 spec.timeInGrid = 0;
                 spec.diveTheta = 0;
                 moveToNextOpenSlotInGrid(grid, elapsedTime);
@@ -94,16 +108,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
         // transform image, if needed
         if (timeAlive > spec.transformTime && spec.willTransform) {
-            // console.log('alien transformed');
             spec.type = 'transformed';
         }
-        // }
-
-        // shoot player if unit lines up with player and is diving or 
-        // if the level is challenge and unit is flagged to shoot
-        // if (_isLinedUpWithPlayer()) {
-        //     ufoSmallShootPlayer(elapsedTime, spec.playerCoords);
-        // }
 
         timeAlive += elapsedTime;
         timeSinceLastShot += elapsedTime;
@@ -118,26 +124,8 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         }
     }
 
-    function ufoStartMovement(elapsedTime, direction) {
-        switch (direction) {
-            case 'down':
-                _moveDown(elapsedTime);
-                timeSpentOnPath += elapsedTime;
-                break;
-            case 'left':
-                _moveLeft(elapsedTime);
-                timeSpentOnPath += elapsedTime;
-            case 'right':
-                _moveRight(elapsedTime);
-                timeSpentOnPath += elapsedTime;
-            default:
-                console.log(`INVALID DIRECTION IN UFO START ${direction}`);
-        }
-    }
-
     function diveAtPlayer(elapsedTime, playerCoords) {
         // do a downwards sqrt function
-        // x = -a\sqrt{ \left(b\left(-y - c\right) \right) } +d
         let prevX = spec.coords.x;
         let prevY = spec.coords.y;
 
@@ -149,15 +137,9 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         spec.coords.y = nextY;
     }
 
-    function getDownRightY(x) {
-        let result = (diveSpeed) * + (spec.coords.y);
-        // console.log('result', result);
-        return -result;
+    function _moveUp(elapsedTime) {
+        spec.coords.y -= (movementSpeed * elapsedTime);
     }
-
-    // function _moveUp(elapsedTime) {
-    //     spec.coords.y -= (movementSpeed * elapsedTime);
-    // }
     function _moveUpLeft(elapsedTime) {
         spec.coords.x -= (movementSpeed * elapsedTime * spec.size * 30);
         spec.coords.y -= (movementSpeed * elapsedTime * spec.size * 30);
@@ -179,10 +161,10 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function _moveRight(elapsedTime) {
         spec.coords.x += (movementSpeed * elapsedTime);
     }
-    // function _moveUpRight(elapsedTime) {
-    //     spec.coords.x += (movementSpeed * elapsedTime);
-    //     spec.coords.y -= (movementSpeed * elapsedTime);
-    // }
+    function _moveUpRight(elapsedTime) {
+        spec.coords.x += (movementSpeed * elapsedTime);
+        spec.coords.y -= (movementSpeed * elapsedTime);
+    }
 
     function getNextCoordsTriLoop(elapsedTime) {
         // move in a loop pattern
@@ -191,7 +173,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             if (spec.theta < 2.8) {
                 let nextX = (r * Math.cos(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
                 let nextY = (r * Math.sin(spec.theta) * 10) + 300 + spec.patternOffset; //(elapsedTime * movementSpeed);
-                // console.log(`X: ${nextX} Y: ${nextY}`);
 
                 spec.coords.x = nextX;
                 spec.coords.y = nextY;
@@ -205,7 +186,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
             if (spec.theta < 2.8) {
                 let nextX = (r * Math.cos(spec.theta) * 10) + (spec.boardSize.x - 300 + spec.patternOffset); //(elapsedTime * movementSpeed);
                 let nextY = (r * Math.sin(spec.theta) * 10) + (200 + spec.patternOffset); //(elapsedTime * movementSpeed);
-                // console.log(`X: ${nextX} Y: ${nextY}`);
 
                 spec.coords.x = nextX;
                 spec.coords.y = nextY;
@@ -274,17 +254,15 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function moveToNextOpenSlotInGrid(grid, elapsedTime) {
-        // TODO: given a grid of possible places for aliens, moves to the next one that is available
+        // given a grid of possible places for aliens, moves to the next one that is available
         if (slot === null) {
             slot = grid.getNextOpen();
             slot.toggleAvailable();
         }
-        // let withinMargin = ?
         if (!_coordsAreClose(spec.coords, slot.coords)) {
             moveTo(slot.coords, elapsedTime);
         }
         else {
-            // spec.coords = nextSlot.coords;
             spec.timeInGrid += elapsedTime;
         }
     }
@@ -297,7 +275,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     function moveTo(coords, elapsedTime) {
         let oLine = (coords.y - spec.coords.y);
         let aLine = (coords.x - spec.coords.x);
-        let angle = Math.atan(oLine, aLine);
         let dist = _getDistanceBetweenPoints(coords, spec.coords);
         let xVel = (elapsedTime * aLine * followSpeed) / dist;
         let yVel = (elapsedTime * oLine * followSpeed) / dist;
@@ -324,14 +301,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
         }
     }
 
-    // function found on https://stackoverflow.com/questions/32219051/how-to-convert-cartesian-coordinates-to-polar-coordinates-in-js
-    function cartesian2Polar(x, y) {
-        distance = Math.sqrt(x * x + y * y)
-        radians = Math.atan2(y, x) //This takes y first
-        polarCoor = { distance: distance, radians: radians }
-        return polarCoor
-    }
-
     function ufoSmallShootPlayer(elapsedTime, playerCoords, playerDead) {
         let oLine = (playerCoords.y - spec.coords.y) + Math.random() * 25;
         let aLine = (playerCoords.x - spec.coords.x) + Math.random() * 25;
@@ -344,7 +313,6 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
 
     function ufoSmallShoot(elapsedTime, newVelocity) {
         if (timeSinceLastShot >= shotInterval) {
-            // console.log('creating new shot...');
             let newShot = spec.shot.PlayerShot({
                 coords: { x: spec.coords.x + (spec.size / 2), y: spec.coords.y + (spec.size / 2), },
                 imageSrc: spec.shotImgSource,
@@ -397,9 +365,7 @@ Galaga.objects.ufo.UFOSmall = function (spec) {
     }
 
     function updateShots(elapsedTime) {
-        let shotsToKeep = [];
         projectiles.forEach(shot => {
-            // console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
         });
         // check if a shot needs to be removed, based on how long it's been alive

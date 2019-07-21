@@ -55,6 +55,7 @@ Galaga.game.Board = function (spec) {
         'challenge': { spawned: { first: 0, second: 0, third: 0, fourth: 0, fifth: 0, sixth: 0, }, numLeft: 40 },
     }
     let timeSincePlayerDeath = 0;
+    let totalElapsedTime = 0;
     let deadTime = 2000;
     let playerImmuneTime = 2000;
     let levelDisplayTime = 4500;
@@ -392,7 +393,7 @@ Galaga.game.Board = function (spec) {
 
 //----------------------------
 //
-//  ASTEROID FUNCTIONS
+//  PLAYER FUNCTIONS
 //
 //----------------------------
 
