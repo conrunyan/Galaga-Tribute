@@ -1,19 +1,17 @@
 // --------------------------------------------------------------
 //
-// Creates a Player object, with functions for managing state.
-// One player object will exist at a time. This object can manuever
-// around the game board and shoot asteroids. It also has a hyperspace
-// ability.
+// Creates a player shot object, with functions for managing state.
 // spec = {
-//  coords: {x: int, y: int} ,
-//  imageSrc: ,
-//  maxSpeed: ,
-//  accelleration: ,
-//  velocities: {x: float, y: float},
-//  size: in pixels
+//  coords: _getPlayerNose(),
+//  imageSrc: spec.shotImgSource,
+//  maxSpeed: spec.shotSpeed,
+//  velocities: { x: tmpShotXVel, y: tmpShotYVel },
+//  size: 10,
+//  lifeTime: 0,
+//  rotation: 0,
+//  maxLifeTime: 20000,
 // }
 //
-// CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
 // --------------------------------------------------------------
 Galaga.objects.projectile.PlayerShot = function (spec) {
     'use strict';
@@ -23,18 +21,15 @@ Galaga.objects.projectile.PlayerShot = function (spec) {
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        // console.log('loaded image...');
         this.isReady = true;
     };
 
     let didCollide = false;
 
     function moveProjectileFoward(elapsedTime) {
-        // console.log('PROJ BEFORE: ', spec.coords);
         spec.coords.x += (spec.velocities.x * elapsedTime);
         spec.coords.y += (spec.velocities.y * elapsedTime);
         spec.lifeTime += elapsedTime;
-        // console.log('PROJ AFTER :', spec.coords);
     }
 
     function setDidCollide(newVal) {

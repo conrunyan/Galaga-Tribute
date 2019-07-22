@@ -48,7 +48,6 @@ Galaga.main = (function (myGraphics, input, player, renderer, screens, myGame, p
     }
 
     function update(elapsedTime) {
-        // myPlayer.playerMoveLocation(elapsedTime);
         gameBoard.updatePieces(elapsedTime);
         gameBoard.updateClock(totalElapsedTime);
         portalRenderer.update(elapsedTime);

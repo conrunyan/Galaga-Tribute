@@ -5,14 +5,24 @@
 // around the game board and shoot asteroids. It also has a hyperspace
 // ability.
 // spec = {
-//  coords: {x: int, y: int} ,
-//  imageSrc: ,
-//  rotation: 45 initially,
-//  size: in pixels
-//  shot: objects.projectiles.playerShot
+//   coords: { x: boardDim.x / 2, y: boardDim.y - 60 },
+//   imageSrc: './assets/playerShip.png',
+//   maxSpeed: 0.33, // pixels per second
+//   acceleration: 40,
+//   velocities: { x: 0, y: 0 },
+//   rotation: -Math.PI / 2,
+//   boardSize: boardDim,
+//   size: 30,
+//   shot: projectiles,
+//   shotImgSource: './assets/shot.png',
+//   shotSpeed: 150,
+//   maxProjectiles: 1000,
+//   sounds: sounds,
+//   particleController: particleSystemController,
+//   partSys: partSys,
+//   myRandom: myRandom,
 // }
 //
-// CREDITS: Character art from https://www.kisspng.com/png-star-fox-2-lylat-wars-super-nintendo-entertainment-4798475/preview.html
 // --------------------------------------------------------------
 Galaga.objects.player.Player = function (spec) {
     'use strict';
@@ -22,7 +32,6 @@ Galaga.objects.player.Player = function (spec) {
     image.isReady = false;
     image.src = spec.imageSrc;
     image.onload = function () {
-        // console.log('loaded image...');
         this.isReady = true;
     };
 
@@ -44,13 +53,6 @@ Galaga.objects.player.Player = function (spec) {
         // if edge of screen is reached, go right until aliens are found.
         if (enemyNearby(gamePieces)) {
             movePlayerRight(elapsedTime);
-            // check if need to move right
-            // if (enemyToRight(gamePieces)) {
-            //     movePlayerLeft(elapsedTime);
-            // }
-            // else {
-            //     movePlayerRight(elapsedTime);
-            // }
         }
         else if (enemyAbove(gamePieces)) {
             playerShoot(elapsedTime);
@@ -93,29 +95,6 @@ Galaga.objects.player.Player = function (spec) {
         return false;
     }
 
-    function enemyToRight(gamePieces) {
-        let result = false;
-        gamePieces.ufos.forEach(ufo => {
-            if (_checkOnRight(ufo)) {
-                result = true;
-            }
-            ufo.projectiles.forEach(element => {
-                if (_checkOnRight(element)) {
-                    result = true;
-                }
-            });
-        });
-
-        return result;
-    }
-
-    function _checkOnRight(entity) {
-        if ((entity.coords.x - spec.coords.x) > 0 && (entity.coords.x - spec.coords.x) < 20) {
-            return true;
-        }
-        return false;
-    }
-
     function enemyNearby(gamePieces) {
         // check aliens first, then their shots
         let result = false;
@@ -145,20 +124,15 @@ Galaga.objects.player.Player = function (spec) {
     }
 
     function movePlayerLeft(elapsedTime) {
-        // console.log('turning player left');
         spec.coords.x -= spec.maxSpeed * elapsedTime;
-        // console.log(spec.rotation);
     }
 
     function movePlayerRight(elapsedTime) {
-        // console.log('turning player right');
         spec.coords.x += spec.maxSpeed * elapsedTime;
-        // console.log(spec.rotation);
     }
 
     function playerShoot(elapsedTime) {
         if (projectiles.length < spec.maxProjectiles && timeSinceLastShot >= shotInterval && displayPlayer) {
-            // console.log('creating new shot...');
             let tmpShotXVel = spec.shotSpeed * (Math.cos(spec.rotation) / 180);
             let tmpShotYVel = spec.shotSpeed * (Math.sin(spec.rotation) / 180);
             let newShot = spec.shot.PlayerShot({
@@ -210,15 +184,6 @@ Galaga.objects.player.Player = function (spec) {
         displayPlayer = newVal;
     }
 
-    function _getPlayerCenter() {
-        let center = {
-            x: spec.coords.x + (spec.size / 2),
-            y: spec.coords.y + (spec.size / 2),
-        };
-
-        return center;
-    }
-
     function _getPlayerNose() {
         let nose = {
             x: (spec.coords.x + (spec.size / 2)) + ((Math.cos(spec.rotation)) * spec.size / 2),
@@ -247,16 +212,13 @@ Galaga.objects.player.Player = function (spec) {
     }
 
     function updateShots(elapsedTime) {
-        let shotsToKeep = [];
         timeSinceLastShot += elapsedTime;
         projectiles.forEach(shot => {
-            // console.log(shot)
             shot.moveProjectileFoward(elapsedTime);
-            // TODO: check if a shot needs to be removed, based on how long it's been alive
         });
+
         // check if a shot needs to be removed, based on how long it's been alive
         // also remove if it's run into something
-
         projectiles = projectiles.filter(shot => (shot.lifeTime < shot.maxLifeTime) && !shot.didCollide);
     }
 

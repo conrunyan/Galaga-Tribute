@@ -1,5 +1,3 @@
-// Fire works: https://opengameart.org/content/fireworks
-
 Galaga.particles.ParticleSystem = function (spec, Random) {
     let nextName = 1;
     let particles = {};
