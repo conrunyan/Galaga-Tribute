@@ -41,8 +41,7 @@ Galaga.utils.Random = (function () {
     //
     // Generate a normally distributed random number.
     //
-    // NOTE: This code is adapted from a wiki reference I found a long time ago.  I originally
-    // wrote the code in C# and am now converting it over to JavaScript.
+    // NOTE: This code is adapted from a wiki reference.
     //
     function nextGaussian(mean, stdDev) {
         let x1 = 0;

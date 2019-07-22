@@ -1,8 +1,6 @@
 Galaga.render.LevelText = (function (graphics) {
     'use strict';
 
-    //drawTexture(image, center, rotation, size)
-
     function renderLevelText(gameLevel, boardSize) {
         let scale = 1
         let initCoords = {x: boardSize.x / 2 - 50, y: boardSize.y / 2};

@@ -5,7 +5,6 @@ Galaga.render.ParticleSystem = (function (graphics) {
         // system controller
         systems.forEach(system => {
             // individual system
-            // console.log('system', system);
             if (system.isReady) {
                 Object.getOwnPropertyNames(system.particles).forEach(value => {
                     let particle = system.particles[value];

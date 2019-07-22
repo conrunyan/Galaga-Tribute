@@ -1,8 +1,6 @@
 Galaga.render.Player = (function (graphics) {
     'use strict';
 
-    //drawTexture(image, center, rotation, size)
-
     function renderPlayer(player) {
         let scale = 1
         let center = {
